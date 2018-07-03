@@ -18,4 +18,6 @@ public interface AuthView extends MvpView {
     void go(String url, WebViewClient webViewClient);
 
     void showError(String error);
+
+    void goBackView();
 }

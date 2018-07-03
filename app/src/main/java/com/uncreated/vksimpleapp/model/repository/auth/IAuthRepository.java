@@ -5,7 +5,9 @@ import com.uncreated.vksimpleapp.model.entity.Auth;
 import java.util.List;
 
 public interface IAuthRepository {
-    void addAuth(Auth auth);
+    Auth getCurrentAuth();
+
+    void setCurrentAuth(Auth auth);
 
     List<Auth> getAuthList();
 }

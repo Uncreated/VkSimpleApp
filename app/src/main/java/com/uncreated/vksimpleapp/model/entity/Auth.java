@@ -2,19 +2,11 @@ package com.uncreated.vksimpleapp.model.entity;
 
 public class Auth {
 
-    private String accessToken;
     private String userId;
+    private String accessToken;
 
-    public Auth(String accessToken, String userId) {
-        this.accessToken = accessToken;
+    public Auth(String userId, String accessToken) {
         this.userId = userId;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
 
@@ -24,5 +16,13 @@ public class Auth {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

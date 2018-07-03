@@ -9,6 +9,8 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 @Module
 public class AppModule {
@@ -27,5 +29,11 @@ public class AppModule {
     @Provides
     public SharedPreferences sharedPreferences(App app) {
         return app.getApplicationContext().getSharedPreferences("Auth", Context.MODE_PRIVATE);
+    }
+
+    @Named("mainThread")
+    @Provides
+    public Scheduler mainThreadScheduler() {
+        return AndroidSchedulers.mainThread();
     }
 }

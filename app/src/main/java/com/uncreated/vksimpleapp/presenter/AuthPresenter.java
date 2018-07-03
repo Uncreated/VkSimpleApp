@@ -3,9 +3,12 @@ package com.uncreated.vksimpleapp.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.auth.AuthWebClient;
+import com.uncreated.vksimpleapp.model.entity.Auth;
+import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.view.auth.AuthView;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
@@ -15,26 +18,33 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
 
     @Inject
     AuthWebClient authWebClient;
-    private Scheduler mainThreadScheduler;
 
-    public AuthPresenter(Scheduler mainThreadScheduler) {
-        this.mainThreadScheduler = mainThreadScheduler;
-    }
+    @Inject
+    IAuthRepository authRepository;
+
+    @Named("mainThread")
+    @Inject
+    Scheduler mainThreadScheduler;
 
     @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
+    public void attachView(AuthView view) {
+        super.attachView(view);
+
+        doAuth();
     }
 
-    public void permissionGranted() {
+    private void doAuth() {
         Disposable disposable = authWebClient.subscribe()
                 .subscribeOn(mainThreadScheduler)
-                .subscribe(auth -> {
-
-                }, throwable -> {
+                .subscribe(this::onAuth, throwable -> {
                     getViewState().showError(throwable.getMessage());
-                    permissionGranted();
+                    doAuth();
                 });
         getViewState().go(authWebClient.getAuthUrl(), authWebClient);
+    }
+
+    private void onAuth(Auth auth) {
+        authRepository.setCurrentAuth(auth);
+        getViewState().goBackView();
     }
 }

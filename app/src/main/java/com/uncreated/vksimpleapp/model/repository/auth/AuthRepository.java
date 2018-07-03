@@ -12,11 +12,18 @@ public class AuthRepository implements IAuthRepository {
 
     private SharedPreferences sharedPreferences;
 
+    private Auth currentAuth;
+
     public AuthRepository(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
 
-    public void addAuth(Auth auth) {
+    public Auth getCurrentAuth() {
+        return currentAuth;
+    }
+
+    public void setCurrentAuth(Auth auth) {
+        currentAuth = auth;
         sharedPreferences.edit()
                 .putString(auth.getUserId(), auth.getAccessToken())
                 .apply();

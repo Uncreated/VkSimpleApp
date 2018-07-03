@@ -1,8 +1,8 @@
 package com.uncreated.vksimpleapp.model.auth;
 
-import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -16,13 +16,14 @@ public class AuthWebClient extends WebViewClient {
 
     private static final int CLIENT_ID = 6622858;
     private static final int AUTH_SCOPE = 2 + 4; //friends + photos
-    private static final String REDIRECT_HOST = "http://uncreated.com";
+    private static final String REDIRECT_HOST = "uncreated.com";
     private static final String VK_SDK_VERSION = "5.80";
 
     private Subject<Auth> subject;
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+        url = url.replace('#', '?');
         Uri uri = Uri.parse(url);
         String accessToken = uri.getQueryParameter("access_token");
         String userId = uri.getQueryParameter("user_id");
@@ -34,7 +35,7 @@ public class AuthWebClient extends WebViewClient {
         return false;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean shouldOverrideUrlLoading(WebView webView, WebResourceRequest request) {
         Uri uri = request.getUrl();

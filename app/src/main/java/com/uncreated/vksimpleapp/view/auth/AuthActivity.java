@@ -16,7 +16,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class AuthActivity extends MvpAppCompatActivity implements AuthView {
 
@@ -39,14 +38,11 @@ public class AuthActivity extends MvpAppCompatActivity implements AuthView {
         setContentView(R.layout.activity_auth);
 
         ButterKnife.bind(this);
-
-        authPresenter.permissionGranted();
     }
-
 
     @ProvidePresenter
     public AuthPresenter provideMainPresenter() {
-        AuthPresenter authPresenter = new AuthPresenter(AndroidSchedulers.mainThread());
+        AuthPresenter authPresenter = new AuthPresenter();
         app.getAppComponent().inject(authPresenter);
         return authPresenter;
     }
@@ -70,5 +66,15 @@ public class AuthActivity extends MvpAppCompatActivity implements AuthView {
     @Override
     public void showError(String error) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void goBackView() {
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
