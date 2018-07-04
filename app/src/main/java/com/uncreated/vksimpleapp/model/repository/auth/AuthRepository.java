@@ -7,7 +7,7 @@ import com.uncreated.vksimpleapp.model.entity.Auth;
 public class AuthRepository implements IAuthRepository {
 
     private static final String KEY_USER_ID = "keyUserId";
-    private static final String KEY_ACCESS_TOKEN = "keyUserId";
+    private static final String KEY_ACCESS_TOKEN = "keyAccessToken";
     private static final String KEY_EXPIRED_DATE = "keyExpiredDate";
 
     private SharedPreferences sharedPreferences;

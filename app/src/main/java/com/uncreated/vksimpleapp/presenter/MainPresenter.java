@@ -1,10 +1,12 @@
 package com.uncreated.vksimpleapp.presenter;
 
+import android.graphics.Bitmap;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.uncreated.vksimpleapp.model.api.ApiClient;
 import com.uncreated.vksimpleapp.model.entity.Auth;
 import com.uncreated.vksimpleapp.model.entity.User;
+import com.uncreated.vksimpleapp.model.repository.Repository;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.view.main.MainView;
 
@@ -20,8 +22,13 @@ public class MainPresenter extends MvpPresenter<MainView> {
     @Inject
     IAuthRepository authRepository;
 
+    @Named("web")
     @Inject
-    ApiClient apiClient;
+    Repository webRepository;
+
+    @Named("cache")
+    @Inject
+    Repository cacheRepository;
 
     @Named("mainThread")
     @Inject
@@ -42,14 +49,27 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     public void onAuthResult() {
-        Disposable disposable = apiClient.getUser()
+        Disposable disposable = webRepository.getUser(authRepository.getCurrentAuth().getUserId())
                 .observeOn(mainThreadScheduler)
-                .subscribe(this::onUser,
-                        throwable -> getViewState().showError(throwable.getMessage()));
+                .subscribe(this::onUser, this::loadingException);
     }
 
     private void onUser(User user) {
         getViewState().hideLoading();
         getViewState().setUserName(user.getFirstName(), user.getLastName());
+
+        Disposable disposable = webRepository.getPhoto(user.getPhotoUrl())
+                .observeOn(mainThreadScheduler)
+                .subscribe(this::onAvatar, this::loadingException);
+    }
+
+    private void onAvatar(Bitmap bitmap) {
+        getViewState().setUserAvatar(bitmap);
+    }
+
+    private void loadingException(Throwable throwable) {
+        throwable.printStackTrace();
+        getViewState().hideLoading();
+        getViewState().showError(throwable.getMessage());
     }
 }

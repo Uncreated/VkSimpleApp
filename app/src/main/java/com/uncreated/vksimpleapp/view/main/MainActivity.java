@@ -2,6 +2,7 @@ package com.uncreated.vksimpleapp.view.main;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -79,8 +80,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void setUserAvatar() {
-
+    public void setUserAvatar(Bitmap bitmap) {
+        imageViewAvatar.setImageBitmap(bitmap);
     }
 
     @Override

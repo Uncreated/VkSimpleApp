@@ -36,4 +36,10 @@ public class AppModule {
     public Scheduler mainThreadScheduler() {
         return AndroidSchedulers.mainThread();
     }
+
+    @Named("application")
+    @Provides
+    public Context applicationContext() {
+        return app.getApplicationContext();
+    }
 }

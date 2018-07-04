@@ -3,7 +3,6 @@ package com.uncreated.vksimpleapp.di.modules;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.uncreated.vksimpleapp.model.api.ApiClient;
 import com.uncreated.vksimpleapp.model.api.ApiService;
 import com.uncreated.vksimpleapp.model.api.VkApiInterceptor;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
@@ -23,11 +22,6 @@ public class ApiModule {
     @Provides
     public String version() {
         return "5.80";
-    }
-
-    @Provides
-    public ApiClient apiClient(ApiService apiService, IAuthRepository authRepository) {
-        return new ApiClient(apiService, authRepository);
     }
 
     @Provides

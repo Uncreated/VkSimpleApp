@@ -4,7 +4,7 @@ public class User {
     private String id;
     private String firstName;
     private String lastName;
-    private String photo;
+    private String photoMax;
 
     public String getId() {
         return id;
@@ -18,7 +18,7 @@ public class User {
         return lastName;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getPhotoUrl() {
+        return photoMax;
     }
 }
