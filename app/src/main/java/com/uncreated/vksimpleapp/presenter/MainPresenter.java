@@ -3,6 +3,7 @@ package com.uncreated.vksimpleapp.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.api.ApiClient;
+import com.uncreated.vksimpleapp.model.entity.Auth;
 import com.uncreated.vksimpleapp.model.entity.User;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.view.main.MainView;
@@ -31,12 +32,9 @@ public class MainPresenter extends MvpPresenter<MainView> {
         super.onFirstViewAttach();
 
         getViewState().showLoading();
-        //go check auth
-        onAuthChecked(false);
-    }
 
-    private void onAuthChecked(Boolean result) {
-        if (!result) {
+        Auth auth = authRepository.getCurrentAuth();
+        if (auth == null || auth.isExpired()) {
             getViewState().goAuth();
         } else {
             onAuthResult();
@@ -52,6 +50,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     private void onUser(User user) {
         getViewState().hideLoading();
-        getViewState().setUser(user.getFirstName());
+        getViewState().setUserName(user.getFirstName(), user.getLastName());
     }
 }

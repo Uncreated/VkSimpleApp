@@ -17,9 +17,14 @@ public class AuthWebClient extends WebViewClient {
     private static final int CLIENT_ID = 6622858;
     private static final int AUTH_SCOPE = 2 + 4; //friends + photos
     private static final String REDIRECT_HOST = "uncreated.com";
-    private static final String VK_SDK_VERSION = "5.80";
 
     private Subject<Auth> subject;
+
+    private String version;
+
+    public AuthWebClient(String version) {
+        this.version = version;
+    }
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView webView, String url) {
@@ -27,8 +32,13 @@ public class AuthWebClient extends WebViewClient {
         Uri uri = Uri.parse(url);
         String accessToken = uri.getQueryParameter("access_token");
         String userId = uri.getQueryParameter("user_id");
-        if (uri.getHost().equals(REDIRECT_HOST) && accessToken != null && userId != null) {
-            subject.onNext(new Auth(userId, accessToken));
+        String expiresIn = uri.getQueryParameter("expires_in");
+        if (uri.getHost().equals(REDIRECT_HOST)
+                && accessToken != null
+                && userId != null
+                && expiresIn != null) {
+            Long expiredDate = Auth.calcExpiredDate(Long.parseLong(expiresIn));
+            subject.onNext(new Auth(userId, accessToken, expiredDate));
             subject.onComplete();
             return true;
         }
@@ -49,7 +59,7 @@ public class AuthWebClient extends WebViewClient {
                 "&" + "redirect_uri=" + REDIRECT_HOST +
                 "&" + "scope=" + AUTH_SCOPE +
                 "&" + "response_type=token" +
-                "&" + "v=" + VK_SDK_VERSION;
+                "&" + "v=" + version;
     }
 
     public Subject<Auth> subscribe() {

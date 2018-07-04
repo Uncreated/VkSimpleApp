@@ -4,11 +4,11 @@ import android.content.SharedPreferences;
 
 import com.uncreated.vksimpleapp.model.entity.Auth;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class AuthRepository implements IAuthRepository {
+
+    private static final String KEY_USER_ID = "keyUserId";
+    private static final String KEY_ACCESS_TOKEN = "keyUserId";
+    private static final String KEY_EXPIRED_DATE = "keyExpiredDate";
 
     private SharedPreferences sharedPreferences;
 
@@ -16,6 +16,17 @@ public class AuthRepository implements IAuthRepository {
 
     public AuthRepository(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
+
+        loadLastAuth();
+    }
+
+    private void loadLastAuth() {
+        String userId = sharedPreferences.getString(KEY_USER_ID, null);
+        String accessToken = sharedPreferences.getString(KEY_ACCESS_TOKEN, null);
+        Long expiredDate = sharedPreferences.getLong(KEY_EXPIRED_DATE, 0);
+        if (userId != null && accessToken != null) {
+            currentAuth = new Auth(userId, accessToken, expiredDate);
+        }
     }
 
     public Auth getCurrentAuth() {
@@ -25,19 +36,9 @@ public class AuthRepository implements IAuthRepository {
     public void setCurrentAuth(Auth auth) {
         currentAuth = auth;
         sharedPreferences.edit()
-                .putString(auth.getUserId(), auth.getAccessToken())
+                .putString(KEY_USER_ID, auth.getUserId())
+                .putString(KEY_ACCESS_TOKEN, auth.getAccessToken())
+                .putLong(KEY_EXPIRED_DATE, auth.getExpiredDate())
                 .apply();
-    }
-
-    public List<Auth> getAuthList() {
-        ArrayList<Auth> authList = new ArrayList<>();
-
-        for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
-            if (entry.getValue() instanceof String) {
-                authList.add(new Auth(entry.getKey(), (String) entry.getValue()));
-            }
-        }
-
-        return authList;
     }
 }

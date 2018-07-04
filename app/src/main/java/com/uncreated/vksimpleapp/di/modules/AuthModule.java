@@ -22,7 +22,7 @@ public class AuthModule {
 
     @Singleton
     @Provides
-    public AuthWebClient authWebClient() {
-        return new AuthWebClient();
+    public AuthWebClient authWebClient(@Named("version") String version) {
+        return new AuthWebClient(version);
     }
 }

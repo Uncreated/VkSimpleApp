@@ -14,7 +14,7 @@ public interface MainView extends MvpView {
 
     void goAuth();
 
-    void setUser(String name);
+    void setUserName(String firstName, String lastName);
 
     void setUserAvatar();
 

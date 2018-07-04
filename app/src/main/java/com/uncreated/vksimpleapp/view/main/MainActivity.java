@@ -3,6 +3,8 @@ package com.uncreated.vksimpleapp.view.main;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -15,6 +17,7 @@ import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView {
@@ -26,6 +29,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @InjectPresenter
     MainPresenter mainPresenter;
+
+    @BindView(R.id.tv_name)
+    TextView textViewName;
+
+    @BindView(R.id.iv_avatar)
+    ImageView imageViewAvatar;
 
     private AlertDialog dialog;
 
@@ -64,8 +73,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void setUser(String name) {
-        Toast.makeText(this, name, Toast.LENGTH_LONG).show();
+    public void setUserName(String firstName, String lastName) {
+        String fullName = firstName + " " + lastName;
+        textViewName.setText(fullName);
     }
 
     @Override
