@@ -37,6 +37,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @BindView(R.id.iv_avatar)
     ImageView imageViewAvatar;
 
+    @BindView(R.id.tv_gallery_size)
+    TextView textViewGallerySize;
+
     private AlertDialog dialog;
 
     public MainActivity() {
@@ -82,6 +85,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void setUserAvatar(Bitmap bitmap) {
         imageViewAvatar.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void setGallerySize(int size) {
+        textViewGallerySize.setText("GallerySize:" + size);
     }
 
     @Override

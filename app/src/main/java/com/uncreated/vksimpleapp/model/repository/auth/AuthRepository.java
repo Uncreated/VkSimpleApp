@@ -2,7 +2,7 @@ package com.uncreated.vksimpleapp.model.repository.auth;
 
 import android.content.SharedPreferences;
 
-import com.uncreated.vksimpleapp.model.entity.Auth;
+import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 
 public class AuthRepository implements IAuthRepository {
 

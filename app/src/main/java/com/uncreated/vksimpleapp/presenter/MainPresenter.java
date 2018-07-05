@@ -4,8 +4,9 @@ import android.graphics.Bitmap;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.uncreated.vksimpleapp.model.entity.Auth;
-import com.uncreated.vksimpleapp.model.entity.User;
+import com.uncreated.vksimpleapp.model.entity.vk.Auth;
+import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
+import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.Repository;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.view.main.MainView;
@@ -61,10 +62,18 @@ public class MainPresenter extends MvpPresenter<MainView> {
         Disposable disposable = webRepository.getPhoto(user.getPhotoUrl())
                 .observeOn(mainThreadScheduler)
                 .subscribe(this::onAvatar, this::loadingException);
+
+        disposable = webRepository.getGallery(user)
+                .observeOn(mainThreadScheduler)
+                .subscribe(this::onGallery, this::loadingException);
     }
 
     private void onAvatar(Bitmap bitmap) {
         getViewState().setUserAvatar(bitmap);
+    }
+
+    private void onGallery(Gallery gallery) {
+        getViewState().setGallerySize(gallery.getCount());
     }
 
     private void loadingException(Throwable throwable) {

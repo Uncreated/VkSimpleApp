@@ -3,7 +3,7 @@ package com.uncreated.vksimpleapp.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.auth.AuthWebClient;
-import com.uncreated.vksimpleapp.model.entity.Auth;
+import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.view.auth.AuthView;
 

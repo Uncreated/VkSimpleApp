@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.model.entity;
+package com.uncreated.vksimpleapp.model.entity.vk;
 
 public class Auth {
 

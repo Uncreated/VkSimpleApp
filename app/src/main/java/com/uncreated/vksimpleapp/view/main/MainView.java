@@ -19,10 +19,12 @@ public interface MainView extends MvpView {
     @StateStrategyType(SkipStrategy.class)
     void goAuth();
 
+    @StateStrategyType(SkipStrategy.class)
+    void showError(String error);
+
     void setUserName(String firstName, String lastName);
 
     void setUserAvatar(Bitmap bitmap);
 
-    @StateStrategyType(SkipStrategy.class)
-    void showError(String error);
+    void setGallerySize(int size);
 }

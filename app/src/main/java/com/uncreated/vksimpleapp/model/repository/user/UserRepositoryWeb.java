@@ -1,8 +1,8 @@
 package com.uncreated.vksimpleapp.model.repository.user;
 
 import com.uncreated.vksimpleapp.model.api.ApiService;
-import com.uncreated.vksimpleapp.model.entity.RequestError;
-import com.uncreated.vksimpleapp.model.entity.User;
+import com.uncreated.vksimpleapp.model.entity.responses.RequestException;
+import com.uncreated.vksimpleapp.model.entity.vk.User;
 
 import java.util.List;
 
@@ -22,12 +22,11 @@ public class UserRepositoryWeb implements IUserRepository {
         return apiService.getUser(userId, "photo_max")
                 .subscribeOn(Schedulers.io())
                 .map(userResponse -> {
-                    List<User> users = userResponse.getUsers();
+                    List<User> users = userResponse.getResponse();
                     if (users != null && users.size() > 0) {
                         return users.get(0);
                     } else {
-                        RequestError.throwException(userResponse.getRequestError());
-                        return null;
+                        throw new RequestException(userResponse.getRequestError());
                     }
                 });
     }

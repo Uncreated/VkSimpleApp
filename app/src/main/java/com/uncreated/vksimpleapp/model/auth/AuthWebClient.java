@@ -7,7 +7,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.uncreated.vksimpleapp.model.entity.Auth;
+import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
