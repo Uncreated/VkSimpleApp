@@ -30,9 +30,4 @@ public class UserRepositoryWeb implements IUserRepository {
                     }
                 });
     }
-
-    @Override
-    public void set(String s, User user) {
-        //nothing
-    }
 }

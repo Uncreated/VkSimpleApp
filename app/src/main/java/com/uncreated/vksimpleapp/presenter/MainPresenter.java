@@ -11,6 +11,7 @@ import com.uncreated.vksimpleapp.view.main.MainView;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 
@@ -65,5 +66,11 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
         getViewState().hideLoading();
         getViewState().setUser(user);
+    }
+
+    public void setClicks(Observable<Integer> onClicks) {
+        Disposable clickDisposable = onClicks.subscribe(integer -> {
+            getViewState().goPhoto(user.getGallery().getItems().get(integer).getOriginalUrl());
+        });
     }
 }

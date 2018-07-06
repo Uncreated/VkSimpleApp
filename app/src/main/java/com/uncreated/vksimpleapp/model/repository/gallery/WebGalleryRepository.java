@@ -28,9 +28,4 @@ public class WebGalleryRepository implements IGalleryRepository {
                     return gallery;
                 });
     }
-
-    @Override
-    public void set(String userId, Gallery gallery) {
-        //nothing
-    }
 }

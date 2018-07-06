@@ -6,8 +6,10 @@ import com.uncreated.vksimpleapp.di.modules.AuthModule;
 import com.uncreated.vksimpleapp.di.modules.RepositoryModule;
 import com.uncreated.vksimpleapp.presenter.AuthPresenter;
 import com.uncreated.vksimpleapp.presenter.MainPresenter;
+import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 import com.uncreated.vksimpleapp.view.main.MainActivity;
+import com.uncreated.vksimpleapp.view.photo.PhotoActivity;
 
 import javax.inject.Singleton;
 
@@ -23,4 +25,8 @@ public interface AppComponent {
     void inject(AuthActivity authActivity);
 
     void inject(AuthPresenter authPresenter);
+
+    void inject(PhotoActivity photoActivity);
+
+    void inject(PhotoPresenter photoPresenter);
 }

@@ -18,8 +18,10 @@ import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.presenter.MainPresenter;
 import com.uncreated.vksimpleapp.view.AutoGridLayoutManager;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
+import com.uncreated.vksimpleapp.view.photo.PhotoActivity;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,12 +29,17 @@ import butterknife.ButterKnife;
 public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     private static final int AUTH_CODE = 1;
+    private static final int PHOTO_CODE = 2;
 
     @Inject
     App app;
 
     @Inject
     Picasso picasso;
+
+    @Named("keyPhotoUrl")
+    @Inject
+    String keyPhotoUrl;
 
     @InjectPresenter
     MainPresenter mainPresenter;
@@ -77,6 +84,13 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
+    public void goPhoto(String url) {
+        Intent intent = new Intent(this, PhotoActivity.class);
+        intent.putExtra(keyPhotoUrl, url);
+        startActivityForResult(intent, PHOTO_CODE);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -90,15 +104,18 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         String fullName = user.getFirstName() + " " + user.getLastName();
         textViewName.setText(fullName);
 
-        picasso.load(user.getPhotoUrl())
+        picasso.load(user.getPhotoUrl())//TODO: move to presenter like observable
                 .into(imageViewAvatar);
 
-        textViewGallerySize.setText("GallerySize:" + user.getGallery().getSize());
+        textViewGallerySize.setText("GallerySize:" +
+                user.getGallery().getItems().size() + "/" + user.getGallery().getSize());
 
         PhotosAdapter photosAdapter = new PhotosAdapter(user.getGallery());
 
         recyclerViewPhotos.setLayoutManager(new AutoGridLayoutManager(this, 100));
         recyclerViewPhotos.setAdapter(photosAdapter);
+
+        mainPresenter.setClicks(photosAdapter.getClicks());
     }
 
     @Override

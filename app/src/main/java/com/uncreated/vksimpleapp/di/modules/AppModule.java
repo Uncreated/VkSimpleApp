@@ -42,4 +42,10 @@ public class AppModule {
     public Context applicationContext() {
         return app.getApplicationContext();
     }
+
+    @Named("keyPhotoUrl")
+    @Provides
+    public String getPhotoUrl() {
+        return "getPhotoUrl";
+    }
 }

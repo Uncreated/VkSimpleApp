@@ -11,9 +11,15 @@ import com.squareup.picasso.Picasso;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
+
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewHolder> {
 
     private Gallery gallery;
+
+    private PublishSubject<Integer> onClickSubject = PublishSubject.create();
+    private PublishSubject<Integer> onLoadSubject = PublishSubject.create();
 
     public PhotosAdapter(Gallery gallery) {
         this.gallery = gallery;
@@ -32,6 +38,16 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
         Picasso.get()
                 .load(gallery.getItems().get(position).getThumbnailUrl())
                 .into(holder.imageViewPhoto);
+
+        holder.imageViewPhoto.setOnClickListener(v -> onClickSubject.onNext(position));
+    }
+
+    public Observable<Integer> getClicks() {
+        return onClickSubject;
+    }
+
+    public PublishSubject<Integer> getLoads() {
+        return onLoadSubject;
     }
 
     @Override

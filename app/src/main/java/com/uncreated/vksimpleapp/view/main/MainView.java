@@ -19,6 +19,9 @@ public interface MainView extends MvpView {
     void goAuth();
 
     @StateStrategyType(SkipStrategy.class)
+    void goPhoto(String url);
+
+    @StateStrategyType(SkipStrategy.class)
     void showError(String error);
 
     void setUser(User user);

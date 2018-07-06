@@ -6,5 +6,7 @@ public interface DataRepository<KEY, VALUE> {
 
     Observable<VALUE> get(KEY key);
 
-    void set(KEY key, VALUE value);
+    default void set(KEY key, VALUE value) {
+        //nothing
+    }
 }
