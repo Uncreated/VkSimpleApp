@@ -2,8 +2,8 @@ package com.uncreated.vksimpleapp.view.main;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,9 +11,12 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.squareup.picasso.Picasso;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
+import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.presenter.MainPresenter;
+import com.uncreated.vksimpleapp.view.AutoGridLayoutManager;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 
 import javax.inject.Inject;
@@ -28,6 +31,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Inject
     App app;
 
+    @Inject
+    Picasso picasso;
+
     @InjectPresenter
     MainPresenter mainPresenter;
 
@@ -39,6 +45,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @BindView(R.id.tv_gallery_size)
     TextView textViewGallerySize;
+
+    @BindView(R.id.rv_photos)
+    RecyclerView recyclerViewPhotos;
 
     private AlertDialog dialog;
 
@@ -77,19 +86,19 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void setUserName(String firstName, String lastName) {
-        String fullName = firstName + " " + lastName;
+    public void setUser(User user) {
+        String fullName = user.getFirstName() + " " + user.getLastName();
         textViewName.setText(fullName);
-    }
 
-    @Override
-    public void setUserAvatar(Bitmap bitmap) {
-        imageViewAvatar.setImageBitmap(bitmap);
-    }
+        picasso.load(user.getPhotoUrl())
+                .into(imageViewAvatar);
 
-    @Override
-    public void setGallerySize(int size) {
-        textViewGallerySize.setText("GallerySize:" + size);
+        textViewGallerySize.setText("GallerySize:" + user.getGallery().getSize());
+
+        PhotosAdapter photosAdapter = new PhotosAdapter(user.getGallery());
+
+        recyclerViewPhotos.setLayoutManager(new AutoGridLayoutManager(this, 100));
+        recyclerViewPhotos.setAdapter(photosAdapter);
     }
 
     @Override

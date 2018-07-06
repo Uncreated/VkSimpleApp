@@ -1,11 +1,8 @@
 package com.uncreated.vksimpleapp.presenter;
 
-import android.graphics.Bitmap;
-
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
-import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.Repository;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
@@ -35,6 +32,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     @Inject
     Scheduler mainThreadScheduler;
 
+    private User user;
+
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
@@ -52,33 +51,19 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void onAuthResult() {
         Disposable disposable = webRepository.getUser(authRepository.getCurrentAuth().getUserId())
                 .observeOn(mainThreadScheduler)
-                .subscribe(this::onUser, this::loadingException);
-    }
-
-    private void onUser(User user) {
-        getViewState().hideLoading();
-        getViewState().setUserName(user.getFirstName(), user.getLastName());
-
-        Disposable disposable = webRepository.getPhoto(user.getPhotoUrl())
-                .observeOn(mainThreadScheduler)
-                .subscribe(this::onAvatar, this::loadingException);
-
-        disposable = webRepository.getGallery(user)
-                .observeOn(mainThreadScheduler)
-                .subscribe(this::onGallery, this::loadingException);
-    }
-
-    private void onAvatar(Bitmap bitmap) {
-        getViewState().setUserAvatar(bitmap);
-    }
-
-    private void onGallery(Gallery gallery) {
-        getViewState().setGallerySize(gallery.getCount());
+                .subscribe(this::onUserLoaded, this::loadingException);
     }
 
     private void loadingException(Throwable throwable) {
         throwable.printStackTrace();
         getViewState().hideLoading();
         getViewState().showError(throwable.getMessage());
+    }
+
+    private void onUserLoaded(User user) {
+        this.user = user;
+
+        getViewState().hideLoading();
+        getViewState().setUser(user);
     }
 }

@@ -1,14 +1,10 @@
 package com.uncreated.vksimpleapp.di.modules;
 
-import android.content.Context;
-
 import com.squareup.picasso.Picasso;
 import com.uncreated.vksimpleapp.model.api.ApiService;
 import com.uncreated.vksimpleapp.model.repository.Repository;
 import com.uncreated.vksimpleapp.model.repository.gallery.IGalleryRepository;
 import com.uncreated.vksimpleapp.model.repository.gallery.WebGalleryRepository;
-import com.uncreated.vksimpleapp.model.repository.photo.IPhotoRepository;
-import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepositoryWeb;
 import com.uncreated.vksimpleapp.model.repository.user.IUserRepository;
 import com.uncreated.vksimpleapp.model.repository.user.UserRepositoryWeb;
 
@@ -22,22 +18,14 @@ public class RepositoryModule {
     @Named("web")
     @Provides
     public Repository webRepository(@Named("web") IUserRepository userRepository,
-                                    @Named("web") IPhotoRepository photoRepository,
                                     @Named("web") IGalleryRepository galleryRepository) {
-        return new Repository(userRepository, photoRepository, galleryRepository);
+        return new Repository(userRepository, galleryRepository);
     }
 
     @Named("web")
     @Provides
     public IUserRepository webUserRepository(ApiService apiService) {
         return new UserRepositoryWeb(apiService);
-    }
-
-    @Named("web")
-    @Provides
-    public IPhotoRepository webPhotoRepository(@Named("application") Context context,
-                                               Picasso picasso) {
-        return new PhotoRepositoryWeb(context, picasso);
     }
 
     @Named("web")
@@ -49,22 +37,14 @@ public class RepositoryModule {
     @Named("cache")
     @Provides
     public Repository cacheRepository(@Named("cache") IUserRepository userRepository,
-                                      @Named("cache") IPhotoRepository photoRepository,
                                       @Named("web") IGalleryRepository galleryRepository) {
-        return webRepository(userRepository, photoRepository, galleryRepository);
+        return webRepository(userRepository, galleryRepository);
     }
 
     @Named("cache")
     @Provides
     public IUserRepository cacheUserRepository(ApiService apiService) {
         return webUserRepository(apiService);
-    }
-
-    @Named("cache")
-    @Provides
-    public IPhotoRepository cachePhotoRepository(@Named("application") Context context,
-                                                 Picasso picasso) {
-        return webPhotoRepository(context, picasso);
     }
 
     @Named("cache")

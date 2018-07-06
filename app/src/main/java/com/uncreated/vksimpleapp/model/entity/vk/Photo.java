@@ -1,5 +1,6 @@
 package com.uncreated.vksimpleapp.model.entity.vk;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Photo {
@@ -35,5 +36,23 @@ public class Photo {
 
     public void setSizes(List<PhotoSize> sizes) {
         this.sizes = sizes;
+    }
+
+    void sort() {
+        Collections.sort(sizes, (o1, o2) -> o1.getWidth() - o2.getWidth());
+    }
+
+    public String getThumbnailUrl() {
+        PhotoSize photoSize = sizes.get(0);
+        for (int i = 1; i < sizes.size(); i++) {
+            if (sizes.get(i).getWidth() > 320)
+                break;
+            photoSize = sizes.get(i);
+        }
+        return photoSize.getUrl();
+    }
+
+    public String getOriginalUrl() {
+        return sizes.get(sizes.size() - 1).getUrl();
     }
 }

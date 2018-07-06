@@ -1,19 +1,18 @@
 package com.uncreated.vksimpleapp.view.main;
 
-import android.graphics.Bitmap;
-
 import com.arellomobile.mvp.MvpView;
-import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
+import com.uncreated.vksimpleapp.model.entity.vk.User;
 
-@StateStrategyType(SingleStateStrategy.class)
+@StateStrategyType(value = AddToEndSingleStrategy.class)
 public interface MainView extends MvpView {
 
-    @StateStrategyType(value = SingleStateStrategy.class, tag = "loading")
+    @StateStrategyType(value = AddToEndSingleStrategy.class, tag = "loading")
     void showLoading();
 
-    @StateStrategyType(value = SingleStateStrategy.class, tag = "loading")
+    @StateStrategyType(value = AddToEndSingleStrategy.class, tag = "loading")
     void hideLoading();
 
     @StateStrategyType(SkipStrategy.class)
@@ -22,9 +21,5 @@ public interface MainView extends MvpView {
     @StateStrategyType(SkipStrategy.class)
     void showError(String error);
 
-    void setUserName(String firstName, String lastName);
-
-    void setUserAvatar(Bitmap bitmap);
-
-    void setGallerySize(int size);
+    void setUser(User user);
 }

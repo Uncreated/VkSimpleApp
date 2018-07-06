@@ -18,5 +18,6 @@ public interface ApiService {
     @GET("photos.getAll")
     Observable<VkResponse<Gallery>> getGallery(@Query("owner_id") String userId,
                                                @Query("photo_sizes") boolean photoSizes,
+                                               @Query("offset") int offset,
                                                @Query("count") int count);
 }

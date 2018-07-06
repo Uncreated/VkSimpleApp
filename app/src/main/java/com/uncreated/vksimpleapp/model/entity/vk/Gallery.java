@@ -12,19 +12,17 @@ public class Gallery {
         this.items = items;
     }
 
-    public int getCount() {
+    public int getSize() {
         return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public List<Photo> getItems() {
         return items;
     }
 
-    public void setItems(List<Photo> items) {
-        this.items = items;
+    public void sort() {
+        for (Photo photo : items) {
+            photo.sort();
+        }
     }
 }

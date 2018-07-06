@@ -21,7 +21,8 @@ public class Auth {
     }
 
     public String getUserId() {
-        return userId;
+        //return userId;
+        return "1";
     }
 
     public void setUserId(String userId) {
