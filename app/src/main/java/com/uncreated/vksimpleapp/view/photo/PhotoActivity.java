@@ -11,7 +11,7 @@ import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.repository.BitmapIndex;
-import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryCache;
+import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 
 import javax.inject.Inject;
@@ -39,8 +39,8 @@ public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
     EventBus eventBus;
 
 
-    GalleryCache thumbnailsCache;
-    GalleryCache originalCache;
+    GalleryPhotoCache thumbnailsCache;
+    GalleryPhotoCache originalCache;
 
     private PagerAdapter pagerAdapter;
 
@@ -58,8 +58,6 @@ public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
         int index = getIntent().getIntExtra(keyPhotoIndex, 0);
         pagerAdapter = new PagerAdapter(app,
                 getSupportFragmentManager(),
-                thumbnailsCache,
-                originalCache,
                 index + 1);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(index);
@@ -81,8 +79,6 @@ public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
     @Override
     public void updatePhoto(BitmapIndex bitmapIndex) {
         pagerAdapter.notifyDataSetChanged();
-        Toast.makeText(this, "original: " + bitmapIndex.getIndex(), Toast.LENGTH_SHORT).show();
-        //imageViewPhoto.setImageBitmap(bitmapIndex.getBitmap());
     }
 
     @Override

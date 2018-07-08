@@ -6,26 +6,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.uncreated.vksimpleapp.App;
-import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryCache;
 
 public class PagerAdapter extends FragmentPagerAdapter {
-
-    private GalleryCache thumbnailsCache;
-    private GalleryCache originalsCache;
 
     private int count;
 
     private App app;
 
-    public PagerAdapter(App app,
-                        FragmentManager fm,
-                        GalleryCache thumbnailsCache,
-                        GalleryCache originalsCache,
-                        int count) {
+    PagerAdapter(App app, FragmentManager fm, int count) {
         super(fm);
         this.app = app;
-        this.thumbnailsCache = thumbnailsCache;
-        this.originalsCache = originalsCache;
         this.count = count;
     }
 

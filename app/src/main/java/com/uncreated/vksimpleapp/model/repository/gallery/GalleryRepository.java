@@ -10,11 +10,11 @@ import com.uncreated.vksimpleapp.model.entity.vk.User;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class WebGalleryRepository implements IGalleryRepository {
+public class GalleryRepository {
 
     private ApiService apiService;
 
-    public WebGalleryRepository(ApiService apiService, EventBus eventBus) {
+    public GalleryRepository(ApiService apiService, EventBus eventBus) {
         this.apiService = apiService;
 
         Disposable disposable = eventBus.getGallerySubject()
@@ -46,11 +46,17 @@ public class WebGalleryRepository implements IGalleryRepository {
                         .execute()
                         .body();
 
-        Gallery gallery = galleryResponse.getResponse();
-        if (gallery == null) {
-            throw new RequestException(galleryResponse.getRequestError());
+        if (galleryResponse != null) {
+            Gallery gallery = galleryResponse.getResponse();
+            if (gallery != null) {
+                gallery.sort();
+                return gallery;
+            }
         }
-        gallery.sort();
-        return gallery;
+        if (galleryResponse != null) {
+            throw new RequestException(galleryResponse.getRequestError());
+        } else {
+            throw new RuntimeException("empty response");
+        }
     }
 }

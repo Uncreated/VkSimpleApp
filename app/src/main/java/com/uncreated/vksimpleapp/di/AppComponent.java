@@ -1,9 +1,11 @@
 package com.uncreated.vksimpleapp.di;
 
+import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.di.modules.ApiModule;
 import com.uncreated.vksimpleapp.di.modules.AppModule;
 import com.uncreated.vksimpleapp.di.modules.AuthModule;
 import com.uncreated.vksimpleapp.di.modules.EventBusModule;
+import com.uncreated.vksimpleapp.di.modules.PhotoRepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.RepositoryModule;
 import com.uncreated.vksimpleapp.presenter.AuthPresenter;
 import com.uncreated.vksimpleapp.presenter.MainPresenter;
@@ -23,8 +25,11 @@ import dagger.Component;
         AuthModule.class,
         ApiModule.class,
         RepositoryModule.class,
-        EventBusModule.class})
+        EventBusModule.class,
+        PhotoRepositoryModule.class})
 public interface AppComponent {
+    void inject(App app);
+
     void inject(MainActivity mainActivity);
 
     void inject(MainPresenter mainPresenter);

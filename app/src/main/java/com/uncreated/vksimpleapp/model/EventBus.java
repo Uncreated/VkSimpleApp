@@ -12,8 +12,8 @@ import io.reactivex.subjects.ReplaySubject;
 
 public class EventBus {
 
-    private BitmapEvents thumbnailEvents = new BitmapEvents(10);
-    private BitmapEvents originalEvents = new BitmapEvents(3);
+    private BitmapEvents thumbnailEvents;
+    private BitmapEvents originalEvents;
 
     private PublishSubject<Integer> clickThumbnailSubject = PublishSubject.create();
 
@@ -21,6 +21,11 @@ public class EventBus {
     private BehaviorSubject<Object> authNotValidSubject = BehaviorSubject.create();
     private BehaviorSubject<User> userSubject = BehaviorSubject.create();
     private BehaviorSubject<Gallery> gallerySubject = BehaviorSubject.create();
+
+    public EventBus(int thumbnailCount, int originalCount) {
+        thumbnailEvents = new BitmapEvents(thumbnailCount);
+        originalEvents = new BitmapEvents(originalCount);
+    }
 
     public BehaviorSubject<Auth> getAuthSubject() {
         return authSubject;

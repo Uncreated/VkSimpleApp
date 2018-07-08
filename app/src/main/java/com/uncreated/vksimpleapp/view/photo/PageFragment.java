@@ -9,12 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.EventBus;
-import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryCache;
+import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,13 +27,14 @@ public class PageFragment extends Fragment {
     EventBus eventBus;
     @Named("thumbnail")
     @Inject
-    GalleryCache thumbnailsCache;
+    GalleryPhotoCache thumbnailsCache;
     @Named("original")
     @Inject
-    GalleryCache originalsCache;
+    GalleryPhotoCache originalsCache;
     @BindView(R.id.iv_photo)
     ImageView imageView;
-    private int index;
+
+    private int index = 0;
 
     public PageFragment() {
         App.getApp().getAppComponent().inject(this);
@@ -53,7 +53,10 @@ public class PageFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        index = getArguments().getInt("index");
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            index = getArguments().getInt("index");
+        }
     }
 
     @Nullable
@@ -70,7 +73,6 @@ public class PageFragment extends Fragment {
             eventBus.getOriginalEvents()
                     .getIndexSubject()
                     .onNext(index);
-            Toast.makeText(getContext(), "onNext: " + index, Toast.LENGTH_SHORT).show();
         }
         imageView.setImageBitmap(bitmap);
 

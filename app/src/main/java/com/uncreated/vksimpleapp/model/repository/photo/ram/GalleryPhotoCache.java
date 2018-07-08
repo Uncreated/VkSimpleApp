@@ -3,11 +3,11 @@ package com.uncreated.vksimpleapp.model.repository.photo.ram;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
-public class GalleryCache {
+public class GalleryPhotoCache {
 
     private LruCache<Integer, Bitmap> items;
 
-    public GalleryCache(int itemsCount) {
+    public GalleryPhotoCache(int itemsCount) {
         items = new LruCache<>(itemsCount);
     }
 

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.EventBus;
-import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryCache;
+import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,14 +20,14 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
 
     @Named("thumbnail")
     @Inject
-    GalleryCache galleryCache;
+    GalleryPhotoCache galleryPhotoCache;
 
     @Inject
     EventBus eventBus;
 
     private int photosCount;
 
-    public PhotosAdapter(int photosCount) {
+    PhotosAdapter(int photosCount) {
         this.photosCount = photosCount;
     }
 
@@ -50,7 +50,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
-        Bitmap bitmap = galleryCache.getBitmap(position);
+        Bitmap bitmap = galleryPhotoCache.getBitmap(position);
         if (bitmap != null) {
             holder.imageViewPhoto.setImageBitmap(bitmap);
         } else {

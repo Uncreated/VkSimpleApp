@@ -5,8 +5,6 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.IndexUrl;
-import com.uncreated.vksimpleapp.model.repository.Repository;
-import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.view.main.MainView;
 
 import javax.inject.Inject;
@@ -18,13 +16,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
-
-    @Inject
-    IAuthRepository authRepository;
-
-    @Named("web")
-    @Inject
-    Repository webRepository;
 
     @Named("mainThread")
     @Inject
@@ -71,9 +62,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
         compositeDisposable.add(eventBus.getGallerySubject()
                 .observeOn(mainThreadScheduler)
-                .subscribe(gallery -> {
-                    getViewState().setGallery(user.getGallery().getItems().size());
-                }));
+                .subscribe(gallery ->
+                        getViewState().setGallery(user.getGallery().getItems().size())));
 
         compositeDisposable.add(eventBus.getAuthNotValidSubject()
                 .observeOn(mainThreadScheduler)

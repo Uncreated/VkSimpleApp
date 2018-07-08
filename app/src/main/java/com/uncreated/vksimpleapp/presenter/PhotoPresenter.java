@@ -5,7 +5,7 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.IndexUrl;
-import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryCache;
+import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 import com.uncreated.vksimpleapp.view.photo.PhotoView;
 
 import javax.inject.Inject;
@@ -25,8 +25,10 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
     EventBus eventBus;
     @Named("original")
     @Inject
-    GalleryCache galleryCache;
+    GalleryPhotoCache galleryPhotoCache;
+
     private User user;
+
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
@@ -57,6 +59,6 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
         super.onDestroy();
 
         compositeDisposable.dispose();
-        galleryCache.clear();
+        galleryPhotoCache.clear();
     }
 }

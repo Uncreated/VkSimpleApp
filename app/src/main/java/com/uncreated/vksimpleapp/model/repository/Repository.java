@@ -1,18 +1,22 @@
 package com.uncreated.vksimpleapp.model.repository;
 
-import com.uncreated.vksimpleapp.model.repository.gallery.IGalleryRepository;
-import com.uncreated.vksimpleapp.model.repository.photo.IPhotoRepository;
-import com.uncreated.vksimpleapp.model.repository.user.IUserRepository;
+import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
+import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
+import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
+import com.uncreated.vksimpleapp.model.repository.user.UserRepository;
 
 public class Repository {
 
-    private IUserRepository userRepository;
-    private IGalleryRepository galleryRepository;
-    private IPhotoRepository photoRepository;
+    private IAuthRepository authRepository;
+    private UserRepository userRepository;
+    private GalleryRepository galleryRepository;
+    private PhotoRepository photoRepository;
 
-    public Repository(IUserRepository userRepository,
-                      IGalleryRepository galleryRepository,
-                      IPhotoRepository photoRepository) {
+    public Repository(IAuthRepository authRepository,
+                      UserRepository userRepository,
+                      GalleryRepository galleryRepository,
+                      PhotoRepository photoRepository) {
+        this.authRepository = authRepository;
         this.userRepository = userRepository;
         this.galleryRepository = galleryRepository;
         this.photoRepository = photoRepository;
