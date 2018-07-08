@@ -7,6 +7,8 @@ public class Gallery {
     private int count;
     private List<Photo> items;
 
+    private User user;
+
     public Gallery(int count, List<Photo> items) {
         this.count = count;
         this.items = items;
@@ -18,6 +20,14 @@ public class Gallery {
 
     public List<Photo> getItems() {
         return items;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void sort() {

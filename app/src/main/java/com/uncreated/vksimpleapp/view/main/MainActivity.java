@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,10 +12,10 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.squareup.picasso.Picasso;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
+import com.uncreated.vksimpleapp.model.repository.photo.GlideApp;
 import com.uncreated.vksimpleapp.presenter.MainPresenter;
 import com.uncreated.vksimpleapp.view.AutoGridLayoutManager;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
@@ -34,12 +35,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Inject
     App app;
 
+    @Named("keyPhotoIndex")
     @Inject
-    Picasso picasso;
-
-    @Named("keyPhotoUrl")
-    @Inject
-    String keyPhotoUrl;
+    String keyPhotoIndex;
 
     @InjectPresenter
     MainPresenter mainPresenter;
@@ -58,6 +56,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     private AlertDialog dialog;
 
+    private PhotosAdapter photosAdapter;
+
     public MainActivity() {
         App.getApp().getAppComponent().inject(this);
     }
@@ -68,6 +68,13 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        ((SimpleItemAnimator) recyclerViewPhotos.getItemAnimator()).setSupportsChangeAnimations(false);
+
+        photosAdapter = new PhotosAdapter(0);
+        app.getAppComponent().inject(photosAdapter);
+
+        recyclerViewPhotos.setLayoutManager(new AutoGridLayoutManager(this, 100));
+        recyclerViewPhotos.setAdapter(photosAdapter);
     }
 
     @ProvidePresenter
@@ -84,19 +91,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void goPhoto(String url) {
+    public void goPhoto(int index) {
         Intent intent = new Intent(this, PhotoActivity.class);
-        intent.putExtra(keyPhotoUrl, url);
+        intent.putExtra(keyPhotoIndex, index);
         startActivityForResult(intent, PHOTO_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == AUTH_CODE) {
-            mainPresenter.onAuthResult();
-        }
     }
 
     @Override
@@ -104,18 +102,22 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         String fullName = user.getFirstName() + " " + user.getLastName();
         textViewName.setText(fullName);
 
-        picasso.load(user.getPhotoUrl())//TODO: move to presenter like observable
+        GlideApp.with(this)
+                .load(user.getPhotoUrl())//TODO: move to presenter like observable
                 .into(imageViewAvatar);
+    }
 
-        textViewGallerySize.setText("GallerySize:" +
-                user.getGallery().getItems().size() + "/" + user.getGallery().getSize());
+    @Override
+    public void setGallery(int size) {
+        textViewGallerySize.setText("GallerySize:" + size);
 
-        PhotosAdapter photosAdapter = new PhotosAdapter(user.getGallery());
+        photosAdapter.setPhotosCount(size);
+        photosAdapter.notifyDataSetChanged();
+    }
 
-        recyclerViewPhotos.setLayoutManager(new AutoGridLayoutManager(this, 100));
-        recyclerViewPhotos.setAdapter(photosAdapter);
-
-        mainPresenter.setClicks(photosAdapter.getClicks());
+    @Override
+    public void updateThumbnail(int index) {
+        photosAdapter.notifyItemChanged(index);
     }
 
     @Override

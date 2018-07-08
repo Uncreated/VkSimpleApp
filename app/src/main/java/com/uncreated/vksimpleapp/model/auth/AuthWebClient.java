@@ -7,10 +7,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
-
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
 
 public class AuthWebClient extends WebViewClient {
 
@@ -18,11 +16,12 @@ public class AuthWebClient extends WebViewClient {
     private static final int AUTH_SCOPE = 2 + 4; //friends + photos
     private static final String REDIRECT_HOST = "uncreated.com";
 
-    private Subject<Auth> subject;
+    private EventBus eventBus;
 
     private String version;
 
-    public AuthWebClient(String version) {
+    public AuthWebClient(EventBus eventBus, String version) {
+        this.eventBus = eventBus;
         this.version = version;
     }
 
@@ -38,8 +37,10 @@ public class AuthWebClient extends WebViewClient {
                 && userId != null
                 && expiresIn != null) {
             Long expiredDate = Auth.calcExpiredDate(Long.parseLong(expiresIn));
-            subject.onNext(new Auth(userId, accessToken, expiredDate));
-            subject.onComplete();
+
+            Auth auth = new Auth(userId, accessToken, expiredDate);
+            eventBus.getAuthSubject()
+                    .onNext(auth);
             return true;
         }
         return false;
@@ -60,10 +61,5 @@ public class AuthWebClient extends WebViewClient {
                 "&" + "scope=" + AUTH_SCOPE +
                 "&" + "response_type=token" +
                 "&" + "v=" + version;
-    }
-
-    public Subject<Auth> subscribe() {
-        subject = PublishSubject.create();
-        return subject;
     }
 }

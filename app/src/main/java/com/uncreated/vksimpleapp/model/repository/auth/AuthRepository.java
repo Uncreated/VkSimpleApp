@@ -2,7 +2,11 @@ package com.uncreated.vksimpleapp.model.repository.auth;
 
 import android.content.SharedPreferences;
 
+import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class AuthRepository implements IAuthRepository {
 
@@ -11,13 +15,34 @@ public class AuthRepository implements IAuthRepository {
     private static final String KEY_EXPIRED_DATE = "keyExpiredDate";
 
     private SharedPreferences sharedPreferences;
+    private EventBus eventBus;
 
     private Auth currentAuth;
 
-    public AuthRepository(SharedPreferences sharedPreferences) {
+    public AuthRepository(SharedPreferences sharedPreferences, EventBus eventBus) {
         this.sharedPreferences = sharedPreferences;
+        this.eventBus = eventBus;
 
         loadLastAuth();
+
+        if (currentAuth != null) {
+            eventBus.getAuthSubject()
+                    .onNext(currentAuth);
+        } else {
+            eventBus.getAuthNotValidSubject()
+                    .onNext("");
+        }
+
+        Disposable disposable = eventBus.getAuthSubject()
+                .observeOn(Schedulers.io())
+                .subscribe(auth -> {
+                    currentAuth = auth;
+                    sharedPreferences.edit()
+                            .putString(KEY_USER_ID, auth.getUserId())
+                            .putString(KEY_ACCESS_TOKEN, auth.getAccessToken())
+                            .putLong(KEY_EXPIRED_DATE, auth.getExpiredDate())
+                            .apply();
+                });
     }
 
     private void loadLastAuth() {
@@ -29,7 +54,7 @@ public class AuthRepository implements IAuthRepository {
         }
     }
 
-    public Auth getCurrentAuth() {
+    /*public Auth getCurrentAuth() {
         return currentAuth;
     }
 
@@ -40,5 +65,5 @@ public class AuthRepository implements IAuthRepository {
                 .putString(KEY_ACCESS_TOKEN, auth.getAccessToken())
                 .putLong(KEY_EXPIRED_DATE, auth.getExpiredDate())
                 .apply();
-    }
+    }*/
 }

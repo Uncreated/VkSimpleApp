@@ -3,9 +3,9 @@ package com.uncreated.vksimpleapp.di.modules;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.api.ApiService;
 import com.uncreated.vksimpleapp.model.api.VkApiInterceptor;
-import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 
 import javax.inject.Named;
 
@@ -13,7 +13,6 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
@@ -38,7 +37,7 @@ public class ApiModule {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(gsonConverterFactory)
                 .build();
     }
@@ -68,8 +67,8 @@ public class ApiModule {
     }
 
     @Provides
-    public VkApiInterceptor accessTokenInterceptor(IAuthRepository authRepository,
+    public VkApiInterceptor accessTokenInterceptor(EventBus eventBus,
                                                    @Named("version") String version) {
-        return new VkApiInterceptor(authRepository, version);
+        return new VkApiInterceptor(eventBus, version);
     }
 }

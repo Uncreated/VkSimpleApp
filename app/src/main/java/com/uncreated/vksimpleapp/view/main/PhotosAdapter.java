@@ -1,28 +1,43 @@
 package com.uncreated.vksimpleapp.view.main;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
+import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryCache;
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewHolder> {
 
-    private Gallery gallery;
+    @Named("thumbnail")
+    @Inject
+    GalleryCache galleryCache;
 
-    private PublishSubject<Integer> onClickSubject = PublishSubject.create();
-    private PublishSubject<Integer> onLoadSubject = PublishSubject.create();
+    @Inject
+    EventBus eventBus;
 
-    public PhotosAdapter(Gallery gallery) {
-        this.gallery = gallery;
+    private int photosCount;
+
+    public PhotosAdapter(int photosCount) {
+        this.photosCount = photosCount;
+    }
+
+    public void setPhotosCount(int photosCount) {
+        this.photosCount = photosCount;
+    }
+
+    @Override
+    public int getItemCount() {
+        return photosCount;
     }
 
     @NonNull
@@ -35,32 +50,27 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
-        Picasso.get()
-                .load(gallery.getItems().get(position).getThumbnailUrl())
-                .into(holder.imageViewPhoto);
-
-        holder.imageViewPhoto.setOnClickListener(v -> onClickSubject.onNext(position));
-    }
-
-    public Observable<Integer> getClicks() {
-        return onClickSubject;
-    }
-
-    public PublishSubject<Integer> getLoads() {
-        return onLoadSubject;
-    }
-
-    @Override
-    public int getItemCount() {
-        return gallery.getItems().size();
+        Bitmap bitmap = galleryCache.getBitmap(position);
+        if (bitmap != null) {
+            holder.imageViewPhoto.setImageBitmap(bitmap);
+        } else {
+            holder.imageViewPhoto.setImageBitmap(null);
+            eventBus.getThumbnailEvents()
+                    .getIndexSubject()
+                    .onNext(position);
+        }
+        View.OnClickListener listener = v -> eventBus.getClickThumbnailSubject().onNext(position);
+        holder.frameLayout.setOnClickListener(listener);
     }
 
     class PhotoViewHolder extends RecyclerView.ViewHolder {
+        FrameLayout frameLayout;
         ImageView imageViewPhoto;
 
         PhotoViewHolder(View itemView) {
             super(itemView);
 
+            frameLayout = itemView.findViewById(R.id.fl_container);
             imageViewPhoto = itemView.findViewById(R.id.iv_photo);
         }
     }

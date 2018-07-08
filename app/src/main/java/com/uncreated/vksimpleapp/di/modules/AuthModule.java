@@ -2,6 +2,7 @@ package com.uncreated.vksimpleapp.di.modules;
 
 import android.content.SharedPreferences;
 
+import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.auth.AuthWebClient;
 import com.uncreated.vksimpleapp.model.repository.auth.AuthRepository;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
@@ -16,13 +17,14 @@ import dagger.Provides;
 public class AuthModule {
     @Singleton
     @Provides
-    public IAuthRepository authRepository(@Named("Auth") SharedPreferences sharedPreferences) {
-        return new AuthRepository(sharedPreferences);
+    public IAuthRepository authRepository(EventBus eventBus,
+                                          @Named("Auth") SharedPreferences sharedPreferences) {
+        return new AuthRepository(sharedPreferences, eventBus);
     }
 
     @Singleton
     @Provides
-    public AuthWebClient authWebClient(@Named("version") String version) {
-        return new AuthWebClient(version);
+    public AuthWebClient authWebClient(EventBus eventBus, @Named("version") String version) {
+        return new AuthWebClient(eventBus, version);
     }
 }

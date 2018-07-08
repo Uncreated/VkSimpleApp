@@ -30,5 +30,6 @@ public class User {
 
     public void setGallery(Gallery gallery) {
         this.gallery = gallery;
+        this.gallery.setUser(this);
     }
 }

@@ -43,9 +43,9 @@ public class AppModule {
         return app.getApplicationContext();
     }
 
-    @Named("keyPhotoUrl")
+    @Named("keyPhotoIndex")
     @Provides
     public String getPhotoUrl() {
-        return "getPhotoUrl";
+        return "keyPhotoIndex";
     }
 }

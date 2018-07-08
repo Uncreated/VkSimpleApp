@@ -1,9 +1,7 @@
 package com.uncreated.vksimpleapp.model.repository.auth;
 
-import com.uncreated.vksimpleapp.model.entity.vk.Auth;
-
 public interface IAuthRepository {
-    Auth getCurrentAuth();
+    /*Auth getCurrentAuth();
 
-    void setCurrentAuth(Auth auth);
+    void setCurrentAuth(Auth auth);*/
 }
