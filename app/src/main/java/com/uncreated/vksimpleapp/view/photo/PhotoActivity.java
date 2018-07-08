@@ -1,7 +1,8 @@
 package com.uncreated.vksimpleapp.view.photo;
 
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -10,6 +11,7 @@ import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.repository.BitmapIndex;
+import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryCache;
 import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 
 import javax.inject.Inject;
@@ -30,11 +32,17 @@ public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
     @Inject
     App app;
 
-    @BindView(R.id.iv_photo)
-    ImageView imageViewPhoto;
+    @BindView(R.id.vp_photos)
+    ViewPager viewPager;
 
     @Inject
     EventBus eventBus;
+
+
+    GalleryCache thumbnailsCache;
+    GalleryCache originalCache;
+
+    private PagerAdapter pagerAdapter;
 
     public PhotoActivity() {
         App.getApp().getAppComponent().inject(this);
@@ -47,9 +55,20 @@ public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
 
         ButterKnife.bind(this);
 
-        eventBus.getOriginalEvents()
-                .getIndexSubject()
-                .onNext(getIntent().getIntExtra(keyPhotoIndex, 0));//TODO: move to adapter
+        int index = getIntent().getIntExtra(keyPhotoIndex, 0);
+        pagerAdapter = new PagerAdapter(app,
+                getSupportFragmentManager(),
+                thumbnailsCache,
+                originalCache,
+                index + 1);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(index);
+    }
+
+    @Override
+    public void setGallerySize(int size) {
+        pagerAdapter.setCount(size);
+        pagerAdapter.notifyDataSetChanged();
     }
 
     @ProvidePresenter
@@ -60,7 +79,14 @@ public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
     }
 
     @Override
-    public void showPhoto(BitmapIndex bitmapIndex) {
-        imageViewPhoto.setImageBitmap(bitmapIndex.getBitmap());
+    public void updatePhoto(BitmapIndex bitmapIndex) {
+        pagerAdapter.notifyDataSetChanged();
+        Toast.makeText(this, "original: " + bitmapIndex.getIndex(), Toast.LENGTH_SHORT).show();
+        //imageViewPhoto.setImageBitmap(bitmapIndex.getBitmap());
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(this, "error", Toast.LENGTH_LONG).show();
     }
 }

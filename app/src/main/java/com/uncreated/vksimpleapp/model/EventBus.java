@@ -8,11 +8,12 @@ import com.uncreated.vksimpleapp.model.repository.IndexUrl;
 
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.ReplaySubject;
 
 public class EventBus {
 
-    private BitmapEvents thumbnailEvents = new BitmapEvents();
-    private BitmapEvents originalEvents = new BitmapEvents();
+    private BitmapEvents thumbnailEvents = new BitmapEvents(10);
+    private BitmapEvents originalEvents = new BitmapEvents(3);
 
     private PublishSubject<Integer> clickThumbnailSubject = PublishSubject.create();
 
@@ -50,18 +51,21 @@ public class EventBus {
     }
 
     public class BitmapEvents {
-        private PublishSubject<Integer> indexSubject = PublishSubject.create();
-        private PublishSubject<IndexUrl> urlSubject = PublishSubject.create();
-        private PublishSubject<BitmapIndex> bitmapSubject = PublishSubject.create();
+        private ReplaySubject<Integer> indexSubject;
+        private ReplaySubject<IndexUrl> urlSubject;
+        private PublishSubject<BitmapIndex> bitmapSubject;
 
-        private BitmapEvents() {
+        private BitmapEvents(int size) {
+            indexSubject = ReplaySubject.createWithSize(size);
+            urlSubject = ReplaySubject.createWithSize(size);
+            bitmapSubject = PublishSubject.create();
         }
 
-        public PublishSubject<Integer> getIndexSubject() {
+        public ReplaySubject<Integer> getIndexSubject() {
             return indexSubject;
         }
 
-        public PublishSubject<IndexUrl> getUrlSubject() {
+        public ReplaySubject<IndexUrl> getUrlSubject() {
             return urlSubject;
         }
 

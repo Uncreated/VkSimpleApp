@@ -11,6 +11,7 @@ import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 import com.uncreated.vksimpleapp.view.main.MainActivity;
 import com.uncreated.vksimpleapp.view.main.PhotosAdapter;
+import com.uncreated.vksimpleapp.view.photo.PageFragment;
 import com.uncreated.vksimpleapp.view.photo.PhotoActivity;
 
 import javax.inject.Singleton;
@@ -37,4 +38,6 @@ public interface AppComponent {
     void inject(PhotoPresenter photoPresenter);
 
     void inject(PhotosAdapter photosAdapter);
+
+    void inject(PageFragment pageFragment);
 }

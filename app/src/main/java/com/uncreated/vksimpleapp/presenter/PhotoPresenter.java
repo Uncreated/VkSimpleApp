@@ -38,8 +38,8 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
         compositeDisposable.add(eventBus.getOriginalEvents()
                 .getBitmapSubject()
                 .observeOn(mainThreadScheduler)
-                .subscribe(bitmapIndex -> getViewState().showPhoto(bitmapIndex),
-                        Throwable::printStackTrace));
+                .subscribe(bitmapIndex -> getViewState().updatePhoto(bitmapIndex),
+                        throwable -> getViewState().showError(throwable.getMessage())));
 
         eventBus.getOriginalEvents()
                 .getIndexSubject()
@@ -48,12 +48,15 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
                     String url = user.getGallery().getItems().get(index).getOriginalUrl();
                     return new IndexUrl(index, url);
                 }).subscribe(eventBus.getOriginalEvents().getUrlSubject());
+
+        getViewState().setGallerySize(user.getGallery().getItems().size());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
+        compositeDisposable.dispose();
         galleryCache.clear();
     }
 }

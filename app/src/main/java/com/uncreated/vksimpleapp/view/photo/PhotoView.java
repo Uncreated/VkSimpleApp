@@ -7,6 +7,10 @@ import com.uncreated.vksimpleapp.model.repository.BitmapIndex;
 
 public interface PhotoView extends MvpView {
 
+    void setGallerySize(int size);
+
+    void showError(String error);
+
     @StateStrategyType(OneExecutionStateStrategy.class)
-    void showPhoto(BitmapIndex bitmapIndex);
+    void updatePhoto(BitmapIndex bitmapIndex);
 }

@@ -45,7 +45,7 @@ public class Photo {
     public String getThumbnailUrl() {
         PhotoSize photoSize = sizes.get(0);
         for (int i = 1; i < sizes.size(); i++) {
-            if (sizes.get(i).getWidth() > 320)
+            if (sizes.get(i).getWidth() > 150)
                 break;
             photoSize = sizes.get(i);
         }
