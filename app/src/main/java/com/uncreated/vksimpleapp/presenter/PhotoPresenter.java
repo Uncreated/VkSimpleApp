@@ -27,15 +27,13 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
     @Inject
     GalleryPhotoCache galleryPhotoCache;
 
-    private User user;
-
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    private User user;
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-
-        user = eventBus.getUserSubject().getValue();
 
         compositeDisposable.add(eventBus.getOriginalEvents()
                 .getBitmapSubject()
@@ -43,15 +41,23 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
                 .subscribe(bitmapIndex -> getViewState().updatePhoto(bitmapIndex),
                         throwable -> getViewState().showError(throwable.getMessage())));
 
-        eventBus.getOriginalEvents()
+        compositeDisposable.add(eventBus.getOriginalEvents()
                 .getIndexSubject()
                 .subscribeOn(mainThreadScheduler)
-                .map(index -> {
-                    String url = user.getGallery().getItems().get(index).getOriginalUrl();
-                    return new IndexUrl(index, url);
-                }).subscribe(eventBus.getOriginalEvents().getUrlSubject());
+                .subscribe(index -> {
+                    if (user != null) {
+                        String url = user.getGallery().getItems().get(index).getOriginalUrl();
+                        eventBus.getOriginalEvents()
+                                .getUrlSubject()
+                                .onNext(new IndexUrl(index, url));
+                    }
+                }));
 
-        getViewState().setGallerySize(user.getGallery().getItems().size());
+        compositeDisposable.add(eventBus.getUserSubject()
+                .subscribe(user -> {
+                    this.user = user;
+                    getViewState().setGallerySize(user.getGallery().getItems().size());
+                }));
     }
 
     @Override

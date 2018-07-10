@@ -3,13 +3,13 @@ package com.uncreated.vksimpleapp.model.entity.responses;
 public class VkResponse<T> {
 
     private T response;
-    private RequestError requestError;
+    private RequestError error;
 
     public T getResponse() {
         return response;
     }
 
-    public RequestError getRequestError() {
-        return requestError;
+    public RequestError getError() {
+        return error;
     }
 }

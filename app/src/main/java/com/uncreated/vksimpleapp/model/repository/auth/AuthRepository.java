@@ -15,13 +15,11 @@ public class AuthRepository implements IAuthRepository {
     private static final String KEY_EXPIRED_DATE = "keyExpiredDate";
 
     private SharedPreferences sharedPreferences;
-    private EventBus eventBus;
 
     private Auth currentAuth;
 
     public AuthRepository(SharedPreferences sharedPreferences, EventBus eventBus) {
         this.sharedPreferences = sharedPreferences;
-        this.eventBus = eventBus;
 
         loadLastAuth();
 
@@ -53,17 +51,4 @@ public class AuthRepository implements IAuthRepository {
             currentAuth = new Auth(userId, accessToken, expiredDate);
         }
     }
-
-    /*public Auth getCurrentAuth() {
-        return currentAuth;
-    }
-
-    public void setCurrentAuth(Auth auth) {
-        currentAuth = auth;
-        sharedPreferences.edit()
-                .putString(KEY_USER_ID, auth.getUserId())
-                .putString(KEY_ACCESS_TOKEN, auth.getAccessToken())
-                .putLong(KEY_EXPIRED_DATE, auth.getExpiredDate())
-                .apply();
-    }*/
 }

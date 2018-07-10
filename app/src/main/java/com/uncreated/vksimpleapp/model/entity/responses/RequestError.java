@@ -1,6 +1,7 @@
 package com.uncreated.vksimpleapp.model.entity.responses;
 
 public class RequestError {
+
     private int errorCode;
     private String errorMsg;
 

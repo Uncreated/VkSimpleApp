@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import io.realm.Realm;
-import timber.log.Timber;
 
 public class StoragePhotoLoader extends WebPhotoLoader {
 
@@ -50,7 +49,6 @@ public class StoragePhotoLoader extends WebPhotoLoader {
                     Bitmap bitmap = futureBitmap.get();
                     bitmapIndex = new BitmapIndex(bitmap, indexUrl.getIndex());
                     galleryPhotoCache.putBitmap(indexUrl.getIndex(), bitmapIndex.getBitmap());
-                    Timber.tag("MyDebug").d("from storage");
                 }
             } catch (ExecutionException e) {
                 e.printStackTrace();
@@ -68,7 +66,6 @@ public class StoragePhotoLoader extends WebPhotoLoader {
                     newRealmPhoto.setPath(generatePath(indexUrl.getUrl()));
                 });
             }
-            Timber.tag("MyDebug").d("from web");
         }
         return bitmapIndex;
     }

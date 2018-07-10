@@ -63,7 +63,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         compositeDisposable.add(eventBus.getGallerySubject()
                 .observeOn(mainThreadScheduler)
                 .subscribe(gallery ->
-                        getViewState().setGallery(user.getGallery().getItems().size())));
+                        getViewState().setGallery(gallery.getItems().size())));
 
         compositeDisposable.add(eventBus.getAuthNotValidSubject()
                 .observeOn(mainThreadScheduler)

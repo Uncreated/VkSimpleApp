@@ -2,38 +2,37 @@ package com.uncreated.vksimpleapp.model.repository.user;
 
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.api.ApiService;
-import com.uncreated.vksimpleapp.model.entity.responses.RequestException;
-import com.uncreated.vksimpleapp.model.entity.responses.VkResponse;
+import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
+import com.uncreated.vksimpleapp.model.repository.WebRepository;
 
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Response;
+import timber.log.Timber;
 
-public class UserRepository {
+public class UserRepository extends WebRepository {
 
     public UserRepository(ApiService apiService, EventBus eventBus) {
-        eventBus.getAuthSubject()
+        Disposable disposable = eventBus.getAuthSubject()
                 .observeOn(Schedulers.io())
-                .map(auth -> {
-                    Response<VkResponse<List<User>>> response =
-                            apiService.getUser(auth.getUserId(), "photo_max")
-                                    .execute();
-                    VkResponse<List<User>> userResponse = response.body();
+                .subscribe(auth -> getUser(apiService, eventBus, auth));
+    }
 
-                    if (userResponse != null) {
-                        List<User> users = userResponse.getResponse();
-                        if (users != null && users.size() > 0) {
-                            return users.get(0);
-                        }
-                    }
-                    if (userResponse != null) {
-                        throw new RequestException(userResponse.getRequestError());
-                    } else {
-                        throw new RuntimeException("empty response");
-                    }
-                })
-                .subscribe(eventBus.getUserSubject());
+    private Disposable getUser(ApiService apiService, EventBus eventBus, Auth auth) {
+        return apiService.getUser(auth.getUserId(), "photo_max")
+                .subscribe(vkResponse -> {
+                            List<User> users = vkResponse.getResponse();
+                            if (users != null && users.size() > 0) {
+                                eventBus.getUserSubject()
+                                        .onNext(users.get(0));
+                            } else {
+                                errorHandle(vkResponse.getError(), eventBus);
+                            }
+                        },
+                        throwable -> {
+                            Timber.tag("MyDebug").d(throwable);
+                        });
     }
 }

@@ -2,61 +2,53 @@ package com.uncreated.vksimpleapp.model.repository.gallery;
 
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.api.ApiService;
-import com.uncreated.vksimpleapp.model.entity.responses.RequestException;
-import com.uncreated.vksimpleapp.model.entity.responses.VkResponse;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
+import com.uncreated.vksimpleapp.model.repository.WebRepository;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
-public class GalleryRepository {
+public class GalleryRepository extends WebRepository {
 
-    private ApiService apiService;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public GalleryRepository(ApiService apiService, EventBus eventBus) {
-        this.apiService = apiService;
 
-        Disposable disposable = eventBus.getGallerySubject()
+        compositeDisposable.add(eventBus.getGallerySubject()
                 .observeOn(Schedulers.io())
-                .subscribe(gallery -> {
-                    if (gallery.getItems().size() < gallery.getSize()) {
-                        int offset = gallery.getItems().size();
-                        Gallery nextGallery = getGallery(gallery.getUser(), offset);
+                .subscribe(gallery -> getGallery(apiService, eventBus, gallery.getUser())));
 
-                        gallery.getItems().addAll(nextGallery.getItems());
-                        eventBus.getGallerySubject()
-                                .onNext(gallery);
-                    }
-                });
-
-        eventBus.getUserSubject()
+        compositeDisposable.add(eventBus.getUserSubject()
                 .observeOn(Schedulers.io())
-                .map(user -> {
-                    Gallery gallery = getGallery(user, 0);
-                    user.setGallery(gallery);
-                    return gallery;
-                })
-                .subscribe(eventBus.getGallerySubject());
+                .subscribe(user -> getGallery(apiService, eventBus, user)));
     }
 
-    private Gallery getGallery(User user, int offset) throws Exception {
-        VkResponse<Gallery> galleryResponse =
-                apiService.getGallery(user.getId(), true, offset, 200)
-                        .execute()
-                        .body();
-
-        if (galleryResponse != null) {
-            Gallery gallery = galleryResponse.getResponse();
-            if (gallery != null) {
-                gallery.sort();
-                return gallery;
-            }
+    private Disposable getGallery(ApiService apiService, EventBus eventBus, User user) {
+        int offset = 0;
+        if (user.getGallery() != null) {
+            offset = user.getGallery().getItems().size();
         }
-        if (galleryResponse != null) {
-            throw new RequestException(galleryResponse.getRequestError());
-        } else {
-            throw new RuntimeException("empty response");
-        }
+        return apiService.getGallery(user.getId(), true, offset, 200)
+                .subscribe(vkResponse -> {
+                            Gallery gallery = vkResponse.getResponse();
+                            if (gallery != null) {
+                                gallery.sort();
+                                if (user.getGallery() != null) {
+                                    user.getGallery().getItems().addAll(gallery.getItems());
+                                } else {
+                                    user.setGallery(gallery);
+                                }
+                                eventBus.getGallerySubject()
+                                        .onNext(user.getGallery());
+                            } else {
+                                errorHandle(vkResponse.getError(), eventBus);
+                            }
+                        },
+                        throwable -> {
+                            Timber.tag("MyDebug").d(throwable);
+                        });
     }
 }

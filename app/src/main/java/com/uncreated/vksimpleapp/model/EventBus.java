@@ -1,5 +1,6 @@
 package com.uncreated.vksimpleapp.model;
 
+import com.uncreated.vksimpleapp.model.entity.responses.RequestError;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
@@ -9,41 +10,45 @@ import com.uncreated.vksimpleapp.model.repository.IndexUrl;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.ReplaySubject;
+import io.reactivex.subjects.Subject;
 
 public class EventBus {
 
     private BitmapEvents thumbnailEvents;
     private BitmapEvents originalEvents;
 
-    private PublishSubject<Integer> clickThumbnailSubject = PublishSubject.create();
+    private Subject<Integer> clickThumbnailSubject = PublishSubject.create();
 
-    private BehaviorSubject<Auth> authSubject = BehaviorSubject.create();
-    private BehaviorSubject<Object> authNotValidSubject = BehaviorSubject.create();
-    private BehaviorSubject<User> userSubject = BehaviorSubject.create();
-    private BehaviorSubject<Gallery> gallerySubject = BehaviorSubject.create();
+    private Subject<Auth> authSubject = BehaviorSubject.create();
+    private Subject<Object> authNotValidSubject = BehaviorSubject.create();
+    private Subject<User> userSubject = BehaviorSubject.create();
+    private Subject<Gallery> gallerySubject = BehaviorSubject.create();
+
+    private Subject<RequestError> vkErrorSubject = BehaviorSubject.create();
+    private Subject<String> messageSubject = BehaviorSubject.create();
 
     public EventBus(int thumbnailCount, int originalCount) {
         thumbnailEvents = new BitmapEvents(thumbnailCount);
         originalEvents = new BitmapEvents(originalCount);
     }
 
-    public BehaviorSubject<Auth> getAuthSubject() {
+    public Subject<Auth> getAuthSubject() {
         return authSubject;
     }
 
-    public BehaviorSubject<Object> getAuthNotValidSubject() {
+    public Subject<Object> getAuthNotValidSubject() {
         return authNotValidSubject;
     }
 
-    public BehaviorSubject<User> getUserSubject() {
+    public Subject<User> getUserSubject() {
         return userSubject;
     }
 
-    public BehaviorSubject<Gallery> getGallerySubject() {
+    public Subject<Gallery> getGallerySubject() {
         return gallerySubject;
     }
 
-    public PublishSubject<Integer> getClickThumbnailSubject() {
+    public Subject<Integer> getClickThumbnailSubject() {
         return clickThumbnailSubject;
     }
 
@@ -55,10 +60,18 @@ public class EventBus {
         return originalEvents;
     }
 
+    public Subject<RequestError> getVkErrorSubject() {
+        return vkErrorSubject;
+    }
+
+    public Subject<String> getMessageSubject() {
+        return messageSubject;
+    }
+
     public class BitmapEvents {
-        private ReplaySubject<Integer> indexSubject;
-        private ReplaySubject<IndexUrl> urlSubject;
-        private PublishSubject<BitmapIndex> bitmapSubject;
+        private Subject<Integer> indexSubject;
+        private Subject<IndexUrl> urlSubject;
+        private Subject<BitmapIndex> bitmapSubject;
 
         private BitmapEvents(int size) {
             indexSubject = ReplaySubject.createWithSize(size);
@@ -66,15 +79,15 @@ public class EventBus {
             bitmapSubject = PublishSubject.create();
         }
 
-        public ReplaySubject<Integer> getIndexSubject() {
+        public Subject<Integer> getIndexSubject() {
             return indexSubject;
         }
 
-        public ReplaySubject<IndexUrl> getUrlSubject() {
+        public Subject<IndexUrl> getUrlSubject() {
             return urlSubject;
         }
 
-        public PublishSubject<BitmapIndex> getBitmapSubject() {
+        public Subject<BitmapIndex> getBitmapSubject() {
             return bitmapSubject;
         }
     }
