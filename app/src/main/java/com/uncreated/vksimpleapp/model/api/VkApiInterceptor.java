@@ -43,6 +43,5 @@ public class VkApiInterceptor implements Interceptor {
             request = chain.request();
         }
         return chain.proceed(request);
-
     }
 }

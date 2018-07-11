@@ -1,17 +1,30 @@
 package com.uncreated.vksimpleapp.model.entity.vk;
 
+import com.uncreated.vksimpleapp.model.entity.realm.RealmPhotoInfo;
+import com.uncreated.vksimpleapp.model.entity.realm.RealmPhotoSize;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Photo {
+public class PhotoInfo {
     private Long id;
     private Long ownerId;
     private List<PhotoSize> sizes;
 
-    public Photo(Long id, Long ownerId, List<PhotoSize> sizes) {
+    public PhotoInfo(Long id, Long ownerId, List<PhotoSize> sizes) {
         this.id = id;
         this.ownerId = ownerId;
         this.sizes = sizes;
+    }
+
+    PhotoInfo(RealmPhotoInfo realmPhotoInfo) {
+        this.id = realmPhotoInfo.getId();
+        this.ownerId = realmPhotoInfo.getOwnerId();
+        this.sizes = new ArrayList<>(realmPhotoInfo.getSizes().size());
+        for (RealmPhotoSize realmPhotoSize : realmPhotoInfo.getSizes()) {
+            this.sizes.add(new PhotoSize(realmPhotoSize));
+        }
     }
 
     public Long getId() {

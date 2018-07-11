@@ -1,24 +1,37 @@
 package com.uncreated.vksimpleapp.model.entity.vk;
 
+import com.uncreated.vksimpleapp.model.entity.realm.RealmGallery;
+import com.uncreated.vksimpleapp.model.entity.realm.RealmPhotoInfo;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Gallery {
 
-    private int count;
-    private List<Photo> items;
-
     private User user;
 
-    public Gallery(int count, List<Photo> items) {
+    private int count;
+    private List<PhotoInfo> items;
+
+    public Gallery(int count, List<PhotoInfo> items) {
         this.count = count;
         this.items = items;
+    }
+
+    public Gallery(User user, RealmGallery realmGallery) {
+        this.user = user;
+        this.count = realmGallery.getCount();
+        this.items = new ArrayList<>(realmGallery.getItems().size());
+        for (RealmPhotoInfo realmPhotoInfo : realmGallery.getItems()) {
+            this.items.add(new PhotoInfo(realmPhotoInfo));
+        }
     }
 
     public int getSize() {
         return count;
     }
 
-    public List<Photo> getItems() {
+    public List<PhotoInfo> getItems() {
         return items;
     }
 
@@ -31,8 +44,8 @@ public class Gallery {
     }
 
     public void sort() {
-        for (Photo photo : items) {
-            photo.sort();
+        for (PhotoInfo photoInfo : items) {
+            photoInfo.sort();
         }
     }
 }

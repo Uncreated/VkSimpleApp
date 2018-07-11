@@ -11,7 +11,6 @@ import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.repository.BitmapIndex;
-import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 
 import javax.inject.Inject;
@@ -37,10 +36,6 @@ public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
 
     @Inject
     EventBus eventBus;
-
-
-    GalleryPhotoCache thumbnailsCache;
-    GalleryPhotoCache originalCache;
 
     private PagerAdapter pagerAdapter;
 

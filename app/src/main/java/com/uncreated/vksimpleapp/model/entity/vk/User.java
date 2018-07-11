@@ -8,6 +8,13 @@ public class User {
 
     private Gallery gallery;
 
+    public User(String id, String firstName, String lastName, String photoMax) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.photoMax = photoMax;
+    }
+
     public String getId() {
         return id;
     }

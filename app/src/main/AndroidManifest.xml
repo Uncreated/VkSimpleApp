@@ -25,7 +25,7 @@
         <activity
             android:name=".view.photo.PhotoActivity"
             android:label="@string/title_activity_photo"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
