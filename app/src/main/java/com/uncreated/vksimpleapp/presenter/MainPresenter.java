@@ -3,8 +3,8 @@ package com.uncreated.vksimpleapp.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
-import com.uncreated.vksimpleapp.model.repository.IndexUrl;
 import com.uncreated.vksimpleapp.view.main.MainView;
 
 import javax.inject.Inject;
@@ -61,7 +61,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 .subscribe(gallery -> {
                     this.gallery = gallery;
                     getViewState().setGallery(gallery.getItems().size());
-                    if (gallery.getItems().size() == gallery.getSize()) {
+                    if (gallery.getItems().size() == gallery.getCount()) {
                         getViewState().hideLoading();
                     }
                 }));

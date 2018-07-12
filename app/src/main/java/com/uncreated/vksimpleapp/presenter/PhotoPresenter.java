@@ -3,8 +3,8 @@ package com.uncreated.vksimpleapp.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
-import com.uncreated.vksimpleapp.model.repository.IndexUrl;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 import com.uncreated.vksimpleapp.view.photo.PhotoView;
 

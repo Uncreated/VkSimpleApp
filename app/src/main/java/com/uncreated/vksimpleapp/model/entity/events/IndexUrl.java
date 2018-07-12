@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.model.repository;
+package com.uncreated.vksimpleapp.model.entity.events;
 
 public class IndexUrl {
     private Integer index;

@@ -10,6 +10,7 @@ import com.uncreated.vksimpleapp.model.repository.Repositories;
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import timber.log.Timber;
 
 public class App extends Application {
@@ -42,6 +43,12 @@ public class App extends Application {
         Timber.plant(new Timber.DebugTree());
 
         Realm.init(this);
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
+                .name("vk.realm")
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(configuration);
 
         appComponent.inject(this);
     }

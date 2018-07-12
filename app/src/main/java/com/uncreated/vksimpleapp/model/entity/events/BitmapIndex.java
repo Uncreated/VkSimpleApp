@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.model.repository;
+package com.uncreated.vksimpleapp.model.entity.events;
 
 import android.graphics.Bitmap;
 

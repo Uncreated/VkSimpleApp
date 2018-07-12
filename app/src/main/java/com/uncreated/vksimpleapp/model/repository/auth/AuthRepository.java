@@ -21,7 +21,7 @@ public class AuthRepository implements IAuthRepository {
     public AuthRepository(SharedPreferences sharedPreferences, EventBus eventBus) {
         this.sharedPreferences = sharedPreferences;
 
-        loadLastAuth();
+        currentAuth = loadAuth();
 
         if (currentAuth != null) {
             eventBus.getAuthSubject()
@@ -35,20 +35,25 @@ public class AuthRepository implements IAuthRepository {
                 .observeOn(Schedulers.io())
                 .subscribe(auth -> {
                     currentAuth = auth;
-                    sharedPreferences.edit()
-                            .putString(KEY_USER_ID, auth.getUserId())
-                            .putString(KEY_ACCESS_TOKEN, auth.getAccessToken())
-                            .putLong(KEY_EXPIRED_DATE, auth.getExpiredDate())
-                            .apply();
+                    saveAuth(auth);
                 });
     }
 
-    private void loadLastAuth() {
+    private void saveAuth(Auth auth) {
+        sharedPreferences.edit()
+                .putString(KEY_USER_ID, auth.getUserId())
+                .putString(KEY_ACCESS_TOKEN, auth.getAccessToken())
+                .putLong(KEY_EXPIRED_DATE, auth.getExpiredDate())
+                .apply();
+    }
+
+    private Auth loadAuth() {
         String userId = sharedPreferences.getString(KEY_USER_ID, null);
         String accessToken = sharedPreferences.getString(KEY_ACCESS_TOKEN, null);
         Long expiredDate = sharedPreferences.getLong(KEY_EXPIRED_DATE, 0);
         if (userId != null && accessToken != null) {
-            currentAuth = new Auth(userId, accessToken, expiredDate);
+            return new Auth(userId, accessToken, expiredDate);
         }
+        return null;
     }
 }

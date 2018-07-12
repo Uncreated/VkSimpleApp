@@ -8,39 +8,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class PhotoInfo {
-    private Long id;
-    private Long ownerId;
     private List<PhotoSize> sizes;
 
-    public PhotoInfo(Long id, Long ownerId, List<PhotoSize> sizes) {
-        this.id = id;
-        this.ownerId = ownerId;
+    public PhotoInfo(List<PhotoSize> sizes) {
         this.sizes = sizes;
     }
 
     PhotoInfo(RealmPhotoInfo realmPhotoInfo) {
-        this.id = realmPhotoInfo.getId();
-        this.ownerId = realmPhotoInfo.getOwnerId();
         this.sizes = new ArrayList<>(realmPhotoInfo.getSizes().size());
         for (RealmPhotoSize realmPhotoSize : realmPhotoInfo.getSizes()) {
             this.sizes.add(new PhotoSize(realmPhotoSize));
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
     }
 
     public List<PhotoSize> getSizes() {

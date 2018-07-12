@@ -1,11 +1,11 @@
 package com.uncreated.vksimpleapp.model;
 
+import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
+import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
 import com.uncreated.vksimpleapp.model.entity.responses.RequestError;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
-import com.uncreated.vksimpleapp.model.repository.BitmapIndex;
-import com.uncreated.vksimpleapp.model.repository.IndexUrl;
 
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;

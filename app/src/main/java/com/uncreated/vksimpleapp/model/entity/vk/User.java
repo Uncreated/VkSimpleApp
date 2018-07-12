@@ -8,13 +8,6 @@ public class User {
     private String lastName;
     private String photoMax;
 
-    public User(String id, String firstName, String lastName, String photoMax) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.photoMax = photoMax;
-    }
-
     public User(RealmUser realmUser) {
         this.id = realmUser.getUserId();
         this.firstName = realmUser.getFirstName();

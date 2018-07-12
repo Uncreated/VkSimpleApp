@@ -42,14 +42,16 @@ public class GalleryRepository {
                         .onNext(gallery);
                 galleryStorageLoader.saveGallery(gallery, userId);
             }
-            while (offset < gallery.getSize());
+            while (offset < gallery.getCount());
         } catch (Exception e) {
             Timber.tag("MyDebug").d(e);
 
             if (gallery == null) {
                 gallery = galleryStorageLoader.loadGallery(userId);
-                eventBus.getGallerySubject()
-                        .onNext(gallery);
+                if (gallery != null) {
+                    eventBus.getGallerySubject()
+                            .onNext(gallery);
+                }
             }
         }
     }

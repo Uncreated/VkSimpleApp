@@ -10,7 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.EventBus;
-import com.uncreated.vksimpleapp.model.repository.BitmapIndex;
+import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
 import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 
 import javax.inject.Inject;

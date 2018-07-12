@@ -11,11 +11,6 @@ public class Gallery {
     private int count;
     private List<PhotoInfo> items;
 
-    public Gallery(int count, List<PhotoInfo> items) {
-        this.count = count;
-        this.items = items;
-    }
-
     public Gallery(RealmGallery realmGallery) {
         this.count = realmGallery.getCount();
         this.items = new ArrayList<>(realmGallery.getItems().size());
@@ -24,7 +19,7 @@ public class Gallery {
         }
     }
 
-    public int getSize() {
+    public int getCount() {
         return count;
     }
 

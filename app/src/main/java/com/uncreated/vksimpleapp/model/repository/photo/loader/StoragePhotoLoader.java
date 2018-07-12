@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 
 import com.bumptech.glide.request.FutureTarget;
 import com.uncreated.vksimpleapp.model.common.Utils;
+import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
+import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
 import com.uncreated.vksimpleapp.model.entity.realm.RealmPhoto;
-import com.uncreated.vksimpleapp.model.repository.BitmapIndex;
-import com.uncreated.vksimpleapp.model.repository.IndexUrl;
 import com.uncreated.vksimpleapp.model.repository.photo.GlideApp;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 

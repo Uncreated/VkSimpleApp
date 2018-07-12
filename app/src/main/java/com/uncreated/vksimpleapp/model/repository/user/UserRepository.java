@@ -5,6 +5,7 @@ import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class UserRepository {
@@ -18,6 +19,7 @@ public class UserRepository {
         this.userStorageLoader = userStorageLoader;
 
         Disposable disposable = eventBus.getAuthSubject()
+                .observeOn(Schedulers.io())
                 .subscribe(auth -> newAuth(eventBus, auth));
     }
 
@@ -33,8 +35,10 @@ public class UserRepository {
             Timber.tag("MyDebug").d(e);
 
             User user = userStorageLoader.loadUser(userId);
-            eventBus.getUserSubject()
-                    .onNext(user);
+            if (user != null) {
+                eventBus.getUserSubject()
+                        .onNext(user);
+            }
         }
     }
 
