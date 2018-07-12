@@ -18,8 +18,8 @@ public class RealmGallery extends RealmObject {
     public RealmGallery() {
     }
 
-    public RealmGallery(Gallery gallery) {
-        this.userId = gallery.getUser().getId();
+    public RealmGallery(Gallery gallery, String userId) {
+        this.userId = userId;
         this.count = gallery.getSize();
         this.items = new RealmList<>();
         for (PhotoInfo photoInfo : gallery.getItems()) {

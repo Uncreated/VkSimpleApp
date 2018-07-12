@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers;
 public class PhotoRepository implements IPhotoRepository {
 
     public PhotoRepository(EventBus eventBus,
-                           IPhotoLoader webPhotoLoader,
+                           IPhotoLoader photoLoader,
                            GalleryPhotoCache thumbnailsCache,
                            GalleryPhotoCache originalsCache) {
 
@@ -18,12 +18,12 @@ public class PhotoRepository implements IPhotoRepository {
 
         thumbnailEvents.getUrlSubject()
                 .observeOn(Schedulers.io())
-                .map(indexUrl -> webPhotoLoader.loadToCache(indexUrl, thumbnailsCache))
+                .map(indexUrl -> photoLoader.loadToCache(indexUrl, thumbnailsCache))
                 .subscribe(thumbnailEvents.getBitmapSubject());
 
         originalEvents.getUrlSubject()
                 .observeOn(Schedulers.io())
-                .map(indexUrl -> webPhotoLoader.loadToCache(indexUrl, originalsCache))
+                .map(indexUrl -> photoLoader.loadToCache(indexUrl, originalsCache))
                 .subscribe(originalEvents.getBitmapSubject());
     }
 }

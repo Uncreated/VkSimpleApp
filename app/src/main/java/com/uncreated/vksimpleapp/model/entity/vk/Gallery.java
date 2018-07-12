@@ -8,8 +8,6 @@ import java.util.List;
 
 public class Gallery {
 
-    private User user;
-
     private int count;
     private List<PhotoInfo> items;
 
@@ -18,8 +16,7 @@ public class Gallery {
         this.items = items;
     }
 
-    public Gallery(User user, RealmGallery realmGallery) {
-        this.user = user;
+    public Gallery(RealmGallery realmGallery) {
         this.count = realmGallery.getCount();
         this.items = new ArrayList<>(realmGallery.getItems().size());
         for (RealmPhotoInfo realmPhotoInfo : realmGallery.getItems()) {
@@ -33,14 +30,6 @@ public class Gallery {
 
     public List<PhotoInfo> getItems() {
         return items;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public void sort() {

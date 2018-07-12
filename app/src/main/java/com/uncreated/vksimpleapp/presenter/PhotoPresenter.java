@@ -3,7 +3,7 @@ package com.uncreated.vksimpleapp.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.EventBus;
-import com.uncreated.vksimpleapp.model.entity.vk.User;
+import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.repository.IndexUrl;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 import com.uncreated.vksimpleapp.view.photo.PhotoView;
@@ -29,7 +29,7 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private User user;
+    private Gallery gallery;
 
     @Override
     protected void onFirstViewAttach() {
@@ -45,18 +45,18 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
                 .getIndexSubject()
                 .subscribeOn(mainThreadScheduler)
                 .subscribe(index -> {
-                    if (user != null) {
-                        String url = user.getGallery().getItems().get(index).getOriginalUrl();
+                    if (gallery != null) {
+                        String url = gallery.getItems().get(index).getOriginalUrl();
                         eventBus.getOriginalEvents()
                                 .getUrlSubject()
                                 .onNext(new IndexUrl(index, url));
                     }
                 }));
 
-        compositeDisposable.add(eventBus.getUserSubject()
-                .subscribe(user -> {
-                    this.user = user;
-                    getViewState().setGallerySize(user.getGallery().getItems().size());
+        compositeDisposable.add(eventBus.getGallerySubject()
+                .subscribe(gallery -> {
+                    this.gallery = gallery;
+                    getViewState().setGallerySize(gallery.getItems().size());
                 }));
     }
 

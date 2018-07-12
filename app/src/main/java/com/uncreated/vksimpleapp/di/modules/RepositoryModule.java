@@ -3,14 +3,15 @@ package com.uncreated.vksimpleapp.di.modules;
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.api.ApiService;
 import com.uncreated.vksimpleapp.model.api.VkErrorHandler;
-import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
-import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.Repositories;
-import com.uncreated.vksimpleapp.model.repository.Repository;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
-import com.uncreated.vksimpleapp.model.repository.gallery.GalleryStorageRepository;
+import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
+import com.uncreated.vksimpleapp.model.repository.gallery.GalleryStorageLoader;
+import com.uncreated.vksimpleapp.model.repository.gallery.GalleryWebLoader;
 import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
-import com.uncreated.vksimpleapp.model.repository.user.UserStorageRepository;
+import com.uncreated.vksimpleapp.model.repository.user.UserRepository;
+import com.uncreated.vksimpleapp.model.repository.user.UserStorageLoader;
+import com.uncreated.vksimpleapp.model.repository.user.UserWebLoader;
 
 import javax.inject.Singleton;
 
@@ -22,27 +23,54 @@ public class RepositoryModule {
     @Singleton
     @Provides
     public Repositories repository(IAuthRepository authRepository,
-                                   Repository<User> userRepository,
-                                   Repository<Gallery> galleryRepository,
                                    PhotoRepository photoRepository,
-                                   VkErrorHandler vkErrorHandler) {
+                                   VkErrorHandler vkErrorHandler,
+                                   GalleryRepository galleryRepository,
+                                   UserRepository userRepository) {
         return new Repositories(authRepository,
-                userRepository,
-                galleryRepository,
                 photoRepository,
-                vkErrorHandler);
+                vkErrorHandler,
+                galleryRepository,
+                userRepository);
     }
 
     @Singleton
     @Provides
-    public Repository<User> userRepository(ApiService apiService, EventBus eventBus) {
-        return new UserStorageRepository(apiService, eventBus);
+    public UserRepository userRepository(EventBus eventBus,
+                                         UserWebLoader userWebLoader,
+                                         UserStorageLoader userStorageLoader) {
+        return new UserRepository(eventBus, userWebLoader, userStorageLoader);
     }
 
     @Singleton
     @Provides
-    public Repository<Gallery> galleryRepository(ApiService apiService, EventBus eventBus) {
-        return new GalleryStorageRepository(apiService, eventBus);
+    public GalleryRepository galleryRepository(EventBus eventBus,
+                                               GalleryWebLoader galleryWebLoader,
+                                               GalleryStorageLoader galleryStorageLoader) {
+        return new GalleryRepository(eventBus, galleryWebLoader, galleryStorageLoader);
     }
 
+    @Singleton
+    @Provides
+    public GalleryWebLoader galleryWebLoader(ApiService apiService) {
+        return new GalleryWebLoader(apiService);
+    }
+
+    @Singleton
+    @Provides
+    public GalleryStorageLoader galleryStorageLoader() {
+        return new GalleryStorageLoader();
+    }
+
+    @Singleton
+    @Provides
+    public UserWebLoader userWebLoader(ApiService apiService) {
+        return new UserWebLoader(apiService);
+    }
+
+    @Singleton
+    @Provides
+    public UserStorageLoader userStorageLoader() {
+        return new UserStorageLoader();
+    }
 }

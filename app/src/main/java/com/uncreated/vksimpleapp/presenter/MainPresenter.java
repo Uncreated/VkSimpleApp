@@ -3,7 +3,7 @@ package com.uncreated.vksimpleapp.presenter;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.EventBus;
-import com.uncreated.vksimpleapp.model.entity.vk.User;
+import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.repository.IndexUrl;
 import com.uncreated.vksimpleapp.view.main.MainView;
 
@@ -24,7 +24,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     @Inject
     EventBus eventBus;
 
-    private User user;
+    private Gallery gallery;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -41,7 +41,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         eventBus.getThumbnailEvents()
                 .getIndexSubject()
                 .map(index -> {
-                    String url = user.getGallery().getItems().get(index).getThumbnailUrl();
+                    String url = gallery.getItems().get(index).getThumbnailUrl();
                     return new IndexUrl(index, url);
                 }).subscribe(eventBus.getThumbnailEvents().getUrlSubject());
 
@@ -53,17 +53,18 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
         compositeDisposable.add(eventBus.getUserSubject()
                 .observeOn(mainThreadScheduler)
-                .subscribe(user -> {
-                    this.user = user;
-
-                    getViewState().hideLoading();
-                    getViewState().setUser(user);
-                }, this::loadingException));
+                .subscribe(user -> getViewState().setUser(user),
+                        this::loadingException));
 
         compositeDisposable.add(eventBus.getGallerySubject()
                 .observeOn(mainThreadScheduler)
-                .subscribe(gallery ->
-                        getViewState().setGallery(gallery.getItems().size())));
+                .subscribe(gallery -> {
+                    this.gallery = gallery;
+                    getViewState().setGallery(gallery.getItems().size());
+                    if (gallery.getItems().size() == gallery.getSize()) {
+                        getViewState().hideLoading();
+                    }
+                }));
 
         compositeDisposable.add(eventBus.getAuthNotValidSubject()
                 .observeOn(mainThreadScheduler)
