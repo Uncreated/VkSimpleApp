@@ -16,7 +16,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.main.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action
+                    android:name="android.intent.action.MAIN"
+                    android:label="@string/title_activity_main"
+                    android:theme="@style/AppTheme" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -25,7 +28,7 @@
         <activity
             android:name=".view.photo.PhotoActivity"
             android:label="@string/title_activity_photo"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

@@ -1,17 +1,23 @@
 package com.uncreated.vksimpleapp.view.main;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.bumptech.glide.request.RequestOptions;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
@@ -42,25 +48,28 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @InjectPresenter
     MainPresenter mainPresenter;
 
-    @BindView(R.id.tv_name)
-    TextView textViewName;
-
-    @BindView(R.id.iv_avatar)
-    ImageView imageViewAvatar;
-
-    @BindView(R.id.tv_gallery_size)
-    TextView textViewGallerySize;
-
     @BindView(R.id.rv_photos)
     RecyclerView recyclerViewPhotos;
 
-    private AlertDialog dialog;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
-    private PhotosAdapter photosAdapter;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
+    @BindView(R.id.srl_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public MainActivity() {
         App.getApp().getAppComponent().inject(this);
     }
+
+    private PhotosAdapter photosAdapter;
+
+    private NavigationViewHolder navigationViewHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +77,21 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-        ((SimpleItemAnimator) recyclerViewPhotos.getItemAnimator()).setSupportsChangeAnimations(false);
+        navigationViewHolder = new NavigationViewHolder(navigationView.getHeaderView(0));
+        navigationView.setNavigationItemSelectedListener(getNavigationListener());
+
+        setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         photosAdapter = new PhotosAdapter(0);
         app.getAppComponent().inject(photosAdapter);
 
+        ((SimpleItemAnimator) recyclerViewPhotos.getItemAnimator()).setSupportsChangeAnimations(false);
         recyclerViewPhotos.setLayoutManager(new AutoGridLayoutManager(this, 100));
-        recyclerViewPhotos.setAdapter(photosAdapter);
     }
 
     @ProvidePresenter
@@ -99,17 +116,19 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void setUser(User user) {
-        String fullName = user.getFirstName() + " " + user.getLastName();
-        textViewName.setText(fullName);
+        String name = user.getFirstName() + " " + user.getLastName();
+        navigationViewHolder.getTextViewName().setText(name);
 
         GlideApp.with(this)
-                .load(user.getPhotoUrl())//TODO: move to presenter like observable
-                .into(imageViewAvatar);
+                .load(user.getPhotoUrl())
+                .centerCrop()
+                .apply(RequestOptions.circleCropTransform())
+                .into(navigationViewHolder.getImageViewAvatar());
     }
 
     @Override
     public void setGallery(int size) {
-        textViewGallerySize.setText("GallerySize:" + size);
+        toolbar.setTitle("Фотографий: " + size);
 
         photosAdapter.setPhotosCount(size);
         photosAdapter.notifyDataSetChanged();
@@ -127,19 +146,60 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showLoading() {
-        if (dialog == null) {
-            dialog = new AlertDialog.Builder(this)
-                    .setCancelable(false)
-                    .setTitle("Loading...")
-                    .create();
-        }
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoading() {
-        if (dialog != null) {
-            dialog.cancel();
-            dialog = null;
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            //super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private NavigationView.OnNavigationItemSelectedListener getNavigationListener() {
+        return item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_camera) {
+
+            } else if (id == R.id.nav_gallery) {
+
+            } else if (id == R.id.nav_slideshow) {
+
+            } else if (id == R.id.nav_manage) {
+
+            } else if (id == R.id.nav_share) {
+
+            } else if (id == R.id.nav_send) {
+
+            }
+
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        };
     }
 }
