@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.main;
+package com.uncreated.vksimpleapp.view.main.gallery;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;

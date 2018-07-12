@@ -9,27 +9,9 @@
     tools:context=".view.main.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl_refresh"
+    <FrameLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv_empty_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Empty gallery" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_photos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent" />
 
 </android.support.v7.widget.LinearLayoutCompat>
