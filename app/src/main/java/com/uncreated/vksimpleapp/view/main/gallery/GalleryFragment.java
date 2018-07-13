@@ -16,7 +16,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.presenter.main.GalleryPresenter;
-import com.uncreated.vksimpleapp.view.AutoGridLayoutManager;
 import com.uncreated.vksimpleapp.view.photo.PhotoActivity;
 
 import javax.inject.Inject;
@@ -66,7 +65,7 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
         app.getAppComponent().inject(photosAdapter);
 
         ((SimpleItemAnimator) recyclerViewGallery.getItemAnimator()).setSupportsChangeAnimations(false);
-        recyclerViewGallery.setLayoutManager(new AutoGridLayoutManager(getContext(), 100));
+        recyclerViewGallery.setLayoutManager(new AutoGridLayoutManager(getContext(), 100, 8));
 
         recyclerViewGallery.setAdapter(photosAdapter);
 

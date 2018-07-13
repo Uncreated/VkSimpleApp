@@ -61,4 +61,11 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
                     }
                 }));
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        compositeDisposable.dispose();
+    }
 }

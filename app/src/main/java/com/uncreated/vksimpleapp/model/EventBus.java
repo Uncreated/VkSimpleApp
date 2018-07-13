@@ -9,7 +9,6 @@ import com.uncreated.vksimpleapp.model.entity.vk.User;
 
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.ReplaySubject;
 import io.reactivex.subjects.Subject;
 
 public class EventBus {
@@ -74,8 +73,8 @@ public class EventBus {
         private Subject<BitmapIndex> bitmapSubject;
 
         private BitmapEvents(int size) {
-            indexSubject = ReplaySubject.createWithSize(size);
-            urlSubject = ReplaySubject.createWithSize(size);
+            indexSubject = PublishSubject.create();
+            urlSubject = PublishSubject.create();
             bitmapSubject = PublishSubject.create();
         }
 
