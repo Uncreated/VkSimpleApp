@@ -12,7 +12,7 @@ public class VkErrorHandler {
                 .subscribe(error -> {
                     if (error.getErrorCode() == AUTH_ERROR) {
                         eventBus.getAuthNotValidSubject()
-                                .onNext("");
+                                .onNext(false);
                     }
                 });
     }

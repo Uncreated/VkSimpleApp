@@ -7,14 +7,17 @@ import com.uncreated.vksimpleapp.di.modules.AuthModule;
 import com.uncreated.vksimpleapp.di.modules.EventBusModule;
 import com.uncreated.vksimpleapp.di.modules.PhotoRepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.RepositoryModule;
+import com.uncreated.vksimpleapp.di.modules.SettingsModule;
 import com.uncreated.vksimpleapp.presenter.AuthPresenter;
 import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 import com.uncreated.vksimpleapp.presenter.main.GalleryPresenter;
 import com.uncreated.vksimpleapp.presenter.main.MainPresenter;
+import com.uncreated.vksimpleapp.presenter.main.SettingsPresenter;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 import com.uncreated.vksimpleapp.view.main.MainActivity;
 import com.uncreated.vksimpleapp.view.main.gallery.GalleryFragment;
 import com.uncreated.vksimpleapp.view.main.gallery.PhotosAdapter;
+import com.uncreated.vksimpleapp.view.main.settings.SettingsFragment;
 import com.uncreated.vksimpleapp.view.photo.PageFragment;
 import com.uncreated.vksimpleapp.view.photo.PhotoActivity;
 
@@ -28,7 +31,8 @@ import dagger.Component;
         ApiModule.class,
         RepositoryModule.class,
         EventBusModule.class,
-        PhotoRepositoryModule.class})
+        PhotoRepositoryModule.class,
+        SettingsModule.class})
 public interface AppComponent {
     void inject(App app);
 
@@ -51,4 +55,8 @@ public interface AppComponent {
     void inject(GalleryFragment galleryFragment);
 
     void inject(GalleryPresenter galleryPresenter);
+
+    void inject(SettingsFragment settingsFragment);
+
+    void inject(SettingsPresenter settingsPresenter);
 }

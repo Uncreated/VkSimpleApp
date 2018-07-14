@@ -59,6 +59,9 @@ public class AuthActivity extends MvpAppCompatActivity implements AuthView {
 
     @Override
     public void go(String url, WebViewClient webViewClient) {
+        webView.clearCache(true);
+        webView.clearHistory();
+
         webView.setWebViewClient(webViewClient);
         webView.loadUrl(url);
     }

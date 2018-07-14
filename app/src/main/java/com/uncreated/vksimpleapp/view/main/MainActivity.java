@@ -3,6 +3,7 @@ package com.uncreated.vksimpleapp.view.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,8 +21,10 @@ import com.uncreated.vksimpleapp.model.repository.photo.GlideApp;
 import com.uncreated.vksimpleapp.presenter.main.MainPresenter;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 import com.uncreated.vksimpleapp.view.main.gallery.GalleryFragment;
+import com.uncreated.vksimpleapp.view.main.settings.SettingsFragment;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +33,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Inject
     App app;
+
+    @Named("themeId")
+    @Inject
+    Integer themeId;
 
     @InjectPresenter
     MainPresenter mainPresenter;
@@ -51,12 +58,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(themeId);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
         navigationViewHolder = new NavigationViewHolder(navigationView.getHeaderView(0));
-        navigationView.setNavigationItemSelectedListener(getNavigationListener());
+        NavigationView.OnNavigationItemSelectedListener selectedListener = getNavigationListener();
+        navigationView.setNavigationItemSelectedListener(selectedListener);
 
         setSupportActionBar(toolbar);
 
@@ -65,9 +74,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_container, new GalleryFragment())
-                .commit();
+        if (savedInstanceState == null) {
+            selectedListener.onNavigationItemSelected(navigationView.getMenu().getItem(0));
+            navigationView.setCheckedItem(navigationView.getMenu().getItem(0).getItemId());
+        }
     }
 
     @ProvidePresenter
@@ -118,22 +128,23 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         return item -> {
             int id = item.getItemId();
 
-            if (id == R.id.nav_camera) {
-
-            } else if (id == R.id.nav_gallery) {
-
-            } else if (id == R.id.nav_slideshow) {
-
-            } else if (id == R.id.nav_manage) {
-
-            } else if (id == R.id.nav_share) {
-
-            } else if (id == R.id.nav_send) {
-
+            if (id == R.id.nav_gallery) {
+                switchFragment(new GalleryFragment());
+            } else if (id == R.id.nav_settings) {
+                switchFragment(new SettingsFragment());
+            } else if (id == R.id.nav_logout) {
+                mainPresenter.onLogout();
+                item.setChecked(false);
             }
 
             drawer.closeDrawer(GravityCompat.START);
             return true;
         };
+    }
+
+    private void switchFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_container, fragment)
+                .commit();
     }
 }

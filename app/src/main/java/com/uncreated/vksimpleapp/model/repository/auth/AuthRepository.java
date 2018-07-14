@@ -28,7 +28,7 @@ public class AuthRepository implements IAuthRepository {
                     .onNext(currentAuth);
         } else {
             eventBus.getAuthNotValidSubject()
-                    .onNext("");
+                    .onNext(false);
         }
 
         Disposable disposable = eventBus.getAuthSubject()

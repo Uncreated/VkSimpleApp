@@ -3,6 +3,7 @@ package com.uncreated.vksimpleapp.presenter.main;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.settings.ISettingsRepository;
 import com.uncreated.vksimpleapp.view.main.MainView;
 
 import javax.inject.Inject;
@@ -21,6 +22,9 @@ public class MainPresenter extends MvpPresenter<MainView> {
     @Inject
     EventBus eventBus;
 
+    @Inject
+    ISettingsRepository settingsRepository;
+
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
@@ -38,5 +42,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
         compositeDisposable.add(eventBus.getAuthNotValidSubject()
                 .observeOn(mainThreadScheduler)
                 .subscribe(o -> getViewState().goAuth()));
+    }
+
+    public void onLogout() {
+        eventBus.getAuthNotValidSubject()
+                .onNext(true);
     }
 }

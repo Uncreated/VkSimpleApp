@@ -3,12 +3,15 @@ package com.uncreated.vksimpleapp.model.auth;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
+
+import io.reactivex.disposables.Disposable;
 
 public class AuthWebClient extends WebViewClient {
 
@@ -23,6 +26,18 @@ public class AuthWebClient extends WebViewClient {
     public AuthWebClient(EventBus eventBus, String version) {
         this.eventBus = eventBus;
         this.version = version;
+
+        Disposable disposable = eventBus.getAuthNotValidSubject()
+                .subscribe(logout -> {
+                    if (logout) {
+                        CookieManager cookieManager = CookieManager.getInstance();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            cookieManager.removeAllCookies(null);
+                            cookieManager.flush();
+                        } else
+                            cookieManager.removeAllCookie();
+                    }
+                });
     }
 
     @Override

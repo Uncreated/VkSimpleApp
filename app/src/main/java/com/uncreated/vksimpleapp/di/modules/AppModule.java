@@ -27,8 +27,14 @@ public class AppModule {
 
     @Named("Auth")
     @Provides
-    public SharedPreferences sharedPreferences(App app) {
-        return app.getApplicationContext().getSharedPreferences("Auth", Context.MODE_PRIVATE);
+    public SharedPreferences sharedPreferencesAuth(App app) {
+        return app.getSharedPreferences("Auth", Context.MODE_PRIVATE);
+    }
+
+    @Named("Settings")
+    @Provides
+    public SharedPreferences sharedPreferencesSettings(App app) {
+        return app.getSharedPreferences("Settings", Context.MODE_PRIVATE);
     }
 
     @Named("mainThread")

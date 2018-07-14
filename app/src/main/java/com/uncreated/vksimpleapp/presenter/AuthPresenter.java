@@ -33,9 +33,7 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
 
         compositeDisposable.add(eventBus.getAuthSubject()
                 .observeOn(mainThreadScheduler)
-                .subscribe(auth -> {
-                    getViewState().goBackView();
-                }, throwable -> {
+                .subscribe(auth -> getViewState().goBackView(), throwable -> {
                     getViewState().showError(throwable.getMessage());
                     doAuth();
                 }));

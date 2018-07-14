@@ -19,7 +19,7 @@ public class EventBus {
     private Subject<Integer> clickThumbnailSubject = PublishSubject.create();
 
     private Subject<Auth> authSubject = BehaviorSubject.create();
-    private Subject<Object> authNotValidSubject = BehaviorSubject.create();
+    private Subject<Boolean> authNotValidSubject = BehaviorSubject.create();
     private Subject<User> userSubject = BehaviorSubject.create();
     private Subject<Gallery> gallerySubject = BehaviorSubject.create();
 
@@ -35,7 +35,7 @@ public class EventBus {
         return authSubject;
     }
 
-    public Subject<Object> getAuthNotValidSubject() {
+    public Subject<Boolean> getAuthNotValidSubject() {
         return authNotValidSubject;
     }
 
