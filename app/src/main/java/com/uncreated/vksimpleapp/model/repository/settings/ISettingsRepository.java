@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.model.settings;
+package com.uncreated.vksimpleapp.model.repository.settings;
 
 public interface ISettingsRepository {
 

@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -31,6 +32,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView {
 
+    private static final String FRAGMENT_INDEX_KEY = "fragmentIndexKey";
+
     @Inject
     App app;
 
@@ -52,8 +55,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     private NavigationViewHolder navigationViewHolder;
 
+    private int curFragment;
+
     public MainActivity() {
         App.getApp().getAppComponent().inject(this);
+    }
+
+    @ProvidePresenter
+    public MainPresenter provideMainPresenter() {
+        MainPresenter mainPresenter = new MainPresenter();
+        app.getAppComponent().inject(mainPresenter);
+        return mainPresenter;
     }
 
     @Override
@@ -74,17 +86,33 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         if (savedInstanceState == null) {
-            selectedListener.onNavigationItemSelected(navigationView.getMenu().getItem(0));
-            navigationView.setCheckedItem(navigationView.getMenu().getItem(0).getItemId());
+            curFragment = navigationView.getMenu().getItem(0).getItemId();
+            curFragment = getIntent().getIntExtra(FRAGMENT_INDEX_KEY, curFragment);
+            MenuItem menuItem = navigationView.getMenu().findItem(curFragment);
+            menuItem.setChecked(true);
+            selectedListener.onNavigationItemSelected(menuItem);
+        } else {
+            curFragment = savedInstanceState.getInt(FRAGMENT_INDEX_KEY);
         }
     }
 
-    @ProvidePresenter
-    public MainPresenter provideMainPresenter() {
-        MainPresenter mainPresenter = new MainPresenter();
-        app.getAppComponent().inject(mainPresenter);
-        return mainPresenter;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(FRAGMENT_INDEX_KEY, curFragment);
+    }
+
+    @Override
+    public void changeTheme(Integer themeId) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(FRAGMENT_INDEX_KEY, curFragment);
+        startActivity(intent);
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 
     @Override
@@ -119,9 +147,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            //super.onBackPressed();
-        }
+        }/* else {
+            super.onBackPressed();
+        }*/
     }
 
     private NavigationView.OnNavigationItemSelectedListener getNavigationListener() {
@@ -129,8 +157,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             int id = item.getItemId();
 
             if (id == R.id.nav_gallery) {
+                curFragment = id;
                 switchFragment(new GalleryFragment());
             } else if (id == R.id.nav_settings) {
+                curFragment = id;
                 switchFragment(new SettingsFragment());
             } else if (id == R.id.nav_logout) {
                 mainPresenter.onLogout();

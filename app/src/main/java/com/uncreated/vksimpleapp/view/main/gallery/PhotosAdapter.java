@@ -2,6 +2,7 @@ package com.uncreated.vksimpleapp.view.main.gallery;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +27,13 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
     EventBus eventBus;
 
     private int photosCount;
+    private int itemSize;
+    private int margin;
 
-    PhotosAdapter(int photosCount) {
+    public PhotosAdapter(int photosCount, int itemSize, int margin) {
         this.photosCount = photosCount;
+        this.itemSize = itemSize;
+        this.margin = margin;
     }
 
     public void setPhotosCount(int photosCount) {
@@ -45,7 +50,13 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
     public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.photo_item, parent, false);
-        return new PhotoViewHolder(view);
+        PhotoViewHolder holder = new PhotoViewHolder(view);
+
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(itemSize, itemSize);
+        layoutParams.setMargins(margin, margin, margin, margin);
+        holder.cardView.setLayoutParams(layoutParams);
+
+        return holder;
     }
 
     @Override
@@ -60,17 +71,17 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
                     .onNext(position);
         }
         View.OnClickListener listener = v -> eventBus.getClickThumbnailSubject().onNext(position);
-        holder.frameLayout.setOnClickListener(listener);
+        holder.cardView.setOnClickListener(listener);
     }
 
     class PhotoViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout frameLayout;
+        CardView cardView;
         ImageView imageViewPhoto;
 
         PhotoViewHolder(View itemView) {
             super(itemView);
 
-            frameLayout = itemView.findViewById(R.id.fl_container);
+            cardView = itemView.findViewById(R.id.fl_container);
             imageViewPhoto = itemView.findViewById(R.id.iv_photo);
         }
     }

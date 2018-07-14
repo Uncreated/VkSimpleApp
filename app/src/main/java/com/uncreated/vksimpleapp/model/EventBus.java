@@ -26,6 +26,8 @@ public class EventBus {
     private Subject<RequestError> vkErrorSubject = BehaviorSubject.create();
     private Subject<String> messageSubject = BehaviorSubject.create();
 
+    private Subject<Integer> themeIdSubject = PublishSubject.create();
+
     public EventBus(int thumbnailCount, int originalCount) {
         thumbnailEvents = new BitmapEvents(thumbnailCount);
         originalEvents = new BitmapEvents(originalCount);
@@ -65,6 +67,10 @@ public class EventBus {
 
     public Subject<String> getMessageSubject() {
         return messageSubject;
+    }
+
+    public Subject<Integer> getThemeIdSubject() {
+        return themeIdSubject;
     }
 
     public class BitmapEvents {

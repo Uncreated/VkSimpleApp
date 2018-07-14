@@ -19,4 +19,6 @@ public interface MainView extends MvpView {
     void setUser(User user);
 
     void setGallerySize(int size);
+
+    void changeTheme(Integer themeId);
 }

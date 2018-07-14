@@ -22,7 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.auth.AuthActivity" />
-        <activity android:name=".view.photo.PhotoActivity" />
+        <activity
+            android:name=".view.photo.PhotoActivity"
+            android:theme="@style/AppTheme.FullScreen" />
     </application>
 
 </manifest>

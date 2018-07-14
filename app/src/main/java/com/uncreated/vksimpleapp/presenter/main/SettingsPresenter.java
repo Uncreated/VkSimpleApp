@@ -2,7 +2,7 @@ package com.uncreated.vksimpleapp.presenter.main;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.uncreated.vksimpleapp.model.settings.ISettingsRepository;
+import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
 import com.uncreated.vksimpleapp.view.main.settings.SettingsView;
 
 import javax.inject.Inject;

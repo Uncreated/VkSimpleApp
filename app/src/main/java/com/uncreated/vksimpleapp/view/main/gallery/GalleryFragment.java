@@ -1,5 +1,6 @@
 package com.uncreated.vksimpleapp.view.main.gallery;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -58,15 +59,20 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context context = container.getContext();
+
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
         ButterKnife.bind(this, view);
 
-        photosAdapter = new PhotosAdapter(0);
-        app.getAppComponent().inject(photosAdapter);
+        float minSize = context.getResources().getDimension(R.dimen.thumbnail_min_size);
+        float margin = context.getResources().getDimension(R.dimen.default_margin);
 
         ((SimpleItemAnimator) recyclerViewGallery.getItemAnimator()).setSupportsChangeAnimations(false);
-        recyclerViewGallery.setLayoutManager(new AutoGridLayoutManager(getContext(), 100, 8));
+        AutoGridLayoutManager layoutManager = new AutoGridLayoutManager(context, minSize, margin);
+        recyclerViewGallery.setLayoutManager(layoutManager);
 
+        photosAdapter = new PhotosAdapter(0, layoutManager.getItemSize(), (int) margin);
+        app.getAppComponent().inject(photosAdapter);
         recyclerViewGallery.setAdapter(photosAdapter);
 
         return view;

@@ -1,5 +1,7 @@
 package com.uncreated.vksimpleapp.model.common;
 
+import android.content.Context;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,5 +16,10 @@ public class Utils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static int dpToPx(Context context, float dpValue) {
+        return (int) (context.getResources().getDisplayMetrics().density * dpValue);
+
     }
 }
