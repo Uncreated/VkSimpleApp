@@ -110,8 +110,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(FRAGMENT_INDEX_KEY, curFragment);
         startActivity(intent);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
 

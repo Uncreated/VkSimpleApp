@@ -1,42 +1,13 @@
 <resources>
 
-    <style name="AppTheme.Light.Base" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="AppTheme.Light" parent="AppTheme.Base.Light" />
 
-    <style name="AppTheme.Dark.Base" parent="Theme.AppCompat.NoActionBar" />
+    <style name="AppTheme.Dark" parent="AppTheme.Base.Dark" />
 
-    <style name="AppTheme.Light" parent="AppTheme.Light.Base">
-        <!--<item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>-->
-
-        <item name="android:windowAnimationStyle">@style/AppTheme.Animation</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.Dark" parent="AppTheme.Dark.Base">
-
-        <item name="android:windowAnimationStyle">@style/AppTheme.Animation</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.FullScreen" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowAnimationStyle">@style/AppTheme.Animation</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+    <style name="AppTheme.FullScreen" parent="AppTheme.Base.Dark.FullScreen" />
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="AppTheme.Animation" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>
-        <item name="android:activityOpenExitAnimation">@anim/fade_out</item>
-        <item name="android:activityCloseEnterAnimation">@anim/fade_in</item>
-        <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
-    </style>
 
 </resources>

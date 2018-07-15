@@ -8,7 +8,7 @@ public class AutoGridLayoutManager extends GridLayoutManager {
 
     private int itemSize;
 
-    public AutoGridLayoutManager(Context context, float minSize, float margin) {
+    AutoGridLayoutManager(Context context, float minSize, float margin) {
         super(context, getSpanCount(context, minSize, margin));
 
         this.itemSize = getItemSize(context, getSpanCount(), margin);

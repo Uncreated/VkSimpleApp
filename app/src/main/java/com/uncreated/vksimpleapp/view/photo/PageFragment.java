@@ -25,12 +25,15 @@ public class PageFragment extends Fragment {
 
     @Inject
     EventBus eventBus;
+
     @Named("thumbnail")
     @Inject
     GalleryPhotoCache thumbnailsCache;
+
     @Named("original")
     @Inject
     GalleryPhotoCache originalsCache;
+
     @BindView(R.id.iv_photo)
     ImageView imageView;
 

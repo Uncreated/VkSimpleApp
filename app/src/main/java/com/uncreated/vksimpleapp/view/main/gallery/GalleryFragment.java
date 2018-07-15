@@ -27,23 +27,23 @@ import butterknife.ButterKnife;
 
 public class GalleryFragment extends MvpAppCompatFragment implements GalleryView {
 
-    @Inject
-    App app;
-
     @BindView(R.id.srl_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
     @BindView(R.id.rv_gallery)
     RecyclerView recyclerViewGallery;
 
+    @InjectPresenter
+    GalleryPresenter galleryPresenter;
+
+    @Inject
+    App app;
+
     @Named("keyPhotoIndex")
     @Inject
     String keyPhotoIndex;
 
-    @InjectPresenter
-    GalleryPresenter galleryPresenter;
-
-    private PhotosAdapter photosAdapter;
+    private GalleryAdapter galleryAdapter;
 
     public GalleryFragment() {
         App.getApp().getAppComponent().inject(this);
@@ -71,17 +71,17 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
         AutoGridLayoutManager layoutManager = new AutoGridLayoutManager(context, minSize, margin);
         recyclerViewGallery.setLayoutManager(layoutManager);
 
-        photosAdapter = new PhotosAdapter(0, layoutManager.getItemSize(), (int) margin);
-        app.getAppComponent().inject(photosAdapter);
-        recyclerViewGallery.setAdapter(photosAdapter);
+        galleryAdapter = new GalleryAdapter(0, layoutManager.getItemSize(), (int) margin);
+        app.getAppComponent().inject(galleryAdapter);
+        recyclerViewGallery.setAdapter(galleryAdapter);
 
         return view;
     }
 
     @Override
     public void setGallery(int size) {
-        photosAdapter.setPhotosCount(size);
-        photosAdapter.notifyDataSetChanged();
+        galleryAdapter.setPhotosCount(size);
+        galleryAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class GalleryFragment extends MvpAppCompatFragment implements GalleryView
 
     @Override
     public void updateThumbnail(int index) {
-        photosAdapter.notifyItemChanged(index);
+        galleryAdapter.notifyItemChanged(index);
     }
 
     @Override

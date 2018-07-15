@@ -17,7 +17,7 @@ import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoViewHolder> {
 
     @Named("thumbnail")
     @Inject
@@ -30,7 +30,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.PhotoViewH
     private int itemSize;
     private int margin;
 
-    public PhotosAdapter(int photosCount, int itemSize, int margin) {
+    GalleryAdapter(int photosCount, int itemSize, int margin) {
         this.photosCount = photosCount;
         this.itemSize = itemSize;
         this.margin = margin;

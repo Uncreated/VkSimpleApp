@@ -15,8 +15,8 @@ import com.uncreated.vksimpleapp.presenter.main.MainPresenter;
 import com.uncreated.vksimpleapp.presenter.main.SettingsPresenter;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 import com.uncreated.vksimpleapp.view.main.MainActivity;
+import com.uncreated.vksimpleapp.view.main.gallery.GalleryAdapter;
 import com.uncreated.vksimpleapp.view.main.gallery.GalleryFragment;
-import com.uncreated.vksimpleapp.view.main.gallery.PhotosAdapter;
 import com.uncreated.vksimpleapp.view.main.settings.SettingsFragment;
 import com.uncreated.vksimpleapp.view.photo.PageFragment;
 import com.uncreated.vksimpleapp.view.photo.PhotoActivity;
@@ -48,7 +48,7 @@ public interface AppComponent {
 
     void inject(PhotoPresenter photoPresenter);
 
-    void inject(PhotosAdapter photosAdapter);
+    void inject(GalleryAdapter galleryAdapter);
 
     void inject(PageFragment pageFragment);
 
