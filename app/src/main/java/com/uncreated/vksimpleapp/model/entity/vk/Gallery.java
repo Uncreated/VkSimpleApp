@@ -27,6 +27,10 @@ public class Gallery {
         return items;
     }
 
+    public int getCurrentSize() {
+        return items.size();
+    }
+
     public void sort() {
         for (PhotoInfo photoInfo : items) {
             photoInfo.sort();

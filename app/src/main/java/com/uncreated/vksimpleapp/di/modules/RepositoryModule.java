@@ -8,6 +8,7 @@ import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryStorageLoader;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryWebLoader;
 import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
+import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
 import com.uncreated.vksimpleapp.model.repository.user.UserRepository;
 import com.uncreated.vksimpleapp.model.repository.user.UserStorageLoader;
 import com.uncreated.vksimpleapp.model.repository.user.UserWebLoader;
@@ -24,11 +25,13 @@ public class RepositoryModule {
     public Repositories repository(IAuthRepository authRepository,
                                    PhotoRepository photoRepository,
                                    GalleryRepository galleryRepository,
-                                   UserRepository userRepository) {
+                                   UserRepository userRepository,
+                                   ISettingsRepository settingsRepository) {
         return new Repositories(authRepository,
                 photoRepository,
                 galleryRepository,
-                userRepository);
+                userRepository,
+                settingsRepository);
     }
 
     @Singleton

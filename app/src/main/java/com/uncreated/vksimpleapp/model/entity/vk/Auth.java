@@ -1,7 +1,8 @@
 package com.uncreated.vksimpleapp.model.entity.vk;
 
-public class Auth {
+import com.uncreated.vksimpleapp.model.common.Utils;
 
+public class Auth {
     private String userId;
     private String accessToken;
     private Long expiredDate;
@@ -39,10 +40,6 @@ public class Auth {
         return System.currentTimeMillis() + lifeTime;
     }
 
-    public boolean isExpired() {
-        return System.currentTimeMillis() >= expiredDate;
-    }
-
     public String getUserId() {
         //return userId;//TODO: return true value
         return "1";//debug
@@ -58,5 +55,18 @@ public class Auth {
 
     public Long getExpiredDate() {
         return expiredDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Auth) {
+            Auth auth = (Auth) obj;
+            return Utils.equals(auth.userId, this.userId) &&
+                    Utils.equals(auth.accessToken, this.accessToken) &&
+                    Utils.equals(auth.expiredDate, this.expiredDate) &&
+                    Utils.equals(auth.valid, this.valid) &&
+                    Utils.equals(auth.logout, this.logout);
+        }
+        return false;
     }
 }

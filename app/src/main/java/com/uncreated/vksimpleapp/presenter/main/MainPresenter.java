@@ -4,7 +4,6 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.eventbus.EventBus;
-import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
 import com.uncreated.vksimpleapp.view.main.MainView;
 
 import javax.inject.Inject;
@@ -23,9 +22,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
     @Inject
     EventBus eventBus;
 
-    @Inject
-    ISettingsRepository settingsRepository;
-
     private CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
@@ -37,7 +33,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 mainThreadScheduler));
 
         disposables.add(eventBus.gallerySubscribe(
-                gallery -> getViewState().setGallerySize(gallery.getItems().size()),
+                gallery -> getViewState().setGallerySize(gallery.getCurrentSize()),
                 mainThreadScheduler));
 
         disposables.add(eventBus.authSubscribe(

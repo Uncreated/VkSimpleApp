@@ -51,7 +51,7 @@ public class PhotoPresenter extends MvpPresenter<PhotoView> {
         compositeDisposable.add(eventBus.gallerySubscribe(
                 gallery -> {
                     this.gallery = gallery;
-                    getViewState().setGallerySize(gallery.getItems().size());
+                    getViewState().setGallerySize(gallery.getCurrentSize());
                 }, mainThreadScheduler));
     }
 

@@ -33,7 +33,7 @@ public class GalleryRepository {
                 } else {
                     gallery = galleryPart;
                 }
-                offset = gallery.getItems().size();
+                offset = gallery.getCurrentSize();
                 eventBus.galleryPost(gallery);
                 galleryStorageLoader.saveGallery(gallery, userId);
             }

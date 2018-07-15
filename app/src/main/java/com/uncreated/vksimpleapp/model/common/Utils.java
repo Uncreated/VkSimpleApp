@@ -1,6 +1,6 @@
 package com.uncreated.vksimpleapp.model.common;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -18,8 +18,16 @@ public class Utils {
         }
     }
 
-    public static int dpToPx(Context context, float dpValue) {
-        return (int) (context.getResources().getDisplayMetrics().density * dpValue);
+    public static <T> boolean equals(T obj1, T obj2) {
+        if (obj1 == obj2) {
+            return true;
+        } else if (obj1 != null) {
+            return equalsNonNull(obj1, obj2);
+        }
+        return false;
+    }
 
+    private static <T> boolean equalsNonNull(@NonNull T obj1, T obj2) {
+        return obj1.equals(obj2);
     }
 }

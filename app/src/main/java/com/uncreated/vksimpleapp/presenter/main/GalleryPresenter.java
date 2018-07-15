@@ -51,7 +51,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         compositeDisposable.add(eventBus.gallerySubscribe(
                 gallery -> {
                     this.gallery = gallery;
-                    int size = gallery.getItems().size();
+                    int size = gallery.getCurrentSize();
                     getViewState().setGallery(size);
                     if (size == gallery.getCount()) {
                         getViewState().hideLoading();
