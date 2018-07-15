@@ -1,5 +1,6 @@
 package com.uncreated.vksimpleapp.view.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -11,6 +12,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.presenter.AuthPresenter;
+import com.uncreated.vksimpleapp.view.main.MainActivity;
 
 import javax.inject.Inject;
 
@@ -72,12 +74,14 @@ public class AuthActivity extends MvpAppCompatActivity implements AuthView {
     }
 
     @Override
-    public void goBackView() {
+    public void goMain() {
+        Intent intent = new Intent(this, MainActivity.class);
         finish();
+        startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-
+        finish();
     }
 }

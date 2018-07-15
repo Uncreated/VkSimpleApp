@@ -1,10 +1,10 @@
 package com.uncreated.vksimpleapp.model.repository.user;
 
-import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.entity.responses.RequestException;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -18,9 +18,11 @@ public class UserRepository {
         this.userWebLoader = userWebLoader;
         this.userStorageLoader = userStorageLoader;
 
-        Disposable disposable = eventBus.getAuthSubject()
-                .observeOn(Schedulers.io())
-                .subscribe(auth -> newAuth(eventBus, auth));
+        eventBus.authSubscribe(auth -> {
+            if (auth.isValid()) {
+                newAuth(eventBus, auth);
+            }
+        }, Schedulers.io());
     }
 
     private void newAuth(EventBus eventBus, Auth auth) {
@@ -28,17 +30,24 @@ public class UserRepository {
 
         try {
             User user = userWebLoader.loadUser(userId);
-            eventBus.getUserSubject()
-                    .onNext(user);
+            eventBus.userPost(user);
             userStorageLoader.saveUser(user);
+        } catch (RequestException e) {
+
+            if (!userWebLoader.handleVkError(eventBus, e.getRequestError())) {
+                loadFromStorage(eventBus, userId);
+            }
         } catch (Exception e) {
             Timber.tag("MyDebug").d(e);
 
-            User user = userStorageLoader.loadUser(userId);
-            if (user != null) {
-                eventBus.getUserSubject()
-                        .onNext(user);
-            }
+            loadFromStorage(eventBus, userId);
+        }
+    }
+
+    private void loadFromStorage(EventBus eventBus, String userId) {
+        User user = userStorageLoader.loadUser(userId);
+        if (user != null) {
+            eventBus.userPost(user);
         }
     }
 

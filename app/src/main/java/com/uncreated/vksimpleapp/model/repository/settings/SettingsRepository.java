@@ -3,7 +3,7 @@ package com.uncreated.vksimpleapp.model.repository.settings;
 import android.content.SharedPreferences;
 
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
 public class SettingsRepository implements ISettingsRepository {
     private static final String THEME_KEY = "keyTheme";
@@ -42,8 +42,7 @@ public class SettingsRepository implements ISettingsRepository {
                     .putBoolean(THEME_KEY, themeValue)
                     .apply();
 
-            eventBus.getThemeIdSubject()
-                    .onNext(getDefaultThemeId());
+            eventBus.themeIdPost(getDefaultThemeId());
         }
     }
 }

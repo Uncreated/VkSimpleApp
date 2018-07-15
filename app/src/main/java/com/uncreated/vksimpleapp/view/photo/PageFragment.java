@@ -12,7 +12,7 @@ import android.widget.ImageView;
 
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 import javax.inject.Inject;
@@ -73,9 +73,7 @@ public class PageFragment extends Fragment {
         if (bitmap == null) {
             bitmap = thumbnailsCache.getBitmap(index);
 
-            eventBus.getOriginalEvents()
-                    .getIndexSubject()
-                    .onNext(index);
+            eventBus.originalEventPost(index);
         }
         imageView.setImageBitmap(bitmap);
 

@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 import javax.inject.Inject;
@@ -66,12 +66,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
             holder.imageViewPhoto.setImageBitmap(bitmap);
         } else {
             holder.imageViewPhoto.setImageBitmap(null);
-            eventBus.getThumbnailEvents()
-                    .getIndexSubject()
-                    .onNext(position);
+            eventBus.thumbnailEventsPost(position);
         }
-        View.OnClickListener listener = v -> eventBus.getClickThumbnailSubject().onNext(position);
-        holder.cardView.setOnClickListener(listener);
+        holder.cardView.setOnClickListener(v -> eventBus.clickThumbnailPost(position));
     }
 
     class PhotoViewHolder extends RecyclerView.ViewHolder {

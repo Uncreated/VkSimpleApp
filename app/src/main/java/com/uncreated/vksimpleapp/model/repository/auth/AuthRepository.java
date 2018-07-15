@@ -2,10 +2,9 @@ package com.uncreated.vksimpleapp.model.repository.auth;
 
 import android.content.SharedPreferences;
 
-import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class AuthRepository implements IAuthRepository {
@@ -16,27 +15,22 @@ public class AuthRepository implements IAuthRepository {
 
     private SharedPreferences sharedPreferences;
 
-    private Auth currentAuth;
-
     public AuthRepository(SharedPreferences sharedPreferences, EventBus eventBus) {
         this.sharedPreferences = sharedPreferences;
 
-        currentAuth = loadAuth();
+        Auth currentAuth = loadAuth();
 
         if (currentAuth != null) {
-            eventBus.getAuthSubject()
-                    .onNext(currentAuth);
+            eventBus.authPost(currentAuth);
         } else {
-            eventBus.getAuthNotValidSubject()
-                    .onNext(false);
+            eventBus.authPost(Auth.AuthNotValid());
         }
 
-        Disposable disposable = eventBus.getAuthSubject()
-                .observeOn(Schedulers.io())
-                .subscribe(auth -> {
-                    currentAuth = auth;
-                    saveAuth(auth);
-                });
+        eventBus.authSubscribe(auth -> {
+            if (auth.isValid()) {
+                saveAuth(auth);
+            }
+        }, Schedulers.io());
     }
 
     private void saveAuth(Auth auth) {

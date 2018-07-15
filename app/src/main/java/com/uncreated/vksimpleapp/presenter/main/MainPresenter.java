@@ -2,7 +2,8 @@ package com.uncreated.vksimpleapp.presenter.main;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.entity.vk.Auth;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
 import com.uncreated.vksimpleapp.view.main.MainView;
 
@@ -25,31 +26,40 @@ public class MainPresenter extends MvpPresenter<MainView> {
     @Inject
     ISettingsRepository settingsRepository;
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        compositeDisposable.add(eventBus.getUserSubject()
-                .observeOn(mainThreadScheduler)
-                .subscribe(user -> getViewState().setUser(user)));
+        disposables.add(eventBus.userSubscribe(
+                user -> getViewState().setUser(user),
+                mainThreadScheduler));
 
-        compositeDisposable.add(eventBus.getGallerySubject()
-                .observeOn(mainThreadScheduler)
-                .subscribe(gallery -> getViewState().setGallerySize(gallery.getItems().size())));
+        disposables.add(eventBus.gallerySubscribe(
+                gallery -> getViewState().setGallerySize(gallery.getItems().size()),
+                mainThreadScheduler));
 
-        compositeDisposable.add(eventBus.getAuthNotValidSubject()
-                .observeOn(mainThreadScheduler)
-                .subscribe(o -> getViewState().goAuth()));
+        disposables.add(eventBus.authSubscribe(
+                auth -> {
+                    if (!auth.isValid()) {
+                        getViewState().goAuth();
+                    }
+                }, mainThreadScheduler));
 
-        compositeDisposable.add(eventBus.getThemeIdSubject()
-                .observeOn(mainThreadScheduler)
-                .subscribe(themeId -> getViewState().changeTheme(themeId)));
+        disposables.add(eventBus.themeIdSubscribe(
+                themeId -> getViewState().changeTheme(themeId),
+                mainThreadScheduler));
     }
 
     public void onLogout() {
-        eventBus.getAuthNotValidSubject()
-                .onNext(true);
+        eventBus.authPost(Auth.AuthLogout());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        disposables.dispose();
     }
 }

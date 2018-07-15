@@ -2,8 +2,8 @@ package com.uncreated.vksimpleapp.di.modules;
 
 import android.content.SharedPreferences;
 
-import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.auth.AuthWebClient;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.auth.AuthRepository;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 

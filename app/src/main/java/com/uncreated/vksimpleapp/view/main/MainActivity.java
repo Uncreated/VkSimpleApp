@@ -24,9 +24,13 @@ import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 import com.uncreated.vksimpleapp.view.main.gallery.GalleryFragment;
 import com.uncreated.vksimpleapp.view.main.settings.SettingsFragment;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -53,9 +57,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
+    @BindString(R.string.tap_twice)
+    String tapTwice;
+
     private NavigationViewHolder navigationViewHolder;
 
     private int curFragment;
+
+    private boolean backPressed = false;
 
     public MainActivity() {
         App.getApp().getAppComponent().inject(this);
@@ -116,6 +125,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void goAuth() {
         Intent intent = new Intent(this, AuthActivity.class);
+        finish();
         startActivity(intent);
     }
 
@@ -145,9 +155,20 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }/* else {
-            super.onBackPressed();
-        }*/
+        } else {
+            if (backPressed) {
+                finish();
+            } else {
+                backPressed = true;
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        backPressed = false;
+                    }
+                }, 300);
+                Toast.makeText(this, tapTwice, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private NavigationView.OnNavigationItemSelectedListener getNavigationListener() {

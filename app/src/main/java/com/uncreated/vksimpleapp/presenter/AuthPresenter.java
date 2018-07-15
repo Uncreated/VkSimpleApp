@@ -2,8 +2,8 @@ package com.uncreated.vksimpleapp.presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.auth.AuthWebClient;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.view.auth.AuthView;
 
 import javax.inject.Inject;
@@ -31,17 +31,14 @@ public class AuthPresenter extends MvpPresenter<AuthView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        compositeDisposable.add(eventBus.getAuthSubject()
-                .observeOn(mainThreadScheduler)
-                .subscribe(auth -> getViewState().goBackView(), throwable -> {
-                    getViewState().showError(throwable.getMessage());
-                    doAuth();
-                }));
+        compositeDisposable.add(eventBus.authSubscribe(
+                auth -> {
+                    if (auth.isValid()) {
+                        getViewState().goMain();
+                    }
+                },
+                mainThreadScheduler));
 
-        doAuth();
-    }
-
-    private void doAuth() {
         getViewState().go(authWebClient.getAuthUrl(), authWebClient);
     }
 

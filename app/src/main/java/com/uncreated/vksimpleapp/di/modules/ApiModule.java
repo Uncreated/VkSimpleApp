@@ -3,13 +3,11 @@ package com.uncreated.vksimpleapp.di.modules;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.api.ApiService;
 import com.uncreated.vksimpleapp.model.api.VkApiInterceptor;
-import com.uncreated.vksimpleapp.model.api.VkErrorHandler;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -73,11 +71,5 @@ public class ApiModule {
     public VkApiInterceptor accessTokenInterceptor(EventBus eventBus,
                                                    @Named("version") String version) {
         return new VkApiInterceptor(eventBus, version);
-    }
-
-    @Singleton
-    @Provides
-    public VkErrorHandler vkErrorHandler(EventBus eventBus) {
-        return new VkErrorHandler(eventBus);
     }
 }

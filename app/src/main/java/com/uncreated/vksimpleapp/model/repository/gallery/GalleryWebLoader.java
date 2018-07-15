@@ -1,5 +1,7 @@
 package com.uncreated.vksimpleapp.model.repository.gallery;
 
+import android.support.annotation.NonNull;
+
 import com.uncreated.vksimpleapp.model.api.ApiService;
 import com.uncreated.vksimpleapp.model.entity.responses.VkResponse;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
@@ -16,6 +18,7 @@ public class GalleryWebLoader extends WebLoader<Gallery> {
         this.apiService = apiService;
     }
 
+    @NonNull
     Gallery loadGallery(String userId, int offset) throws Exception {
         Call<VkResponse<Gallery>> call = apiService.getCallGallery(userId, true, offset,
                 COUNT_PER_REQUEST);

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="gallery">Галерея</string>
     <string name="settings">Настройки</string>
     <string name="change_user">Сменить пользователя</string>
+
+    <string name="hint_light">Светлая</string>
+    <string name="hint_dark">Тёмная</string>
+    <string name="theme_hint">Тема</string>
+    <string name="tap_twice">Нажми дважды чтобы закрыть приложение</string>
 </resources>

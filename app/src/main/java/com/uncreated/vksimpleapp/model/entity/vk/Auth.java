@@ -5,11 +5,34 @@ public class Auth {
     private String userId;
     private String accessToken;
     private Long expiredDate;
+    private boolean valid = true;
+    private boolean logout = false;
 
     public Auth(String userId, String accessToken, Long expiredDate) {
         this.userId = userId;
         this.accessToken = accessToken;
         this.expiredDate = expiredDate;
+    }
+
+    private Auth(boolean logout) {
+        this.valid = false;
+        this.logout = logout;
+    }
+
+    public static Auth AuthNotValid() {
+        return new Auth(false);
+    }
+
+    public static Auth AuthLogout() {
+        return new Auth(true);
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public boolean isLogout() {
+        return logout;
     }
 
     public static Long calcExpiredDate(long lifeTime) {
@@ -21,8 +44,8 @@ public class Auth {
     }
 
     public String getUserId() {
-        //return userId;
-        return "1";
+        //return userId;//TODO: return true value
+        return "1";//debug
     }
 
     public void setUserId(String userId) {
@@ -33,15 +56,7 @@ public class Auth {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
     public Long getExpiredDate() {
         return expiredDate;
-    }
-
-    public void setExpiredDate(Long expiredDate) {
-        this.expiredDate = expiredDate;
     }
 }

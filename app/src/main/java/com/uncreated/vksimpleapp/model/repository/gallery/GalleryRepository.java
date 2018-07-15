@@ -1,10 +1,9 @@
 package com.uncreated.vksimpleapp.model.repository.gallery;
 
-import com.uncreated.vksimpleapp.model.EventBus;
-import com.uncreated.vksimpleapp.model.entity.vk.Auth;
+import com.uncreated.vksimpleapp.model.entity.responses.RequestException;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -19,14 +18,11 @@ public class GalleryRepository {
         this.galleryWebLoader = galleryWebLoader;
         this.galleryStorageLoader = galleryStorageLoader;
 
-        Disposable disposable = eventBus.getAuthSubject()
-                .observeOn(Schedulers.io())
-                .subscribe(auth -> newAuth(eventBus, auth));
+        eventBus.userSubscribe(user -> loadGallery(eventBus, user.getId()), Schedulers.io());
     }
 
-    private void newAuth(EventBus eventBus, Auth auth) {
+    private void loadGallery(EventBus eventBus, String userId) {
         Gallery gallery = null;
-        String userId = auth.getUserId();
 
         try {
             int offset = 0;
@@ -38,20 +34,26 @@ public class GalleryRepository {
                     gallery = galleryPart;
                 }
                 offset = gallery.getItems().size();
-                eventBus.getGallerySubject()
-                        .onNext(gallery);
+                eventBus.galleryPost(gallery);
                 galleryStorageLoader.saveGallery(gallery, userId);
             }
             while (offset < gallery.getCount());
+        } catch (RequestException e) {
+            if (!galleryWebLoader.handleVkError(eventBus, e.getRequestError())) {
+                loadFromStorage(eventBus, gallery, userId);
+            }
         } catch (Exception e) {
             Timber.tag("MyDebug").d(e);
 
-            if (gallery == null) {
-                gallery = galleryStorageLoader.loadGallery(userId);
-                if (gallery != null) {
-                    eventBus.getGallerySubject()
-                            .onNext(gallery);
-                }
+            loadFromStorage(eventBus, gallery, userId);
+        }
+    }
+
+    private void loadFromStorage(EventBus eventBus, Gallery gallery, String userId) {
+        if (gallery == null) {
+            gallery = galleryStorageLoader.loadGallery(userId);
+            if (gallery != null) {
+                eventBus.galleryPost(gallery);
             }
         }
     }

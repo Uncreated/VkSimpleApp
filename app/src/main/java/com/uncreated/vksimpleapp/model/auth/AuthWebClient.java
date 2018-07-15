@@ -8,10 +8,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
-
-import io.reactivex.disposables.Disposable;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
 public class AuthWebClient extends WebViewClient {
 
@@ -27,17 +25,22 @@ public class AuthWebClient extends WebViewClient {
         this.eventBus = eventBus;
         this.version = version;
 
-        Disposable disposable = eventBus.getAuthNotValidSubject()
-                .subscribe(logout -> {
-                    if (logout) {
-                        CookieManager cookieManager = CookieManager.getInstance();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            cookieManager.removeAllCookies(null);
-                            cookieManager.flush();
-                        } else
-                            cookieManager.removeAllCookie();
-                    }
-                });
+        eventBus.authSubscribe(auth -> {
+            if (!auth.isValid() && auth.isLogout()) {
+                logout();
+            }
+        }, null);
+    }
+
+    private void logout() {
+
+        CookieManager cookieManager = CookieManager.getInstance();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.removeAllCookies(null);
+            cookieManager.flush();
+        } else {
+            cookieManager.removeAllCookie();
+        }
     }
 
     @Override
@@ -54,8 +57,7 @@ public class AuthWebClient extends WebViewClient {
             Long expiredDate = Auth.calcExpiredDate(Long.parseLong(expiresIn));
 
             Auth auth = new Auth(userId, accessToken, expiredDate);
-            eventBus.getAuthSubject()
-                    .onNext(auth);
+            eventBus.authPost(auth);
             return true;
         }
         return false;

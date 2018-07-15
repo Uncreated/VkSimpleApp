@@ -19,5 +19,5 @@ public interface AuthView extends MvpView {
 
     void showError(String error);
 
-    void goBackView();
+    void goMain();
 }

@@ -2,9 +2,9 @@ package com.uncreated.vksimpleapp.presenter.main;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.uncreated.vksimpleapp.model.EventBus;
 import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.view.main.gallery.GalleryView;
 
 import javax.inject.Inject;
@@ -33,33 +33,30 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
 
         getViewState().showLoading();
 
-        compositeDisposable.add(eventBus.getClickThumbnailSubject()
-                .observeOn(mainThreadScheduler)
-                .subscribe(index -> getViewState().goPhoto(index)));
+        compositeDisposable.add(eventBus.clickThumbnailSubscribe(
+                index -> getViewState().goPhoto(index),
+                mainThreadScheduler));
 
-        eventBus.getThumbnailEvents()
-                .getIndexSubject()
-                .observeOn(mainThreadScheduler)
-                .map(index -> {
+        compositeDisposable.add(eventBus.thumbnailIndexSubscribe(
+                index -> {
                     String url = gallery.getItems().get(index).getThumbnailUrl();
-                    return new IndexUrl(index, url);
-                }).subscribe(eventBus.getThumbnailEvents().getUrlSubject());
+                    eventBus.thumbnailEventsPost(new IndexUrl(index, url));
+                }, mainThreadScheduler));
 
-        compositeDisposable.add(eventBus.getThumbnailEvents()
-                .getBitmapSubject()
-                .observeOn(mainThreadScheduler)
-                .subscribe(bitmapIndex -> getViewState().updateThumbnail(bitmapIndex.getIndex()),
-                        Throwable::printStackTrace));
 
-        compositeDisposable.add(eventBus.getGallerySubject()
-                .observeOn(mainThreadScheduler)
-                .subscribe(gallery -> {
+        compositeDisposable.add(eventBus.thumbnailBitmapIndexSubscribe(
+                bitmapIndex -> getViewState().updateThumbnail(bitmapIndex.getIndex()),
+                mainThreadScheduler));
+
+        compositeDisposable.add(eventBus.gallerySubscribe(
+                gallery -> {
                     this.gallery = gallery;
-                    getViewState().setGallery(gallery.getItems().size());
-                    if (gallery.getItems().size() == gallery.getCount()) {
+                    int size = gallery.getItems().size();
+                    getViewState().setGallery(size);
+                    if (size == gallery.getCount()) {
                         getViewState().hideLoading();
                     }
-                }));
+                }, mainThreadScheduler));
     }
 
     @Override

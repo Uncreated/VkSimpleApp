@@ -2,7 +2,7 @@ package com.uncreated.vksimpleapp.di.modules;
 
 import android.content.Context;
 
-import com.uncreated.vksimpleapp.model.EventBus;
+import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
 import com.uncreated.vksimpleapp.model.repository.photo.loader.IPhotoLoader;
 import com.uncreated.vksimpleapp.model.repository.photo.loader.StoragePhotoLoader;
