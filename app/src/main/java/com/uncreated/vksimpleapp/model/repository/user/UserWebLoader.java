@@ -19,7 +19,7 @@ public class UserWebLoader extends WebLoader<List<User>> {
         this.apiService = apiService;
     }
 
-    User loadUser(String userId) throws Exception {
+    public User loadUser(String userId) throws Exception {
         Call<VkResponse<List<User>>> call = apiService.getCallUser(userId, REQUIRED_FIELDS);
 
         List<User> users = load(call);

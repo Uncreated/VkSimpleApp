@@ -13,10 +13,7 @@ import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.presenter.main.MainPresenter;
 import com.uncreated.vksimpleapp.view.main.MainView;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -61,21 +58,11 @@ public class MainPresenterTest {
 
     private ArgumentCaptor<Scheduler> schedulerCaptor;
 
-    @BeforeClass
-    public static void beforeClass() {
-
-    }
-
-    @AfterClass
-    public static void afterClass() {
-
-    }
-
     @Before
     public void before() {
-        eventBus = Mockito.mock(EventBus.class);
-
         MockitoAnnotations.initMocks(this);
+
+        eventBus = Mockito.mock(EventBus.class);
 
         userDisposable = Mockito.mock(Disposable.class);
         authDisposable = Mockito.mock(Disposable.class);
@@ -119,11 +106,6 @@ public class MainPresenterTest {
         galleryCaptor = ArgumentCaptor.forClass(Consumer.class);
         themeIdCaptor = ArgumentCaptor.forClass(Consumer.class);
         schedulerCaptor = ArgumentCaptor.forClass(Scheduler.class);
-    }
-
-    @After
-    public void after() {
-
     }
 
     @Test

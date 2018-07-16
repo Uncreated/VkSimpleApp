@@ -20,12 +20,12 @@ public class UserRepository {
 
         eventBus.authSubscribe(auth -> {
             if (auth.isValid()) {
-                newAuth(eventBus, auth);
+                loadUser(eventBus, auth);
             }
         }, Schedulers.io());
     }
 
-    private void newAuth(EventBus eventBus, Auth auth) {
+    private void loadUser(EventBus eventBus, Auth auth) {
         String userId = auth.getUserId();
 
         try {
