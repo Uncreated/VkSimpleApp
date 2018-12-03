@@ -6,6 +6,10 @@ import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 
+import org.reactivestreams.Publisher;
+
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -42,6 +46,10 @@ public class EventBus extends Events {
 
     public Disposable clickThumbnailSubscribe(Consumer<Integer> consumer, Scheduler scheduler) {
         return subscribe(clickThumbnailSubject, consumer, scheduler);
+    }
+
+    public Publisher<Auth> getAuthSubject() {
+        return authSubject.toFlowable(BackpressureStrategy.BUFFER);
     }
 
     public Disposable authSubscribe(Consumer<Auth> consumer, Scheduler scheduler) {

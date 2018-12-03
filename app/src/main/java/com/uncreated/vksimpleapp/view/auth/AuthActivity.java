@@ -1,80 +1,52 @@
 package com.uncreated.vksimpleapp.view.auth;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.presenter.AuthPresenter;
+import com.uncreated.vksimpleapp.databinding.ActivityAuthBinding;
+import com.uncreated.vksimpleapp.presenter.AuthViewModel;
 import com.uncreated.vksimpleapp.view.main.MainActivity;
 
-import javax.inject.Inject;
+public class AuthActivity extends MvpAppCompatActivity {
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class AuthActivity extends MvpAppCompatActivity implements AuthView {
-
-    @Inject
-    App app;
-
-    @InjectPresenter
-    AuthPresenter authPresenter;
-
-    @BindView(R.id.wv_oauth)
-    WebView webView;
-
-    public AuthActivity() {
-        App.getApp().getAppComponent().inject(this);
-    }
+    private ActivityAuthBinding dataBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auth);
+        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_auth);
 
-        ButterKnife.bind(this);
+        AuthViewModel authViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
+
+        authViewModel.getAuthSuccessfulLiveData()
+                .observe(this, successful -> {
+                    if (successful != null && successful) {
+                        goMain();
+                    }
+                });
+
+        authViewModel.getAuthWebClientLiveData()
+                .observe(this, authWebClient -> {
+                    if (authWebClient != null) {
+                        goUrl(authWebClient.getAuthUrl(), authWebClient);
+                    }
+                });
     }
 
-    @ProvidePresenter
-    public AuthPresenter provideMainPresenter() {
-        AuthPresenter authPresenter = new AuthPresenter();
-        app.getAppComponent().inject(authPresenter);
-        return authPresenter;
+    private void goUrl(String url, WebViewClient webViewClient) {
+        dataBinding.wvOauth.clearCache(true);
+        dataBinding.wvOauth.clearHistory();
+
+        dataBinding.wvOauth.setWebViewClient(webViewClient);
+        dataBinding.wvOauth.loadUrl(url);
     }
 
-    @Override
-    public void showLoading() {
-        Toast.makeText(this, "showLoading", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void hideLoading() {
-        Toast.makeText(this, "hideLoading", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void go(String url, WebViewClient webViewClient) {
-        webView.clearCache(true);
-        webView.clearHistory();
-
-        webView.setWebViewClient(webViewClient);
-        webView.loadUrl(url);
-    }
-
-    @Override
-    public void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void goMain() {
+    private void goMain() {
         Intent intent = new Intent(this, MainActivity.class);
         finish();
         startActivity(intent);

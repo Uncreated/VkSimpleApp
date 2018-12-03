@@ -8,7 +8,7 @@ import com.uncreated.vksimpleapp.di.modules.EventBusModule;
 import com.uncreated.vksimpleapp.di.modules.PhotoRepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.RepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.SettingsModule;
-import com.uncreated.vksimpleapp.presenter.AuthPresenter;
+import com.uncreated.vksimpleapp.presenter.AuthViewModel;
 import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 import com.uncreated.vksimpleapp.presenter.main.GalleryPresenter;
 import com.uncreated.vksimpleapp.presenter.main.MainPresenter;
@@ -42,7 +42,7 @@ public interface AppComponent {
 
     void inject(AuthActivity authActivity);
 
-    void inject(AuthPresenter authPresenter);
+    void inject(AuthViewModel authViewModel);
 
     void inject(PhotoActivity photoActivity);
 
