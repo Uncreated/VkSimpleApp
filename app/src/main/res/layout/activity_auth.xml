@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.auth.AuthActivity">
+    tools:context=".ui.auth.AuthActivity">
 
     <WebView
         android:id="@+id/wv_oauth"

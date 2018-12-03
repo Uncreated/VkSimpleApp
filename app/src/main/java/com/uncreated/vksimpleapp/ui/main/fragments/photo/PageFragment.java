@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.photo;
+package com.uncreated.vksimpleapp.ui.main.fragments.photo;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;

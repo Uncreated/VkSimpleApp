@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.photo;
+package com.uncreated.vksimpleapp.ui.main.fragments.photo;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -11,7 +11,6 @@ import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
 import com.uncreated.vksimpleapp.model.eventbus.EventBus;
-import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 
 import javax.inject.Inject;
 import javax.inject.Named;

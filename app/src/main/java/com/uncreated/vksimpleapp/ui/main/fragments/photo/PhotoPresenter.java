@@ -1,11 +1,11 @@
-package com.uncreated.vksimpleapp.presenter.main;
+package com.uncreated.vksimpleapp.ui.main.fragments.photo;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.eventbus.EventBus;
-import com.uncreated.vksimpleapp.view.main.gallery.GalleryView;
+import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,14 +14,17 @@ import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 
 @InjectViewState
-public class GalleryPresenter extends MvpPresenter<GalleryView> {
-
-    @Inject
-    EventBus eventBus;
+public class PhotoPresenter extends MvpPresenter<PhotoView> {
 
     @Named("mainThread")
     @Inject
     Scheduler mainThreadScheduler;
+
+    @Inject
+    EventBus eventBus;
+    @Named("original")
+    @Inject
+    GalleryPhotoCache galleryPhotoCache;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -31,31 +34,23 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        getViewState().showLoading();
-
-        compositeDisposable.add(eventBus.clickThumbnailSubscribe(
-                index -> getViewState().goPhoto(index),
+        compositeDisposable.add(eventBus.originalBitmapIndexSubscribe(
+                bitmapIndex -> getViewState().updatePhoto(bitmapIndex),
                 mainThreadScheduler));
 
-        compositeDisposable.add(eventBus.thumbnailIndexSubscribe(
+        compositeDisposable.add(eventBus.originalIndexSubscribe(
                 index -> {
-                    String url = gallery.getItems().get(index).getThumbnailUrl();
-                    eventBus.thumbnailEventsPost(new IndexUrl(index, url));
-                }, mainThreadScheduler));
-
-
-        compositeDisposable.add(eventBus.thumbnailBitmapIndexSubscribe(
-                bitmapIndex -> getViewState().updateThumbnail(bitmapIndex.getIndex()),
+                    if (gallery != null) {
+                        String url = gallery.getItems().get(index).getOriginalUrl();
+                        eventBus.originalEventPost(new IndexUrl(index, url));
+                    }
+                },
                 mainThreadScheduler));
 
         compositeDisposable.add(eventBus.gallerySubscribe(
                 gallery -> {
                     this.gallery = gallery;
-                    int size = gallery.getCurrentSize();
-                    getViewState().setGallery(size);
-                    if (size == gallery.getCount()) {
-                        getViewState().hideLoading();
-                    }
+                    getViewState().setGallerySize(gallery.getCurrentSize());
                 }, mainThreadScheduler));
     }
 
@@ -64,5 +59,6 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         super.onDestroy();
 
         compositeDisposable.dispose();
+        galleryPhotoCache.clear();
     }
 }

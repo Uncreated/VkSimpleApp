@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.main;
+package com.uncreated.vksimpleapp.ui.main;
 
 import android.view.View;
 import android.widget.ImageView;

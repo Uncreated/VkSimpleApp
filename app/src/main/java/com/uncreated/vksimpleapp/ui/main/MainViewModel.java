@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.presenter.main;
+package com.uncreated.vksimpleapp.ui.main;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.LiveDataReactiveStreams;
@@ -11,7 +11,6 @@ import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
-import com.uncreated.vksimpleapp.model.repository.settings.SettingsRepository;
 
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -1,0 +1,38 @@
+package com.uncreated.vksimpleapp.ui.main.fragments.settings;
+
+
+import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.uncreated.vksimpleapp.R;
+import com.uncreated.vksimpleapp.databinding.FragmentSettingsBinding;
+
+public class SettingsFragment extends MvpAppCompatFragment {
+
+    private FragmentSettingsBinding dataBinding;
+    private SettingsViewModel settingsViewModel;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container,
+                false);
+
+        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+
+        dataBinding.setThemeLeft(settingsViewModel.getThemeValue());
+
+        return dataBinding.getRoot();
+    }
+
+    public void onThemeChanged(View View) {
+        settingsViewModel.setThemeValue(dataBinding.swTheme.isChecked());
+        dataBinding.setThemeLeft(dataBinding.swTheme.isChecked());
+    }
+}

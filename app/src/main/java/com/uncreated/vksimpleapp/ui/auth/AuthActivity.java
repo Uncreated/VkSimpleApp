@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.auth;
+package com.uncreated.vksimpleapp.ui.auth;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -9,8 +9,7 @@ import android.webkit.WebViewClient;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.ActivityAuthBinding;
-import com.uncreated.vksimpleapp.presenter.AuthViewModel;
-import com.uncreated.vksimpleapp.view.main.MainActivity;
+import com.uncreated.vksimpleapp.ui.main.MainActivity;
 
 public class AuthActivity extends MvpAppCompatActivity {
 

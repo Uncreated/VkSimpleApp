@@ -8,18 +8,18 @@ import com.uncreated.vksimpleapp.di.modules.EventBusModule;
 import com.uncreated.vksimpleapp.di.modules.PhotoRepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.RepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.SettingsModule;
-import com.uncreated.vksimpleapp.presenter.AuthViewModel;
-import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
-import com.uncreated.vksimpleapp.presenter.main.GalleryPresenter;
-import com.uncreated.vksimpleapp.presenter.main.MainViewModel;
-import com.uncreated.vksimpleapp.presenter.main.SettingsPresenter;
-import com.uncreated.vksimpleapp.view.auth.AuthActivity;
-import com.uncreated.vksimpleapp.view.main.MainActivity;
-import com.uncreated.vksimpleapp.view.main.gallery.GalleryAdapter;
-import com.uncreated.vksimpleapp.view.main.gallery.GalleryFragment;
-import com.uncreated.vksimpleapp.view.main.settings.SettingsFragment;
-import com.uncreated.vksimpleapp.view.photo.PageFragment;
-import com.uncreated.vksimpleapp.view.photo.PhotoActivity;
+import com.uncreated.vksimpleapp.ui.auth.AuthViewModel;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoPresenter;
+import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryPresenter;
+import com.uncreated.vksimpleapp.ui.main.MainViewModel;
+import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsViewModel;
+import com.uncreated.vksimpleapp.ui.auth.AuthActivity;
+import com.uncreated.vksimpleapp.ui.main.MainActivity;
+import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryAdapter;
+import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryFragment;
+import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsFragment;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.PageFragment;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoActivity;
 
 import javax.inject.Singleton;
 
@@ -58,5 +58,5 @@ public interface AppComponent {
 
     void inject(SettingsFragment settingsFragment);
 
-    void inject(SettingsPresenter settingsPresenter);
+    void inject(SettingsViewModel settingsViewModel);
 }

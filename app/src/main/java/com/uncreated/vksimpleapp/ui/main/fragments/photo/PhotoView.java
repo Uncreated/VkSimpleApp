@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.photo;
+package com.uncreated.vksimpleapp.ui.main.fragments.photo;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;

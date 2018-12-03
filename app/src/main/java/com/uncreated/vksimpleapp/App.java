@@ -6,8 +6,6 @@ import com.uncreated.vksimpleapp.di.AppComponent;
 import com.uncreated.vksimpleapp.di.DaggerAppComponent;
 import com.uncreated.vksimpleapp.di.modules.AppModule;
 import com.uncreated.vksimpleapp.model.repository.Repositories;
-import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
-import com.uncreated.vksimpleapp.model.repository.settings.SettingsRepository;
 
 import javax.inject.Inject;
 

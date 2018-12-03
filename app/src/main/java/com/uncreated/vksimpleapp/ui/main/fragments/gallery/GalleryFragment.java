@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.main.gallery;
+package com.uncreated.vksimpleapp.ui.main.fragments.gallery;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +16,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.presenter.main.GalleryPresenter;
-import com.uncreated.vksimpleapp.view.photo.PhotoActivity;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoActivity;
 
 import javax.inject.Inject;
 import javax.inject.Named;

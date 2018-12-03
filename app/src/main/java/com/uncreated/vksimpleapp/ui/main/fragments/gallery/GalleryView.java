@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.main.gallery;
+package com.uncreated.vksimpleapp.ui.main.fragments.gallery;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;

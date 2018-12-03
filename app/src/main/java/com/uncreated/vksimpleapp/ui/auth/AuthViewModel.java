@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.presenter;
+package com.uncreated.vksimpleapp.ui.auth;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.LiveDataReactiveStreams;

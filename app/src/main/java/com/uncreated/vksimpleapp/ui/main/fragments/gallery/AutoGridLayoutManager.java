@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.view.main.gallery;
+package com.uncreated.vksimpleapp.ui.main.fragments.gallery;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
