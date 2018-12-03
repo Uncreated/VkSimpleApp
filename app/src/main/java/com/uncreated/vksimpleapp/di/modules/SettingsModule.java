@@ -20,10 +20,4 @@ public class SettingsModule {
                                                   @Named("Settings") SharedPreferences sharedPreferences) {
         return new SettingsRepository(eventBus, sharedPreferences);
     }
-
-    @Named("themeId")
-    @Provides
-    public Integer themeId(ISettingsRepository settingsRepository) {
-        return settingsRepository.getDefaultThemeId();
-    }
 }

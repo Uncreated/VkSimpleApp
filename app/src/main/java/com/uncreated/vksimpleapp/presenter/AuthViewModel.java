@@ -6,15 +6,12 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
+import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.auth.AuthWebClient;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-
-import io.reactivex.Scheduler;
-import io.reactivex.disposables.CompositeDisposable;
 
 public class AuthViewModel extends ViewModel {
 
@@ -28,6 +25,8 @@ public class AuthViewModel extends ViewModel {
     private LiveData<Boolean> authSuccessfulLiveData;
 
     public AuthViewModel() {
+        App.getApp().getAppComponent().inject(this);
+
         authSuccessfulLiveData = Transformations.map(
                 LiveDataReactiveStreams.fromPublisher(eventBus.getAuthSubject()),
                 Auth::isValid);

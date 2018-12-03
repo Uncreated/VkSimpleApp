@@ -11,7 +11,7 @@ import com.uncreated.vksimpleapp.di.modules.SettingsModule;
 import com.uncreated.vksimpleapp.presenter.AuthViewModel;
 import com.uncreated.vksimpleapp.presenter.PhotoPresenter;
 import com.uncreated.vksimpleapp.presenter.main.GalleryPresenter;
-import com.uncreated.vksimpleapp.presenter.main.MainPresenter;
+import com.uncreated.vksimpleapp.presenter.main.MainViewModel;
 import com.uncreated.vksimpleapp.presenter.main.SettingsPresenter;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 import com.uncreated.vksimpleapp.view.main.MainActivity;
@@ -38,7 +38,7 @@ public interface AppComponent {
 
     void inject(MainActivity mainActivity);
 
-    void inject(MainPresenter mainPresenter);
+    void inject(MainViewModel mainViewModel);
 
     void inject(AuthActivity authActivity);
 

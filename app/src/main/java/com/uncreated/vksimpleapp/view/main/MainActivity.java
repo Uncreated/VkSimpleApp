@@ -1,25 +1,24 @@
 package com.uncreated.vksimpleapp.view.main;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.request.RequestOptions;
-import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
+import com.uncreated.vksimpleapp.databinding.ActivityMainBinding;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.photo.GlideApp;
-import com.uncreated.vksimpleapp.presenter.main.MainPresenter;
+import com.uncreated.vksimpleapp.presenter.main.MainViewModel;
 import com.uncreated.vksimpleapp.view.auth.AuthActivity;
 import com.uncreated.vksimpleapp.view.main.gallery.GalleryFragment;
 import com.uncreated.vksimpleapp.view.main.settings.SettingsFragment;
@@ -27,109 +26,74 @@ import com.uncreated.vksimpleapp.view.main.settings.SettingsFragment;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+public class MainActivity extends MvpAppCompatActivity {
 
-import butterknife.BindString;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class MainActivity extends MvpAppCompatActivity implements MainView {
-
-    private static final String FRAGMENT_INDEX_KEY = "fragmentIndexKey";
-
-    @Inject
-    App app;
-
-    @Named("themeId")
-    @Inject
-    Integer themeId;
-
-    @InjectPresenter
-    MainPresenter mainPresenter;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
-
-    @BindString(R.string.tap_twice)
-    String tapTwice;
+    private MainViewModel mainViewModel;
 
     private NavigationViewHolder navigationViewHolder;
-
-    private int curFragment;
+    private Toolbar toolbar;
 
     private boolean backPressed = false;
 
-    public MainActivity() {
-        App.getApp().getAppComponent().inject(this);
-    }
+    private ActivityMainBinding dataBinding;
 
-    @ProvidePresenter
-    public MainPresenter provideMainPresenter() {
-        MainPresenter mainPresenter = new MainPresenter();
-        app.getAppComponent().inject(mainPresenter);
-        return mainPresenter;
+    public MainActivity() {
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(themeId);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
-        navigationViewHolder = new NavigationViewHolder(navigationView.getHeaderView(0));
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        setTheme(mainViewModel.getDefaultThemeId());
+        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        navigationViewHolder = new NavigationViewHolder(dataBinding.navView.getHeaderView(0));
         NavigationView.OnNavigationItemSelectedListener selectedListener = getNavigationListener();
-        navigationView.setNavigationItemSelectedListener(selectedListener);
+        dataBinding.navView.setNavigationItemSelectedListener(selectedListener);
 
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dataBinding.drawerLayout,
+                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        dataBinding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        mainViewModel.getGallerySizeLiveData().observe(this, this::setGallerySize);
+        mainViewModel.getThemeIdLiveData().observe(this, themeId -> this.changeTheme());
+        mainViewModel.getUserLiveData().observe(this, this::setUser);
+        mainViewModel.getAuthLiveData().observe(this, auth -> {
+            if (auth != null && !auth.isValid()) {
+                goAuth();
+            }
+        });
 
         if (savedInstanceState == null) {
-            curFragment = navigationView.getMenu().getItem(0).getItemId();
-            curFragment = getIntent().getIntExtra(FRAGMENT_INDEX_KEY, curFragment);
-            MenuItem menuItem = navigationView.getMenu().findItem(curFragment);
-            menuItem.setChecked(true);
-            selectedListener.onNavigationItemSelected(menuItem);
-        } else {
-            curFragment = savedInstanceState.getInt(FRAGMENT_INDEX_KEY);
+            initFragment(selectedListener);
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putInt(FRAGMENT_INDEX_KEY, curFragment);
+    private void initFragment(NavigationView.OnNavigationItemSelectedListener selectedListener) {
+        Integer curFragment = dataBinding.getCurrentFragment();
+        if (curFragment == null) {
+            curFragment = dataBinding.navView.getMenu().getItem(0).getItemId();
+        }
+        MenuItem menuItem = dataBinding.navView.getMenu().findItem(curFragment);
+        menuItem.setChecked(true);
+        selectedListener.onNavigationItemSelected(menuItem);
     }
 
-    @Override
-    public void changeTheme(Integer themeId) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(FRAGMENT_INDEX_KEY, curFragment);
-        startActivity(intent);
+    public void changeTheme() {
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
-    @Override
     public void goAuth() {
-        Intent intent = new Intent(this, AuthActivity.class);
+        startActivity(new Intent(this, AuthActivity.class));
         finish();
-        startActivity(intent);
     }
 
-    @Override
     public void setUser(User user) {
         String name = user.getFirstName() + " " + user.getLastName();
         navigationViewHolder.getTextViewName().setText(name);
@@ -141,20 +105,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
                 .into(navigationViewHolder.getImageViewAvatar());
     }
 
-    @Override
     public void setGallerySize(int size) {
         toolbar.setTitle("Фотографий: " + size);
     }
 
     @Override
-    public void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (dataBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            dataBinding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             if (backPressed) {
                 finish();
@@ -165,8 +123,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
                     public void run() {
                         backPressed = false;
                     }
-                }, 300);
-                Toast.makeText(this, tapTwice, Toast.LENGTH_SHORT).show();
+                }, 500);
+                Toast.makeText(this, getResources().getString(R.string.tap_twice),
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -176,17 +135,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             int id = item.getItemId();
 
             if (id == R.id.nav_gallery) {
-                curFragment = id;
+                dataBinding.setCurrentFragment(id);
                 switchFragment(new GalleryFragment());
             } else if (id == R.id.nav_settings) {
-                curFragment = id;
+                dataBinding.setCurrentFragment(id);
                 switchFragment(new SettingsFragment());
             } else if (id == R.id.nav_logout) {
-                mainPresenter.onLogout();
+                mainViewModel.onLogout();
                 item.setChecked(false);
             }
 
-            drawer.closeDrawer(GravityCompat.START);
+            dataBinding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         };
     }

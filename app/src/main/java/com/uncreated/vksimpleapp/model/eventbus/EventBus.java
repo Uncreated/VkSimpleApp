@@ -9,7 +9,6 @@ import com.uncreated.vksimpleapp.model.entity.vk.User;
 import org.reactivestreams.Publisher;
 
 import io.reactivex.BackpressureStrategy;
-import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -56,12 +55,24 @@ public class EventBus extends Events {
         return subscribe(authSubject, consumer, scheduler);
     }
 
+    public Publisher<User> getUserSubject() {
+        return userSubject.toFlowable(BackpressureStrategy.BUFFER);
+    }
+
     public Disposable userSubscribe(Consumer<User> consumer, Scheduler scheduler) {
         return subscribe(userSubject, consumer, scheduler);
     }
 
+    public Publisher<Gallery> getGallerySubject() {
+        return gallerySubject.toFlowable(BackpressureStrategy.BUFFER);
+    }
+
     public Disposable gallerySubscribe(Consumer<Gallery> consumer, Scheduler scheduler) {
         return subscribe(gallerySubject, consumer, scheduler);
+    }
+
+    public Publisher<Integer> getThemeIdSubject() {
+        return themeIdSubject.toFlowable(BackpressureStrategy.BUFFER);
     }
 
     public Disposable themeIdSubscribe(Consumer<Integer> consumer, Scheduler scheduler) {
