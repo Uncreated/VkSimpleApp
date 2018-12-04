@@ -16,17 +16,15 @@ public class NavigationViewHolder {
     @BindView(R.id.iv_avatar)
     ImageView imageViewAvatar;
 
-
     NavigationViewHolder(View headerView) {
         ButterKnife.bind(this, headerView);
     }
 
-
-    public TextView getTextViewName() {
+    TextView getTextViewName() {
         return textViewName;
     }
 
-    public ImageView getImageViewAvatar() {
+    ImageView getImageViewAvatar() {
         return imageViewAvatar;
     }
 }

@@ -8,7 +8,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -27,14 +26,13 @@ import java.util.TimerTask;
 
 public class MainActivity extends MvpAppCompatActivity {
 
+    private ActivityMainBinding dataBinding;
     private MainViewModel mainViewModel;
 
     private NavigationViewHolder navigationViewHolder;
-    private Toolbar toolbar;
+    private NavigationView.OnNavigationItemSelectedListener selectedListener;
 
     private boolean backPressed = false;
-
-    private ActivityMainBinding dataBinding;
 
     public MainActivity() {
     }
@@ -47,18 +45,32 @@ public class MainActivity extends MvpAppCompatActivity {
         setTheme(mainViewModel.getDefaultThemeId());
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        setSupportActionBar(dataBinding.appBar.toolbar);
+
+        initNavigation();
+
+        if (savedInstanceState == null) {
+            initFragment(selectedListener);
+        }
+
+        observeAll();
+    }
+
+    private void initNavigation() {
         navigationViewHolder = new NavigationViewHolder(dataBinding.navView.getHeaderView(0));
-        NavigationView.OnNavigationItemSelectedListener selectedListener = getNavigationListener();
+        selectedListener = getNavigationListener();
         dataBinding.navView.setNavigationItemSelectedListener(selectedListener);
+        initToggle();
+    }
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+    private void initToggle() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, dataBinding.drawerLayout,
-                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                dataBinding.appBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         dataBinding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
+    private void observeAll() {
         mainViewModel.getGallerySizeLiveData().observe(this, this::setGallerySize);
         mainViewModel.getThemeIdLiveData().observe(this, themeId -> this.changeTheme());
         mainViewModel.getUserLiveData().observe(this, this::setUser);
@@ -67,10 +79,6 @@ public class MainActivity extends MvpAppCompatActivity {
                 goAuth();
             }
         });
-
-        if (savedInstanceState == null) {
-            initFragment(selectedListener);
-        }
     }
 
     private void initFragment(NavigationView.OnNavigationItemSelectedListener selectedListener) {
@@ -105,7 +113,7 @@ public class MainActivity extends MvpAppCompatActivity {
     }
 
     public void setGallerySize(int size) {
-        toolbar.setTitle("Фотографий: " + size);
+        dataBinding.appBar.toolbar.setTitle("Фотографий: " + size);
     }
 
     @Override
