@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.uncreated.vksimpleapp.model.entity.responses.RequestError;
 import com.uncreated.vksimpleapp.model.entity.responses.RequestException;
 import com.uncreated.vksimpleapp.model.entity.responses.VkResponse;
-import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ public abstract class WebLoader<T> {
     public boolean handleVkError(EventBus eventBus, RequestError error) {
         switch (error.getErrorCode()) {
             case AUTH_ERROR:
-                eventBus.authPost(Auth.AuthNotValid());
+                //eventBus.authPost(Auth.AuthNotValid());TODO:
                 break;
             default:
                 return false;

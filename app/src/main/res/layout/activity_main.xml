@@ -8,10 +8,6 @@
         <variable
             name="currentFragment"
             type="Integer" />
-
-        <variable
-            name="app_bar"
-            type="int" />
     </data>
 
     <android.support.v4.widget.DrawerLayout
@@ -23,8 +19,7 @@
 
         <include
             android:id="@+id/app_bar"
-            layout="@layout/app_bar_main"
-            app:app_bar="@{1}" />
+            layout="@layout/app_bar_main" />
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"

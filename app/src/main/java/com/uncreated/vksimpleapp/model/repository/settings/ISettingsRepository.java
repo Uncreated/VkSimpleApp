@@ -1,10 +1,14 @@
 package com.uncreated.vksimpleapp.model.repository.settings;
 
+import com.uncreated.vksimpleapp.model.repository.settings.entities.SettingsValues;
+
+import io.reactivex.Observable;
+
 public interface ISettingsRepository {
 
     int getDefaultThemeId();
 
-    boolean getThemeValue();
+    Observable<SettingsValues> getSettingsValues();
 
-    void setThemeValue(boolean value);
+    void setSettingsValues(SettingsValues settingsValues);
 }

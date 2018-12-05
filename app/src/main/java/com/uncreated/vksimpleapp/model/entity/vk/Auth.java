@@ -1,5 +1,8 @@
 package com.uncreated.vksimpleapp.model.entity.vk;
 
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
 import com.uncreated.vksimpleapp.model.common.Utils;
 
 public class Auth {
@@ -68,5 +71,15 @@ public class Auth {
                     Utils.equals(auth.logout, this.logout);
         }
         return false;
+    }
+
+    public static Auth load(SharedPreferences preferences, String key) {
+        return new Gson().fromJson(preferences.getString(key, ""), Auth.class);
+    }
+
+    public boolean save(SharedPreferences preferences, String key) {
+        return preferences.edit()
+                .putString(key, new Gson().toJson(this))
+                .commit();
     }
 }

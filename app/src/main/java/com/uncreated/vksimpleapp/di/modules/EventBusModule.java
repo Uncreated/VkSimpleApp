@@ -22,7 +22,6 @@ public class EventBusModule {
                 publishSubject(),
                 behaviorSubject(),
                 behaviorSubject(),
-                behaviorSubject(),
                 publishSubject());
     }
 

@@ -1,40 +1,27 @@
 package com.uncreated.vksimpleapp.ui.main.fragments.photo;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
+import com.uncreated.vksimpleapp.databinding.ActivityPhotoBinding;
 import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+public class PhotoActivity extends MvpAppCompatActivity {
 
-public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
+    private PhotoViewModel photoViewModel;
 
-    @InjectPresenter
-    PhotoPresenter photoPresenter;
+    private ActivityPhotoBinding dataBinding;
 
     @Named("keyPhotoIndex")
     @Inject
     String keyPhotoIndex;
-
-    @Inject
-    App app;
-
-    @BindView(R.id.vp_photos)
-    ViewPager viewPager;
-
-    @Inject
-    EventBus eventBus;
 
     private PagerAdapter pagerAdapter;
 
@@ -45,38 +32,25 @@ public class PhotoActivity extends MvpAppCompatActivity implements PhotoView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
+        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_photo);
 
-        ButterKnife.bind(this);
+        photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel.class);
 
         int index = getIntent().getIntExtra(keyPhotoIndex, 0);
-        pagerAdapter = new PagerAdapter(app,
-                getSupportFragmentManager(),
-                index + 1);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(index);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), index + 1);
+        dataBinding.vpPhotos.setAdapter(pagerAdapter);
+        dataBinding.vpPhotos.setCurrentItem(index);
+
+        photoViewModel.getBitmapIndexLiveData()
+                .observe(this, bitmapIndex -> updatePhoto(null));
     }
 
-    @Override
     public void setGallerySize(int size) {
         pagerAdapter.setCount(size);
         pagerAdapter.notifyDataSetChanged();
     }
 
-    @ProvidePresenter
-    public PhotoPresenter providePhotoPresenter() {
-        PhotoPresenter photoPresenter = new PhotoPresenter();
-        app.getAppComponent().inject(photoPresenter);
-        return photoPresenter;
-    }
-
-    @Override
     public void updatePhoto(BitmapIndex bitmapIndex) {
         pagerAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void showError(String error) {
-        Toast.makeText(this, "error", Toast.LENGTH_LONG).show();
     }
 }

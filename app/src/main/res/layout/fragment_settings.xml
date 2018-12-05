@@ -8,13 +8,13 @@
 
         <import type="android.view.View" />
 
-        <variable
-            name="themeLeft"
-            type="boolean" />
+        <import type="com.uncreated.vksimpleapp.model.repository.settings.entities.SettingsParamBoolean" />
+
+        <import type="com.uncreated.vksimpleapp.model.repository.settings.entities.SettingsParam" />
 
         <variable
-            name="themeSwitcher"
-            type="com.uncreated.vksimpleapp.ui.main.settings.SettingsFragment" />
+            name="values"
+            type="com.uncreated.vksimpleapp.model.repository.settings.entities.SettingsValues" />
     </data>
 
     <android.support.v7.widget.LinearLayoutCompat
@@ -48,8 +48,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="8dp"
-                android:checked="@{themeLeft}"
-                android:onClick="@{themeSwitcher::onThemeChanged}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tv_theme_right_hint"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -63,7 +61,6 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="8dp"
                 android:text="@string/hint_light"
-                android:visibility="@{themeLeft ? View.VISIBLE : View.INVISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/sw_theme"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -78,7 +75,6 @@
                 android:layout_margin="8dp"
                 android:enabled="false"
                 android:text="@string/hint_dark"
-                android:visibility="@{!themeLeft ? View.VISIBLE : View.INVISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

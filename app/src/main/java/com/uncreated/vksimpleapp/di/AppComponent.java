@@ -8,18 +8,19 @@ import com.uncreated.vksimpleapp.di.modules.EventBusModule;
 import com.uncreated.vksimpleapp.di.modules.PhotoRepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.RepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.SettingsModule;
-import com.uncreated.vksimpleapp.ui.auth.AuthViewModel;
-import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoPresenter;
-import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryPresenter;
-import com.uncreated.vksimpleapp.ui.main.MainViewModel;
-import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsViewModel;
-import com.uncreated.vksimpleapp.ui.auth.AuthActivity;
+import com.uncreated.vksimpleapp.ui.auth.activity.AuthActivity;
+import com.uncreated.vksimpleapp.ui.auth.activity.AuthViewModel;
+import com.uncreated.vksimpleapp.ui.auth.web.AuthWebViewModel;
 import com.uncreated.vksimpleapp.ui.main.MainActivity;
+import com.uncreated.vksimpleapp.ui.main.MainViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryAdapter;
 import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryFragment;
-import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsFragment;
+import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryPresenter;
 import com.uncreated.vksimpleapp.ui.main.fragments.photo.PageFragment;
 import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoActivity;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoViewModel;
+import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsFragment;
+import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsViewModel;
 
 import javax.inject.Singleton;
 
@@ -46,7 +47,7 @@ public interface AppComponent {
 
     void inject(PhotoActivity photoActivity);
 
-    void inject(PhotoPresenter photoPresenter);
+    void inject(PhotoViewModel photoViewModel);
 
     void inject(GalleryAdapter galleryAdapter);
 
@@ -59,4 +60,6 @@ public interface AppComponent {
     void inject(SettingsFragment settingsFragment);
 
     void inject(SettingsViewModel settingsViewModel);
+
+    void inject(AuthWebViewModel authWebViewModel);
 }

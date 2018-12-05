@@ -17,7 +17,7 @@ import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.ActivityMainBinding;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.photo.GlideApp;
-import com.uncreated.vksimpleapp.ui.auth.AuthActivity;
+import com.uncreated.vksimpleapp.ui.auth.activity.AuthActivity;
 import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryFragment;
 import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsFragment;
 

@@ -5,27 +5,25 @@ import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
 import timber.log.Timber;
 
 public class UserRepository {
     private UserWebLoader userWebLoader;
     private UserStorageLoader userStorageLoader;
 
-    public UserRepository(EventBus eventBus,
-                          UserWebLoader userWebLoader,
+    private Subject<User> userSubject = BehaviorSubject.create();
+
+    public UserRepository(UserWebLoader userWebLoader,
                           UserStorageLoader userStorageLoader) {
         this.userWebLoader = userWebLoader;
         this.userStorageLoader = userStorageLoader;
-
-        eventBus.authSubscribe(auth -> {
-            if (auth.isValid()) {
-                loadUser(eventBus, auth);
-            }
-        }, Schedulers.io());
     }
 
-    private void loadUser(EventBus eventBus, Auth auth) {
+    //TODO:call in main activity start
+    public Observable<User> loadUser(EventBus eventBus, Auth auth) {
         String userId = auth.getUserId();
 
         try {
@@ -42,6 +40,8 @@ public class UserRepository {
 
             loadFromStorage(eventBus, userId);
         }
+
+        return userSubject;
     }
 
     private void loadFromStorage(EventBus eventBus, String userId) {

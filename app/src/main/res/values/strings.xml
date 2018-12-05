@@ -11,4 +11,7 @@
     <string name="hint_dark">Dark</string>
     <string name="theme_hint">Theme</string>
     <string name="tap_twice">Press twice to close the app</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

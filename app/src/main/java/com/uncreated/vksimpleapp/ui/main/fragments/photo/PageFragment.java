@@ -43,7 +43,7 @@ public class PageFragment extends Fragment {
         App.getApp().getAppComponent().inject(this);
     }
 
-    public static PageFragment newInstance(App app, int index) {
+    public static PageFragment newInstance(int index) {
         PageFragment pageFragment = new PageFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("index", index);

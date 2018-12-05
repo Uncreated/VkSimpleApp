@@ -36,10 +36,9 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public UserRepository userRepository(EventBus eventBus,
-                                         UserWebLoader userWebLoader,
+    public UserRepository userRepository(UserWebLoader userWebLoader,
                                          UserStorageLoader userStorageLoader) {
-        return new UserRepository(eventBus, userWebLoader, userStorageLoader);
+        return new UserRepository(userWebLoader, userStorageLoader);
     }
 
     @Singleton

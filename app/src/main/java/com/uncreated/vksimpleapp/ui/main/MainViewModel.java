@@ -10,11 +10,13 @@ import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.eventbus.EventBus;
+import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Scheduler;
 
 public class MainViewModel extends ViewModel {
@@ -29,6 +31,9 @@ public class MainViewModel extends ViewModel {
     @Inject
     ISettingsRepository settingsRepository;
 
+    @Inject
+    IAuthRepository authRepository;
+
     private LiveData<User> userLiveData;
     private LiveData<Integer> gallerySizeLiveData;
     private LiveData<Auth> authLiveData;
@@ -37,12 +42,13 @@ public class MainViewModel extends ViewModel {
     public MainViewModel() {
         App.getApp().getAppComponent().inject(this);
 
-        userLiveData = LiveDataReactiveStreams.fromPublisher(eventBus.getUserSubject());
+        userLiveData = LiveDataReactiveStreams.fromPublisher(eventBus.getUserPublisher());
         gallerySizeLiveData = Transformations.map(
-                LiveDataReactiveStreams.fromPublisher(eventBus.getGallerySubject()),
+                LiveDataReactiveStreams.fromPublisher(eventBus.getGalleryPublisher()),
                 Gallery::getCurrentSize);
-        authLiveData = LiveDataReactiveStreams.fromPublisher(eventBus.getAuthSubject());
-        themeIdLiveData = LiveDataReactiveStreams.fromPublisher(eventBus.getThemeIdSubject());
+        authLiveData = LiveDataReactiveStreams.fromPublisher(authRepository.getAuthObservable()
+                .toFlowable(BackpressureStrategy.LATEST));
+        themeIdLiveData = LiveDataReactiveStreams.fromPublisher(eventBus.getThemeIdPublisher());
     }
 
     public LiveData<User> getUserLiveData() {
@@ -62,7 +68,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void onLogout() {
-        eventBus.authPost(Auth.AuthLogout());
+        //eventBus.authPost(Auth.AuthLogout());TODO:
     }
 
     public int getDefaultThemeId() {

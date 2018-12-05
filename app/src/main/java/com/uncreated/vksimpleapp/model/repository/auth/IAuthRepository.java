@@ -1,7 +1,11 @@
 package com.uncreated.vksimpleapp.model.repository.auth;
 
-public interface IAuthRepository {
-    /*Auth getCurrentAuth();
+import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 
-    void setCurrentAuth(Auth auth);*/
+import io.reactivex.Observable;
+
+public interface IAuthRepository {
+    void setAuth(Auth auth);
+
+    Observable<Auth> getAuthObservable();
 }

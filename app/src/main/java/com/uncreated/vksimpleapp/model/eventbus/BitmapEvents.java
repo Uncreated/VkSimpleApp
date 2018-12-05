@@ -3,6 +3,9 @@ package com.uncreated.vksimpleapp.model.eventbus;
 import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
 import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
 
+import org.reactivestreams.Publisher;
+
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -31,6 +34,18 @@ public class BitmapEvents extends Events {
 
     Disposable bitmapIndexSubscribe(Consumer<BitmapIndex> consumer, Scheduler scheduler) {
         return subscribe(bitmapSubject, consumer, scheduler);
+    }
+
+    public Publisher<BitmapIndex> getBitmapPublisher() {
+        return bitmapSubject.toFlowable(BackpressureStrategy.BUFFER);
+    }
+
+    public Publisher<IndexUrl> getUrlSubject() {
+        return urlSubject.toFlowable(BackpressureStrategy.BUFFER);
+    }
+
+    public Publisher<BitmapIndex> getBitmapSubject() {
+        return bitmapSubject.toFlowable(BackpressureStrategy.BUFFER);
     }
 
     void post(Integer index) {

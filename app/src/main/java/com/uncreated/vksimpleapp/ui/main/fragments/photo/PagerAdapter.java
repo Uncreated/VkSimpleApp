@@ -5,17 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.uncreated.vksimpleapp.App;
-
 public class PagerAdapter extends FragmentPagerAdapter {
 
     private int count;
 
-    private App app;
-
-    PagerAdapter(App app, FragmentManager fm, int count) {
+    PagerAdapter(FragmentManager fm, int count) {
         super(fm);
-        this.app = app;
         this.count = count;
     }
 
@@ -30,7 +25,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(app, position);
+        return PageFragment.newInstance(position);
     }
 
     @Override

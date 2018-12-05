@@ -3,46 +3,44 @@ package com.uncreated.vksimpleapp.model.repository.settings;
 import android.content.SharedPreferences;
 
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
+import com.uncreated.vksimpleapp.model.repository.settings.entities.SettingsValues;
+
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
 
 public class SettingsRepository implements ISettingsRepository {
-    private static final String THEME_KEY = "keyTheme";
+    private static final String SETTINGS_VALUES = "settingsValues";
 
-    private EventBus eventBus;
     private SharedPreferences sharedPreferences;
 
-    private boolean themeValue;
+    private SettingsValues settingsValues;
 
-    public SettingsRepository(EventBus eventBus, SharedPreferences sharedPreferences) {
-        this.eventBus = eventBus;
+    private Subject<SettingsValues> valuesSubject = BehaviorSubject.create();
+
+    public SettingsRepository(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
 
-        this.themeValue = sharedPreferences.getBoolean(THEME_KEY, false);
+        settingsValues = new SettingsValues(sharedPreferences, SETTINGS_VALUES);
+    }
+
+    @Override
+    public Observable<SettingsValues> getSettingsValues() {
+        return valuesSubject;
+    }
+
+    @Override
+    public void setSettingsValues(SettingsValues settingsValues) {
+        settingsValues.save(sharedPreferences, SETTINGS_VALUES);
+        valuesSubject.onNext(settingsValues);
     }
 
     @Override
     public int getDefaultThemeId() {
-        if (themeValue) {
+        if (settingsValues.getThemeParam().getValue()) {
             return R.style.AppTheme_Dark;
         } else {
             return R.style.AppTheme_Light;
-        }
-    }
-
-    @Override
-    public boolean getThemeValue() {
-        return themeValue;
-    }
-
-    @Override
-    public void setThemeValue(boolean value) {
-        if (themeValue != value) {
-            themeValue = value;
-            sharedPreferences.edit()
-                    .putBoolean(THEME_KEY, themeValue)
-                    .apply();
-
-            eventBus.themeIdPost(getDefaultThemeId());
         }
     }
 }

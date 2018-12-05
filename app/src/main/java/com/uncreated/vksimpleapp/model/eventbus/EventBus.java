@@ -2,7 +2,6 @@ package com.uncreated.vksimpleapp.model.eventbus;
 
 import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
 import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
-import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 
@@ -21,7 +20,6 @@ public class EventBus extends Events {
 
     private Subject<Integer> clickThumbnailSubject;
 
-    private Subject<Auth> authSubject;
     private Subject<User> userSubject;
     private Subject<Gallery> gallerySubject;
 
@@ -30,14 +28,12 @@ public class EventBus extends Events {
     public EventBus(BitmapEvents thumbnailEvents,
                     BitmapEvents originalEvents,
                     Subject<Integer> clickThumbnailSubject,
-                    Subject<Auth> authSubject,
                     Subject<User> userSubject,
                     Subject<Gallery> gallerySubject,
                     Subject<Integer> themeIdSubject) {
         this.thumbnailEvents = thumbnailEvents;
         this.originalEvents = originalEvents;
         this.clickThumbnailSubject = clickThumbnailSubject;
-        this.authSubject = authSubject;
         this.userSubject = userSubject;
         this.gallerySubject = gallerySubject;
         this.themeIdSubject = themeIdSubject;
@@ -47,15 +43,7 @@ public class EventBus extends Events {
         return subscribe(clickThumbnailSubject, consumer, scheduler);
     }
 
-    public Publisher<Auth> getAuthSubject() {
-        return authSubject.toFlowable(BackpressureStrategy.BUFFER);
-    }
-
-    public Disposable authSubscribe(Consumer<Auth> consumer, Scheduler scheduler) {
-        return subscribe(authSubject, consumer, scheduler);
-    }
-
-    public Publisher<User> getUserSubject() {
+    public Publisher<User> getUserPublisher() {
         return userSubject.toFlowable(BackpressureStrategy.BUFFER);
     }
 
@@ -63,7 +51,7 @@ public class EventBus extends Events {
         return subscribe(userSubject, consumer, scheduler);
     }
 
-    public Publisher<Gallery> getGallerySubject() {
+    public Publisher<Gallery> getGalleryPublisher() {
         return gallerySubject.toFlowable(BackpressureStrategy.BUFFER);
     }
 
@@ -71,12 +59,8 @@ public class EventBus extends Events {
         return subscribe(gallerySubject, consumer, scheduler);
     }
 
-    public Publisher<Integer> getThemeIdSubject() {
+    public Publisher<Integer> getThemeIdPublisher() {
         return themeIdSubject.toFlowable(BackpressureStrategy.BUFFER);
-    }
-
-    public Disposable themeIdSubscribe(Consumer<Integer> consumer, Scheduler scheduler) {
-        return subscribe(themeIdSubject, consumer, scheduler);
     }
 
     public Disposable thumbnailIndexSubscribe(Consumer<Integer> consumer, Scheduler scheduler) {
@@ -99,8 +83,8 @@ public class EventBus extends Events {
         return originalEvents.indexUrlSubscribe(consumer, scheduler);
     }
 
-    public Disposable originalBitmapIndexSubscribe(Consumer<BitmapIndex> consumer, Scheduler scheduler) {
-        return originalEvents.bitmapIndexSubscribe(consumer, scheduler);
+    public Publisher<BitmapIndex> getOriginalBitmapPublisher() {
+        return originalEvents.getBitmapPublisher();
     }
 
     public void thumbnailEventsPost(Integer index) {
@@ -131,19 +115,11 @@ public class EventBus extends Events {
         clickThumbnailSubject.onNext(index);
     }
 
-    public void authPost(Auth auth) {
-        authSubject.onNext(auth);
-    }
-
     public void userPost(User user) {
         userSubject.onNext(user);
     }
 
     public void galleryPost(Gallery gallery) {
         gallerySubject.onNext(gallery);
-    }
-
-    public void themeIdPost(Integer themeId) {
-        themeIdSubject.onNext(themeId);
     }
 }

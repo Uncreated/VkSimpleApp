@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.FragmentSettingsBinding;
+import com.uncreated.vksimpleapp.model.repository.settings.entities.SettingsValues;
 
 public class SettingsFragment extends MvpAppCompatFragment {
 
@@ -26,13 +27,15 @@ public class SettingsFragment extends MvpAppCompatFragment {
 
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
 
-        dataBinding.setThemeLeft(settingsViewModel.getThemeValue());
+        settingsViewModel.getSettingsValuesLiveData()
+                .observe(this, settingsValues -> {
+                    dataBinding.setValues(settingsValues);
+                });
 
         return dataBinding.getRoot();
     }
 
-    public void onThemeChanged(View View) {
-        settingsViewModel.setThemeValue(dataBinding.swTheme.isChecked());
-        dataBinding.setThemeLeft(dataBinding.swTheme.isChecked());
+    public void onSettingsValuesChanged(SettingsValues settingsValues) {
+        settingsViewModel.setSettingsValues(settingsValues);
     }
 }

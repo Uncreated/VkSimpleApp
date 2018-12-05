@@ -20,7 +20,7 @@ public class VkApiInterceptor implements Interceptor {
     public VkApiInterceptor(EventBus eventBus, String version) {
         this.version = version;
 
-        eventBus.authSubscribe(auth -> VkApiInterceptor.this.auth = auth, null);
+        //eventBus.authSubscribe(auth -> VkApiInterceptor.this.auth = auth, null);TODO:
     }
 
     @Override
