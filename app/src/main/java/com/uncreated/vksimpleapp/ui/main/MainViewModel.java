@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel;
 
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
+import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
@@ -38,7 +39,7 @@ public class MainViewModel extends ViewModel {
     GalleryRepository galleryRepository;
 
     private MutableLiveData<User> userLiveData = new MutableLiveData<>();
-    private MutableLiveData<Integer> gallerySizeLiveData = new MutableLiveData<>();
+    private MutableLiveData<Gallery> galleryLiveData = new MutableLiveData<>();
     private LiveData<Auth> authLiveData;
     //TODO:change to single
     private LiveData<Object> themeChangeLiveData;
@@ -54,9 +55,7 @@ public class MainViewModel extends ViewModel {
                                 userLiveData.postValue(user);
                             });
                     galleryRepository.getGalleryObservable(auth.getUserId())
-                            .subscribe(gallery -> {
-                                gallerySizeLiveData.postValue(gallery.getCurrentSize());
-                            });
+                            .subscribe(gallery -> galleryLiveData.postValue(gallery));
                 });
 
         authLiveData = LiveDataReactiveStreams.fromPublisher(
@@ -72,8 +71,8 @@ public class MainViewModel extends ViewModel {
         return userLiveData;
     }
 
-    LiveData<Integer> getGallerySizeLiveData() {
-        return gallerySizeLiveData;
+    public LiveData<Gallery> getGalleryLiveData() {
+        return galleryLiveData;
     }
 
     LiveData<Auth> getAuthLiveData() {

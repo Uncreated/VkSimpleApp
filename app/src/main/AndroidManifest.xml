@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".ui.auth.activity.AuthActivity" />
         <activity
-            android:name=".ui.main.fragments.photo.PhotoActivity"
+            android:name=".ui.main.fragments.photo.activity.PhotoActivity"
             android:theme="@style/AppTheme.FullScreen" />
     </application>
 

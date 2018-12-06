@@ -3,12 +3,12 @@ package com.uncreated.vksimpleapp.ui.auth.activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.ui.main.MainActivity;
 
-public class AuthActivity extends MvpAppCompatActivity {
+public class AuthActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

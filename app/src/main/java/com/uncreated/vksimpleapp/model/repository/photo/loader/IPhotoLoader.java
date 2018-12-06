@@ -1,9 +1,9 @@
 package com.uncreated.vksimpleapp.model.repository.photo.loader;
 
-import com.uncreated.vksimpleapp.model.entity.events.IndexedBitmap;
-import com.uncreated.vksimpleapp.model.entity.events.IndexedUrl;
+import android.graphics.Bitmap;
+
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 public interface IPhotoLoader {
-    IndexedBitmap loadToCache(IndexedUrl indexedUrl, GalleryPhotoCache galleryPhotoCache) throws Exception;
+    Bitmap loadToCache(String url, GalleryPhotoCache galleryPhotoCache) throws Exception;
 }

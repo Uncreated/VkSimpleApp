@@ -8,10 +8,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.bumptech.glide.request.RequestOptions;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.ActivityMainBinding;
@@ -24,7 +24,7 @@ import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsFragment;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends MvpAppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding dataBinding;
     private MainViewModel mainViewModel;
@@ -74,7 +74,11 @@ public class MainActivity extends MvpAppCompatActivity {
     }
 
     private void observeAll() {
-        mainViewModel.getGallerySizeLiveData().observe(this, this::setGallerySize);
+        mainViewModel.getGalleryLiveData().observe(this, gallery -> {
+            if (gallery != null) {
+                setGallerySize(gallery.getCurrentSize());
+            }
+        });
         mainViewModel.getThemeChangeLiveData().observe(this, o -> this.changeTheme());
         mainViewModel.getUserLiveData().observe(this, this::setUser);
         mainViewModel.getAuthLiveData().observe(this, auth -> {

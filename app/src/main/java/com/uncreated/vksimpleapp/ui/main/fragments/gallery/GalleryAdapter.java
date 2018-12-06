@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
@@ -30,6 +31,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
         this.photosCount = photosCount;
         this.itemSize = itemSize;
         this.margin = margin;
+
+        App.getApp().getAppComponent().inject(this);
+
+
     }
 
     public void setPhotosCount(int photosCount) {

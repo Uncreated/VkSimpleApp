@@ -59,10 +59,9 @@ public class PhotoRepositoryModule {
 
     @Singleton
     @Provides
-    public PhotoRepository photoRepository(@Named("cache") IPhotoLoader webPhotoLoader,
-                                           @Named("thumbnail") GalleryPhotoCache thumbnailsCache,
-                                           @Named("original") GalleryPhotoCache originalsCache) {
-        return new PhotoRepository(webPhotoLoader, thumbnailsCache, originalsCache);
+    public PhotoRepository photoRepository(@Named("cache") IPhotoLoader photoLoader,
+                                           GalleryPhotoCache thumbnailsCache) {
+        return new PhotoRepository(photoLoader, thumbnailsCache);
     }
 
 

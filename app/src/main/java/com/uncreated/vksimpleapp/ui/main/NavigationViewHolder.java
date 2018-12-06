@@ -6,18 +6,14 @@ import android.widget.TextView;
 
 import com.uncreated.vksimpleapp.R;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+class NavigationViewHolder {
 
-public class NavigationViewHolder {
-    @BindView(R.id.tv_name)
-    TextView textViewName;
-
-    @BindView(R.id.iv_avatar)
-    ImageView imageViewAvatar;
+    private TextView textViewName;
+    private ImageView imageViewAvatar;
 
     NavigationViewHolder(View headerView) {
-        ButterKnife.bind(this, headerView);
+        textViewName = headerView.findViewById(R.id.tv_name);
+        imageViewAvatar = headerView.findViewById(R.id.iv_avatar);
     }
 
     TextView getTextViewName() {

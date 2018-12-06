@@ -14,10 +14,11 @@ import com.uncreated.vksimpleapp.ui.main.MainActivity;
 import com.uncreated.vksimpleapp.ui.main.MainViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryAdapter;
 import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryFragment;
-import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryPresenter;
-import com.uncreated.vksimpleapp.ui.main.fragments.photo.PageFragment;
-import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoActivity;
-import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoViewModel;
+import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryViewModel;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.activity.PhotoActivity;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.activity.PhotoViewModel;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.page.PageFragment;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.page.PageViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsFragment;
 import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsViewModel;
 
@@ -53,11 +54,13 @@ public interface AppComponent {
 
     void inject(GalleryFragment galleryFragment);
 
-    void inject(GalleryPresenter galleryPresenter);
+    void inject(GalleryViewModel galleryViewModel);
 
     void inject(SettingsFragment settingsFragment);
 
     void inject(SettingsViewModel settingsViewModel);
 
     void inject(AuthWebViewModel authWebViewModel);
+
+    void inject(PageViewModel pageViewModel);
 }

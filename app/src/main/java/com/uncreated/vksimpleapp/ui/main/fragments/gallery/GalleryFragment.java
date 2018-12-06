@@ -1,107 +1,91 @@
 package com.uncreated.vksimpleapp.ui.main.fragments.gallery;
 
-import android.content.Context;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.arellomobile.mvp.MvpAppCompatFragment;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.ui.main.fragments.photo.PhotoActivity;
+import com.uncreated.vksimpleapp.databinding.FragmentGalleryBinding;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.activity.PhotoActivity;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+public class GalleryFragment extends Fragment {
 
-public class GalleryFragment extends MvpAppCompatFragment implements GalleryView {
-
-    @BindView(R.id.srl_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
-
-    @BindView(R.id.rv_gallery)
-    RecyclerView recyclerViewGallery;
-
-    @InjectPresenter
-    GalleryPresenter galleryPresenter;
-
-    @Inject
-    App app;
+    private GalleryViewModel galleryViewModel;
 
     @Named("keyPhotoIndex")
     @Inject
     String keyPhotoIndex;
 
     private GalleryAdapter galleryAdapter;
+    private FragmentGalleryBinding binding;
 
     public GalleryFragment() {
         App.getApp().getAppComponent().inject(this);
     }
 
-    @ProvidePresenter
-    public GalleryPresenter provideGalleryPresenter() {
-        GalleryPresenter galleryPresenter = new GalleryPresenter();
-        app.getAppComponent().inject(galleryPresenter);
-        return galleryPresenter;
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Context context = container.getContext();
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery,
+                container, false);
 
-        View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        ButterKnife.bind(this, view);
+        float minSize = container.getResources().getDimension(R.dimen.thumbnail_min_size);
+        float margin = container.getResources().getDimension(R.dimen.default_margin);
 
-        float minSize = context.getResources().getDimension(R.dimen.thumbnail_min_size);
-        float margin = context.getResources().getDimension(R.dimen.default_margin);
-
-        ((SimpleItemAnimator) recyclerViewGallery.getItemAnimator()).setSupportsChangeAnimations(false);
-        AutoGridLayoutManager layoutManager = new AutoGridLayoutManager(context, minSize, margin);
-        recyclerViewGallery.setLayoutManager(layoutManager);
+        ((SimpleItemAnimator) binding.rvGallery.getItemAnimator()).setSupportsChangeAnimations(false);
+        AutoGridLayoutManager layoutManager = new AutoGridLayoutManager(container.getContext(),
+                minSize, margin);
+        binding.rvGallery.setLayoutManager(layoutManager);
 
         galleryAdapter = new GalleryAdapter(0, layoutManager.getItemSize(), (int) margin);
-        app.getAppComponent().inject(galleryAdapter);
-        recyclerViewGallery.setAdapter(galleryAdapter);
+        binding.rvGallery.setAdapter(galleryAdapter);
 
-        return view;
+        GalleryViewModel viewModel = ViewModelProviders.of(this).get(GalleryViewModel.class);
+        viewModel.getGalleryLiveData()
+                .observe(this, gallery -> {
+                    if (gallery != null) {
+                        if (gallery.getCurrentSize() == gallery.getTotalCount()) {
+                            hideLoading();
+                        }
+                    }
+                });
+
+        showLoading();
+
+        return binding.getRoot();
     }
 
-    @Override
     public void setGallery(int size) {
         galleryAdapter.setPhotosCount(size);
         galleryAdapter.notifyDataSetChanged();
     }
 
-    @Override
     public void goPhoto(int index) {
         Intent intent = new Intent(getContext(), PhotoActivity.class);
         intent.putExtra(keyPhotoIndex, index);
         startActivity(intent);
     }
 
-    @Override
     public void updateThumbnail(int index) {
         galleryAdapter.notifyItemChanged(index);
     }
 
-    @Override
     public void showLoading() {
-        swipeRefreshLayout.setRefreshing(true);
+        binding.setRefreshing(true);
     }
 
-    @Override
     public void hideLoading() {
-        swipeRefreshLayout.setRefreshing(false);
+        binding.setRefreshing(false);
     }
 }

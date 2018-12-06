@@ -5,18 +5,18 @@ import android.util.LruCache;
 
 public class GalleryPhotoCache {
 
-    private LruCache<Integer, Bitmap> items;
+    private LruCache<String, Bitmap> items;
 
     public GalleryPhotoCache(int itemsCount) {
         items = new LruCache<>(itemsCount);
     }
 
-    public void putBitmap(int index, Bitmap bitmap) {
-        items.put(index, bitmap);
+    public void putBitmap(String url, Bitmap bitmap) {
+        items.put(url, bitmap);
     }
 
-    public Bitmap getBitmap(int index) {
-        return items.get(index);
+    public Bitmap getBitmap(String url) {
+        return items.get(url);
     }
 
     public void clear() {

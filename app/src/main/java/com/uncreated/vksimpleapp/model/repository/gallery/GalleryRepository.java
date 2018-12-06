@@ -11,37 +11,49 @@ public class GalleryRepository {
     private GalleryWebLoader galleryWebLoader;
     private GalleryStorageLoader galleryStorageLoader;
 
+    private String userId;
+
+    private Observable<Gallery> galleryObservable;
+
     public GalleryRepository(GalleryWebLoader galleryWebLoader,
                              GalleryStorageLoader galleryStorageLoader) {
         this.galleryWebLoader = galleryWebLoader;
         this.galleryStorageLoader = galleryStorageLoader;
     }
 
-    public Observable<Gallery> getGalleryObservable(String userId) {
-        return Observable.create(emitter -> {
-            Gallery gallery = null;
+    public void setUserId(String userId) {
+        if (!userId.equals(this.userId)) {
+            this.userId = userId;
 
-            try {
-                int offset = 0;
-                do {
-                    Gallery galleryPart = galleryWebLoader.loadGallery(userId, offset);
-                    if (gallery != null) {
-                        gallery = new Gallery(gallery, galleryPart);
-                    } else {
-                        gallery = galleryPart;
+            galleryObservable = Observable.create(emitter -> {
+                Gallery gallery = null;
+
+                try {
+                    int offset = 0;
+                    do {
+                        Gallery galleryPart = galleryWebLoader.loadGallery(userId, offset);
+                        if (gallery != null) {
+                            gallery = new Gallery(gallery, galleryPart);
+                        } else {
+                            gallery = galleryPart;
+                        }
+                        offset = gallery.getCurrentSize();
+                        emitter.onNext(gallery);
+                        galleryStorageLoader.saveGallery(gallery, userId);
                     }
-                    offset = gallery.getCurrentSize();
-                    emitter.onNext(gallery);
-                    galleryStorageLoader.saveGallery(gallery, userId);
-                }
-                while (offset < gallery.getTotalCount());
-            } catch (Exception e) {
-                Timber.d(e);
+                    while (offset < gallery.getTotalCount());
+                } catch (Exception e) {
+                    Timber.d(e);
 
-                loadFromStorage(emitter, userId);
-            }
-            emitter.onComplete();
-        });
+                    loadFromStorage(emitter, userId);
+                }
+                emitter.onComplete();
+            });
+        }
+    }
+
+    public Observable<Gallery> getGalleryObservable() {
+        return galleryObservable;
     }
 
     private void loadFromStorage(Emitter<Gallery> emitter, String userId) {
