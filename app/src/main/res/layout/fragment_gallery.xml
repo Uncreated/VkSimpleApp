@@ -3,22 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.main.fragments.gallery.GalleryFragment">
 
-    <data>
-
-        <variable
-            name="refreshing"
-            type="Boolean" />
-    </data>
-
-    <android.support.v4.widget.SwipeRefreshLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:value="@{refreshing}">
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </FrameLayout>
 </layout>

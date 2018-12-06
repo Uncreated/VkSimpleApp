@@ -2,6 +2,7 @@ package com.uncreated.vksimpleapp.ui.main.fragments.photo.page;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.PhotoPageBinding;
 import com.uncreated.vksimpleapp.model.entity.vk.PhotoInfo;
@@ -21,7 +21,6 @@ public class PageFragment extends Fragment {
     private static final String KEY_PHOTO_THUMB_URL = "keyPhotoThumbnailUrl";
 
     public PageFragment() {
-        App.getApp().getAppComponent().inject(this);
     }
 
     public static PageFragment newInstance(PhotoInfo photoInfo) {
@@ -49,7 +48,8 @@ public class PageFragment extends Fragment {
                 new PageViewModelFactory(origUrl, thumbUrl))
                 .get(PageViewModel.class);
         viewModel.getImageLiveData()
-                .observe(this, binding::setImage);
+                .observe(this,
+                        bitmap -> binding.setImage(new BitmapDrawable(getResources(), bitmap)));
 
         return binding.getRoot();
     }

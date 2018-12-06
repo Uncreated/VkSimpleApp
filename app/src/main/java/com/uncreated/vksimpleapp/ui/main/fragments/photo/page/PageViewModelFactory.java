@@ -8,7 +8,7 @@ class PageViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final String thumbUrl;
     private final String origUrl;
 
-    public PageViewModelFactory(String thumbUrl, String origUrl) {
+    PageViewModelFactory(String thumbUrl, String origUrl) {
         this.thumbUrl = thumbUrl;
         this.origUrl = origUrl;
     }
@@ -17,7 +17,9 @@ class PageViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass == PageViewModel.class) {
-            return (T) new PageViewModel(thumbUrl, origUrl);
+            PageViewModel viewModel = new PageViewModel();
+            viewModel.setUrls(thumbUrl, origUrl);
+            return (T) viewModel;
         }
         return null;
     }

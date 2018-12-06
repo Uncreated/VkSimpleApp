@@ -7,7 +7,6 @@ import android.arch.lifecycle.ViewModel;
 
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
-import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
@@ -15,17 +14,10 @@ import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
 import com.uncreated.vksimpleapp.model.repository.user.UserRepository;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import io.reactivex.BackpressureStrategy;
-import io.reactivex.Scheduler;
 
 public class MainViewModel extends ViewModel {
-
-    @Named("mainThread")
-    @Inject
-    Scheduler mainThreadScheduler;
-
     @Inject
     ISettingsRepository settingsRepository;
 
@@ -39,7 +31,7 @@ public class MainViewModel extends ViewModel {
     GalleryRepository galleryRepository;
 
     private MutableLiveData<User> userLiveData = new MutableLiveData<>();
-    private MutableLiveData<Gallery> galleryLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> gallerySizeLiveData = new MutableLiveData<>();
     private LiveData<Auth> authLiveData;
     //TODO:change to single
     private LiveData<Object> themeChangeLiveData;
@@ -51,11 +43,10 @@ public class MainViewModel extends ViewModel {
         authRepository.getAuthObservable()
                 .subscribe(auth -> {
                     userRepository.getUserObservable(auth.getUserId())
-                            .subscribe(user -> {
-                                userLiveData.postValue(user);
-                            });
-                    galleryRepository.getGalleryObservable(auth.getUserId())
-                            .subscribe(gallery -> galleryLiveData.postValue(gallery));
+                            .subscribe(user -> userLiveData.postValue(user));
+                    galleryRepository.setUserId(auth.getUserId());
+                    galleryRepository.getGalleryObservable()
+                            .subscribe(gallery -> gallerySizeLiveData.postValue(gallery.getCurrentSize()));
                 });
 
         authLiveData = LiveDataReactiveStreams.fromPublisher(
@@ -71,8 +62,8 @@ public class MainViewModel extends ViewModel {
         return userLiveData;
     }
 
-    public LiveData<Gallery> getGalleryLiveData() {
-        return galleryLiveData;
+    public LiveData<Integer> getGallerySizeLiveData() {
+        return gallerySizeLiveData;
     }
 
     LiveData<Auth> getAuthLiveData() {

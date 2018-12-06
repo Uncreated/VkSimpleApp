@@ -1,6 +1,7 @@
 package com.uncreated.vksimpleapp.ui.main.fragments.photo.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -11,12 +12,8 @@ public class PhotoActivity extends AppCompatActivity {
 
     private static final String KEY_PHOTO_INDEX = "keyPhotoIndex";
 
-    public static Bundle makeArgs(int index) {
-        Bundle args = new Bundle();
-
-        args.putInt(KEY_PHOTO_INDEX, index);
-
-        return args;
+    public static void putArgs(Intent intent, int index) {
+        intent.putExtra(KEY_PHOTO_INDEX, index);
     }
 
     @Override
@@ -24,7 +21,7 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        ViewModelProviders.of(this).get(PhotoViewModel.class);//create
+        ViewModelProviders.of(this).get(PhotoViewModel.class);//just create
 
         int startIndex = getIntent().getIntExtra(KEY_PHOTO_INDEX, 0);
 

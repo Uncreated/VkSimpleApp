@@ -4,26 +4,31 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
+import com.uncreated.vksimpleapp.model.entity.vk.PhotoInfo;
 import com.uncreated.vksimpleapp.ui.main.fragments.photo.page.PageFragment;
+
+import java.util.List;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
-    private Gallery gallery;
+    private List<PhotoInfo> items;
 
-    PagerAdapter(FragmentManager fm, Gallery gallery) {
+    PagerAdapter(FragmentManager fm, List<PhotoInfo> items) {
         super(fm);
-        this.gallery = gallery;
+        this.items = items;
     }
 
     @Override
     public int getCount() {
-        return gallery.getCurrentSize();
+        if (items != null) {
+            return items.size();
+        }
+        return 0;
     }
 
-    public void setGallery(Gallery gallery) {
-        if (this.gallery != gallery) {
-            this.gallery = gallery;
+    public void setItems(List<PhotoInfo> items) {
+        if (this.items != items) {
+            this.items = items;
 
             notifyDataSetChanged();//TODO:check
         }
@@ -31,6 +36,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(gallery.getItems().get(position));
+        return PageFragment.newInstance(items.get(position));
     }
 }

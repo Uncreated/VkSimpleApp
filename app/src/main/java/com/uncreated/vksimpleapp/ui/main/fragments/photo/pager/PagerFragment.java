@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.FragmentPagerBinding;
-import com.uncreated.vksimpleapp.ui.main.MainViewModel;
+import com.uncreated.vksimpleapp.ui.main.fragments.photo.activity.PhotoViewModel;
 
 public class PagerFragment extends Fragment {
 
@@ -42,7 +42,7 @@ public class PagerFragment extends Fragment {
         FragmentPagerBinding binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_pager, container, false);
 
-        MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        PhotoViewModel viewModel = ViewModelProviders.of(getActivity()).get(PhotoViewModel.class);
 
         pagerAdapter = new PagerAdapter(getChildFragmentManager(),
                 viewModel.getGalleryLiveData().getValue());
@@ -73,7 +73,7 @@ public class PagerFragment extends Fragment {
         binding.vpPhotos.setCurrentItem(currentIndex);
 
         viewModel.getGalleryLiveData()
-                .observe(this, gallery -> pagerAdapter.setGallery(gallery));
+                .observe(this, pagerAdapter::setItems);
 
         return binding.getRoot();
     }

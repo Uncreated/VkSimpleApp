@@ -1,17 +1,18 @@
 package com.uncreated.vksimpleapp.di.modules;
 
+import android.content.SharedPreferences;
+
 import com.uncreated.vksimpleapp.model.api.ApiService;
-import com.uncreated.vksimpleapp.model.repository.Repositories;
-import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryStorageLoader;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryWebLoader;
-import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
 import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
+import com.uncreated.vksimpleapp.model.repository.settings.SettingsRepository;
 import com.uncreated.vksimpleapp.model.repository.user.UserRepository;
 import com.uncreated.vksimpleapp.model.repository.user.UserStorageLoader;
 import com.uncreated.vksimpleapp.model.repository.user.UserWebLoader;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -19,19 +20,6 @@ import dagger.Provides;
 
 @Module
 public class RepositoryModule {
-    @Singleton
-    @Provides
-    public Repositories repository(IAuthRepository authRepository,
-                                   PhotoRepository photoRepository,
-                                   GalleryRepository galleryRepository,
-                                   UserRepository userRepository,
-                                   ISettingsRepository settingsRepository) {
-        return new Repositories(authRepository,
-                photoRepository,
-                galleryRepository,
-                userRepository,
-                settingsRepository);
-    }
 
     @Singleton
     @Provides
@@ -69,5 +57,11 @@ public class RepositoryModule {
     @Provides
     public UserStorageLoader userStorageLoader() {
         return new UserStorageLoader();
+    }
+
+    @Singleton
+    @Provides
+    public ISettingsRepository settingsRepository(@Named("Settings") SharedPreferences sharedPreferences) {
+        return new SettingsRepository(sharedPreferences);
     }
 }

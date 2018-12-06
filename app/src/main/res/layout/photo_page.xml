@@ -5,7 +5,7 @@
 
         <variable
             name="image"
-            type="android.graphics.Bitmap" />
+            type="android.graphics.drawable.Drawable" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

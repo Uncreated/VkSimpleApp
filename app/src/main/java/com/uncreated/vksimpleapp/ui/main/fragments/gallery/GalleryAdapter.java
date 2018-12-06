@@ -1,6 +1,5 @@
 package com.uncreated.vksimpleapp.ui.main.fragments.gallery;
 
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,40 +9,50 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
+import com.uncreated.vksimpleapp.model.entity.vk.PhotoInfo;
+import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoViewHolder> {
 
-    @Named("thumbnail")
-    @Inject
-    GalleryPhotoCache galleryPhotoCache;
+    private PhotoRepository photoRepository;
 
-    private int photosCount;
     private int itemSize;
     private int margin;
 
-    GalleryAdapter(int photosCount, int itemSize, int margin) {
-        this.photosCount = photosCount;
+    private List<PhotoInfo> items;
+    private OnItemClickListener clickListener;
+
+    GalleryAdapter(PhotoRepository photoRepository, int itemSize, int margin,
+                   List<PhotoInfo> items, OnItemClickListener clickListener) {
+        this.photoRepository = photoRepository;
         this.itemSize = itemSize;
         this.margin = margin;
-
-        App.getApp().getAppComponent().inject(this);
-
-
+        this.items = items;
+        this.clickListener = clickListener;
     }
 
-    public void setPhotosCount(int photosCount) {
-        this.photosCount = photosCount;
+    public void setItems(List<PhotoInfo> items) {
+        if (this.items != items) {
+
+            int rangeStart = this.items != null ? this.items.size() : 0;
+
+            this.items = items;
+
+            notifyItemRangeChanged(rangeStart, items.size() - rangeStart);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return photosCount;
+        if (items != null) {
+            return items.size();
+        }
+        return 0;
     }
 
     @NonNull
@@ -62,25 +71,37 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
-        Bitmap bitmap = galleryPhotoCache.getBitmap(position);
-        if (bitmap != null) {
-            holder.imageViewPhoto.setImageBitmap(bitmap);
-        } else {
-            holder.imageViewPhoto.setImageBitmap(null);
-            eventBus.thumbnailEventsPost(position);
-        }
-        holder.cardView.setOnClickListener(v -> eventBus.clickThumbnailPost(position));
+        holder.reload(items.get(position));
+        holder.cardView.setOnClickListener(v -> clickListener.onItemClicked(position));
+    }
+
+    interface OnItemClickListener {
+        void onItemClicked(int index);
     }
 
     class PhotoViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView imageViewPhoto;
 
+        Disposable disposable;
+
         PhotoViewHolder(View itemView) {
             super(itemView);
 
             cardView = itemView.findViewById(R.id.fl_container);
             imageViewPhoto = itemView.findViewById(R.id.iv_photo);
+        }
+
+        void reload(PhotoInfo photoInfo) {
+            if (disposable != null) {
+                disposable.dispose();
+                disposable = null;
+            }
+
+            imageViewPhoto.setImageBitmap(null);
+
+            disposable = photoRepository.getBitmapObservable(photoInfo.getThumbnailUrl())
+                    .subscribe(bitmap -> imageViewPhoto.setImageBitmap(bitmap));
         }
     }
 }

@@ -13,14 +13,19 @@ import io.reactivex.disposables.Disposable;
 
 public class PageViewModel extends ViewModel {
 
-    private final Disposable origDisposable;
-    private final Disposable thumbDisposable;
+    private Disposable origDisposable;
+    private Disposable thumbDisposable;
+
     @Inject
     PhotoRepository photoRepository;
+
     private MutableLiveData<Bitmap> imageLiveData = new MutableLiveData<>();
 
-    PageViewModel(String thumbnailImageUrl, String originalImageUrl) {
+    public PageViewModel() {
         App.getApp().getAppComponent().inject(this);
+    }
+
+    void setUrls(String thumbnailImageUrl, String originalImageUrl) {
 
         thumbDisposable = photoRepository.getBitmapObservable(thumbnailImageUrl)
                 .subscribe(bitmap -> imageLiveData.postValue(bitmap));

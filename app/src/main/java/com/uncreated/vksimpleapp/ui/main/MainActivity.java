@@ -37,9 +37,6 @@ public class MainActivity extends AppCompatActivity {
     //TODO: save and load to Bundle
     private static Integer curFragment;
 
-    public MainActivity() {
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,11 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void observeAll() {
-        mainViewModel.getGalleryLiveData().observe(this, gallery -> {
-            if (gallery != null) {
-                setGallerySize(gallery.getCurrentSize());
-            }
-        });
+        mainViewModel.getGallerySizeLiveData().observe(this, this::setGallerySize);
         mainViewModel.getThemeChangeLiveData().observe(this, o -> this.changeTheme());
         mainViewModel.getUserLiveData().observe(this, this::setUser);
         mainViewModel.getAuthLiveData().observe(this, auth -> {

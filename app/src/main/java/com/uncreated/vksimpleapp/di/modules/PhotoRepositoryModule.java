@@ -17,30 +17,16 @@ import dagger.Provides;
 @Module
 public class PhotoRepositoryModule {
 
-    @Named("thumbnailsCount")
+    @Named("totalImageCount")
     @Provides
-    public Integer thumbnailsCacheSize() {
+    public Integer totalImageCount() {
         return 40;
     }
 
-    @Named("originalsCount")
-    @Provides
-    public Integer originalsCacheSize() {
-        return 3;
-    }
-
-    @Named("thumbnail")
     @Singleton
     @Provides
-    public GalleryPhotoCache thumbnailsCache(@Named("thumbnailsCount") Integer thumbnailsCount) {
-        return new GalleryPhotoCache(thumbnailsCount);
-    }
-
-    @Named("original")
-    @Singleton
-    @Provides
-    public GalleryPhotoCache originalsCache(@Named("originalsCount") Integer originalsCount) {
-        return new GalleryPhotoCache(originalsCount);
+    public GalleryPhotoCache originalsCache(@Named("totalImageCount") Integer totalImageCount) {
+        return new GalleryPhotoCache(totalImageCount);
     }
 
     @Named("web")

@@ -2,41 +2,40 @@ package com.uncreated.vksimpleapp.ui.main.fragments.gallery;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.LiveDataReactiveStreams;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
+import com.uncreated.vksimpleapp.model.entity.vk.PhotoInfo;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
 
+import java.util.List;
+
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import io.reactivex.BackpressureStrategy;
-import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class GalleryViewModel extends ViewModel {
-
-    @Named("mainThread")
-    @Inject
-    Scheduler mainThreadScheduler;
-
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Inject
     GalleryRepository galleryRepository;
 
-    private LiveData<Gallery> galleryLiveData;
+    private LiveData<List<PhotoInfo>> photoInfoListLiveData;
 
     public GalleryViewModel() {
         App.getApp().getAppComponent().inject(this);
 
-        galleryLiveData = LiveDataReactiveStreams.fromPublisher(galleryRepository.getGalleryObservable()
-                .toFlowable(BackpressureStrategy.LATEST));
+        photoInfoListLiveData = Transformations.map(
+                LiveDataReactiveStreams.fromPublisher(galleryRepository.getGalleryObservable()
+                        .toFlowable(BackpressureStrategy.LATEST)),
+                Gallery::getItems);
     }
 
-    public LiveData<Gallery> getGalleryLiveData() {
-        return galleryLiveData;
+    public LiveData<List<PhotoInfo>> getPhotoInfoListLiveData() {
+        return photoInfoListLiveData;
     }
 
     @Override
