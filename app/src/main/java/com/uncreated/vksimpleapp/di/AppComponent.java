@@ -4,7 +4,6 @@ import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.di.modules.ApiModule;
 import com.uncreated.vksimpleapp.di.modules.AppModule;
 import com.uncreated.vksimpleapp.di.modules.AuthModule;
-import com.uncreated.vksimpleapp.di.modules.EventBusModule;
 import com.uncreated.vksimpleapp.di.modules.PhotoRepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.RepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.SettingsModule;
@@ -31,7 +30,6 @@ import dagger.Component;
         AuthModule.class,
         ApiModule.class,
         RepositoryModule.class,
-        EventBusModule.class,
         PhotoRepositoryModule.class,
         SettingsModule.class})
 public interface AppComponent {

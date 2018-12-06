@@ -3,7 +3,6 @@ package com.uncreated.vksimpleapp.model.api;
 import android.support.annotation.NonNull;
 
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 
 import java.io.IOException;
 
@@ -17,10 +16,10 @@ public class VkApiInterceptor implements Interceptor {
     private String version;
     private Auth auth;
 
-    public VkApiInterceptor(EventBus eventBus, String version) {
+    public VkApiInterceptor(String version) {
         this.version = version;
 
-        //eventBus.authSubscribe(auth -> VkApiInterceptor.this.auth = auth, null);TODO:
+        eventBus.authSubscribe(auth -> VkApiInterceptor.this.auth = auth, null);
     }
 
     @Override

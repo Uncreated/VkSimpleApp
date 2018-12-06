@@ -6,10 +6,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.uncreated.vksimpleapp.App;
-import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
-import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
+import com.uncreated.vksimpleapp.model.entity.events.IndexedBitmap;
+import com.uncreated.vksimpleapp.model.entity.events.IndexedUrl;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 import javax.inject.Inject;
@@ -23,16 +22,13 @@ public class PhotoViewModel extends ViewModel {
     @Inject
     Scheduler mainThreadScheduler;
 
-    @Inject
-    EventBus eventBus;
-
     @Named("original")
     @Inject
     GalleryPhotoCache galleryPhotoCache;
 
     private Gallery gallery;
 
-    private LiveData<BitmapIndex> bitmapIndexLiveData;
+    private LiveData<IndexedBitmap> bitmapIndexLiveData;
     private MutableLiveData<Integer> gallerySizeLiveData = new MutableLiveData<>();
 
     public PhotoViewModel() {
@@ -43,7 +39,7 @@ public class PhotoViewModel extends ViewModel {
         eventBus.originalIndexSubscribe(index -> {
                     if (gallery != null) {
                         String url = gallery.getItems().get(index).getOriginalUrl();
-                        eventBus.originalEventPost(new IndexUrl(index, url));
+                        eventBus.originalEventPost(new IndexedUrl(index, url));
                     }
                 },
                 mainThreadScheduler);
@@ -54,7 +50,7 @@ public class PhotoViewModel extends ViewModel {
         }, mainThreadScheduler);
     }
 
-    public LiveData<BitmapIndex> getBitmapIndexLiveData() {
+    public LiveData<IndexedBitmap> getBitmapIndexLiveData() {
         return bitmapIndexLiveData;
     }
 

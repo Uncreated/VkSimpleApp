@@ -2,11 +2,11 @@ package com.uncreated.vksimpleapp.model.entity.events;
 
 import android.graphics.Bitmap;
 
-public class BitmapIndex {
+public class IndexedBitmap {
     private Bitmap bitmap;
     private Integer index;
 
-    public BitmapIndex(Bitmap bitmap, Integer index) {
+    public IndexedBitmap(Bitmap bitmap, Integer index) {
         this.bitmap = bitmap;
         this.index = index;
     }

@@ -1,10 +1,10 @@
 package com.uncreated.vksimpleapp.model.entity.events;
 
-public class IndexUrl {
+public class IndexedUrl {
     private Integer index;
     private String url;
 
-    public IndexUrl(Integer index, String url) {
+    public IndexedUrl(Integer index, String url) {
         this.index = index;
         this.url = url;
     }

@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 import javax.inject.Inject;
@@ -22,9 +21,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PageFragment extends Fragment {
-
-    @Inject
-    EventBus eventBus;
 
     @Named("thumbnail")
     @Inject

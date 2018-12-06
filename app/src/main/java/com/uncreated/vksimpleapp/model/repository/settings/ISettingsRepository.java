@@ -11,4 +11,6 @@ public interface ISettingsRepository {
     Observable<SettingsValues> getSettingsValues();
 
     void setSettingsValues(SettingsValues settingsValues);
+
+    Observable<Object> getThemeChangeSubject();
 }

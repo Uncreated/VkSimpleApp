@@ -2,10 +2,8 @@ package com.uncreated.vksimpleapp.ui.main.fragments.gallery;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
+import com.uncreated.vksimpleapp.model.entity.events.IndexedUrl;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
-import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryView;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -15,9 +13,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 @InjectViewState
 public class GalleryPresenter extends MvpPresenter<GalleryView> {
-
-    @Inject
-    EventBus eventBus;
 
     @Named("mainThread")
     @Inject
@@ -40,7 +35,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         compositeDisposable.add(eventBus.thumbnailIndexSubscribe(
                 index -> {
                     String url = gallery.getItems().get(index).getThumbnailUrl();
-                    eventBus.thumbnailEventsPost(new IndexUrl(index, url));
+                    eventBus.thumbnailEventsPost(new IndexedUrl(index, url));
                 }, mainThreadScheduler));
 
 

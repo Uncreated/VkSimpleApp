@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 
 import com.bumptech.glide.request.FutureTarget;
 import com.uncreated.vksimpleapp.model.common.Utils;
-import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
-import com.uncreated.vksimpleapp.model.entity.events.IndexUrl;
+import com.uncreated.vksimpleapp.model.entity.events.IndexedBitmap;
+import com.uncreated.vksimpleapp.model.entity.events.IndexedUrl;
 import com.uncreated.vksimpleapp.model.entity.realm.RealmPhoto;
 import com.uncreated.vksimpleapp.model.repository.photo.GlideApp;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
@@ -30,12 +30,12 @@ public class StoragePhotoLoader extends WebPhotoLoader {
     }
 
     @Override
-    public BitmapIndex loadToCache(IndexUrl indexUrl, GalleryPhotoCache galleryPhotoCache) throws Exception {
-        BitmapIndex bitmapIndex = null;
+    public IndexedBitmap loadToCache(IndexedUrl indexedUrl, GalleryPhotoCache galleryPhotoCache) throws Exception {
+        IndexedBitmap indexedBitmap = null;
 
         Realm realm = Realm.getDefaultInstance();
         RealmPhoto realmPhoto = realm.where(RealmPhoto.class)
-                .equalTo("url", indexUrl.getUrl())
+                .equalTo("url", indexedUrl.getUrl())
                 .findFirst();
 
         if (realmPhoto != null) {
@@ -47,27 +47,27 @@ public class StoragePhotoLoader extends WebPhotoLoader {
                             .load(file)
                             .submit();
                     Bitmap bitmap = futureBitmap.get();
-                    bitmapIndex = new BitmapIndex(bitmap, indexUrl.getIndex());
-                    galleryPhotoCache.putBitmap(indexUrl.getIndex(), bitmapIndex.getBitmap());
+                    indexedBitmap = new IndexedBitmap(bitmap, indexedUrl.getIndex());
+                    galleryPhotoCache.putBitmap(indexedUrl.getIndex(), indexedBitmap.getBitmap());
                 }
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
         }
 
-        if (bitmapIndex == null) {
+        if (indexedBitmap == null) {
             //super if not
-            bitmapIndex = super.loadToCache(indexUrl, galleryPhotoCache);
+            indexedBitmap = super.loadToCache(indexedUrl, galleryPhotoCache);
 
-            String path = generatePath(indexUrl.getUrl());
-            if (saveToFile(bitmapIndex.getBitmap(), path)) {
+            String path = generatePath(indexedUrl.getUrl());
+            if (saveToFile(indexedBitmap.getBitmap(), path)) {
                 realm.executeTransaction(innerRealm -> {
-                    RealmPhoto newRealmPhoto = realm.createObject(RealmPhoto.class, indexUrl.getUrl());
-                    newRealmPhoto.setPath(generatePath(indexUrl.getUrl()));
+                    RealmPhoto newRealmPhoto = realm.createObject(RealmPhoto.class, indexedUrl.getUrl());
+                    newRealmPhoto.setPath(generatePath(indexedUrl.getUrl()));
                 });
             }
         }
-        return bitmapIndex;
+        return indexedBitmap;
     }
 
     private boolean saveToFile(Bitmap bitmap, String path) {

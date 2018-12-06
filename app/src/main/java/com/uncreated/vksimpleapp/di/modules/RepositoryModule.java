@@ -1,7 +1,6 @@
 package com.uncreated.vksimpleapp.di.modules;
 
 import com.uncreated.vksimpleapp.model.api.ApiService;
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.Repositories;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
@@ -43,10 +42,9 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public GalleryRepository galleryRepository(EventBus eventBus,
-                                               GalleryWebLoader galleryWebLoader,
+    public GalleryRepository galleryRepository(GalleryWebLoader galleryWebLoader,
                                                GalleryStorageLoader galleryStorageLoader) {
-        return new GalleryRepository(eventBus, galleryWebLoader, galleryStorageLoader);
+        return new GalleryRepository(galleryWebLoader, galleryStorageLoader);
     }
 
     @Singleton

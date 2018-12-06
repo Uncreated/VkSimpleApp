@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.uncreated.vksimpleapp.R;
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.photo.ram.GalleryPhotoCache;
 
 import javax.inject.Inject;
@@ -22,9 +21,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
     @Named("thumbnail")
     @Inject
     GalleryPhotoCache galleryPhotoCache;
-
-    @Inject
-    EventBus eventBus;
 
     private int photosCount;
     private int itemSize;

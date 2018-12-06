@@ -8,19 +8,26 @@ import java.util.List;
 
 public class Gallery {
 
-    private int count;
+    private int totalCount;
     private List<PhotoInfo> items;
 
     public Gallery(RealmGallery realmGallery) {
-        this.count = realmGallery.getCount();
-        this.items = new ArrayList<>(realmGallery.getItems().size());
+        totalCount = realmGallery.getCount();
+        items = new ArrayList<>(realmGallery.getItems().size());
         for (RealmPhotoInfo realmPhotoInfo : realmGallery.getItems()) {
-            this.items.add(new PhotoInfo(realmPhotoInfo));
+            items.add(new PhotoInfo(realmPhotoInfo));
         }
     }
 
-    public int getCount() {
-        return count;
+    public Gallery(Gallery partOne, Gallery partTwo) {
+        totalCount = partOne.totalCount;
+        items = new ArrayList<>(partOne.items.size() + partTwo.items.size());
+        items.addAll(partOne.items);
+        items.addAll(partTwo.items);
+    }
+
+    public int getTotalCount() {
+        return totalCount;
     }
 
     public List<PhotoInfo> getItems() {

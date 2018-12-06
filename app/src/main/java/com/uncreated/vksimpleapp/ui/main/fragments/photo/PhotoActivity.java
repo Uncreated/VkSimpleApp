@@ -8,7 +8,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.ActivityPhotoBinding;
-import com.uncreated.vksimpleapp.model.entity.events.BitmapIndex;
+import com.uncreated.vksimpleapp.model.entity.events.IndexedBitmap;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,7 +50,7 @@ public class PhotoActivity extends MvpAppCompatActivity {
         pagerAdapter.notifyDataSetChanged();
     }
 
-    public void updatePhoto(BitmapIndex bitmapIndex) {
+    public void updatePhoto(IndexedBitmap indexedBitmap) {
         pagerAdapter.notifyDataSetChanged();
     }
 }

@@ -7,6 +7,7 @@ import com.uncreated.vksimpleapp.model.repository.settings.entities.SettingsValu
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 public class SettingsRepository implements ISettingsRepository {
@@ -18,10 +19,17 @@ public class SettingsRepository implements ISettingsRepository {
 
     private Subject<SettingsValues> valuesSubject = BehaviorSubject.create();
 
+    private Subject<Object> themeChangeSubject = PublishSubject.create();
+
     public SettingsRepository(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
 
         settingsValues = new SettingsValues(sharedPreferences, SETTINGS_VALUES);
+    }
+
+    @Override
+    public Observable<Object> getThemeChangeSubject() {
+        return themeChangeSubject;
     }
 
     @Override
@@ -30,9 +38,13 @@ public class SettingsRepository implements ISettingsRepository {
     }
 
     @Override
-    public void setSettingsValues(SettingsValues settingsValues) {
-        settingsValues.save(sharedPreferences, SETTINGS_VALUES);
-        valuesSubject.onNext(settingsValues);
+    public void setSettingsValues(SettingsValues newSettingsValues) {
+        this.settingsValues = newSettingsValues;
+        newSettingsValues.save(sharedPreferences, SETTINGS_VALUES);
+        if (settingsValues.getThemeParam().getValue() != newSettingsValues.getThemeParam().getValue()) {
+            themeChangeSubject.onNext(new Object());
+        }
+        valuesSubject.onNext(newSettingsValues);
     }
 
     @Override

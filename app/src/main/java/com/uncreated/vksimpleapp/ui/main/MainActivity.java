@@ -34,6 +34,9 @@ public class MainActivity extends MvpAppCompatActivity {
 
     private boolean backPressed = false;
 
+    //TODO: save and load to Bundle
+    private static Integer curFragment;
+
     public MainActivity() {
     }
 
@@ -72,7 +75,7 @@ public class MainActivity extends MvpAppCompatActivity {
 
     private void observeAll() {
         mainViewModel.getGallerySizeLiveData().observe(this, this::setGallerySize);
-        mainViewModel.getThemeIdLiveData().observe(this, themeId -> this.changeTheme());
+        mainViewModel.getThemeChangeLiveData().observe(this, o -> this.changeTheme());
         mainViewModel.getUserLiveData().observe(this, this::setUser);
         mainViewModel.getAuthLiveData().observe(this, auth -> {
             if (auth != null && !auth.isValid()) {
@@ -82,7 +85,6 @@ public class MainActivity extends MvpAppCompatActivity {
     }
 
     private void initFragment(NavigationView.OnNavigationItemSelectedListener selectedListener) {
-        Integer curFragment = dataBinding.getCurrentFragment();
         if (curFragment == null) {
             curFragment = dataBinding.navView.getMenu().getItem(0).getItemId();
         }
@@ -142,10 +144,10 @@ public class MainActivity extends MvpAppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.nav_gallery) {
-                dataBinding.setCurrentFragment(id);
+                curFragment = id;
                 switchFragment(new GalleryFragment());
             } else if (id == R.id.nav_settings) {
-                dataBinding.setCurrentFragment(id);
+                curFragment = id;
                 switchFragment(new SettingsFragment());
             } else if (id == R.id.nav_logout) {
                 mainViewModel.onLogout();

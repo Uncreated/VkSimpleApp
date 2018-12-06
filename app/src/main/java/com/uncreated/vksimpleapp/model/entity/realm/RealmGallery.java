@@ -20,7 +20,7 @@ public class RealmGallery extends RealmObject {
 
     public RealmGallery(Gallery gallery, String userId) {
         this.userId = userId;
-        this.count = gallery.getCount();
+        this.count = gallery.getTotalCount();
         this.items = new RealmList<>();
         for (PhotoInfo photoInfo : gallery.getItems()) {
             this.items.add(new RealmPhotoInfo(photoInfo));

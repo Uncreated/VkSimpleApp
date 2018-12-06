@@ -2,7 +2,6 @@ package com.uncreated.vksimpleapp.di.modules;
 
 import android.content.Context;
 
-import com.uncreated.vksimpleapp.model.eventbus.EventBus;
 import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
 import com.uncreated.vksimpleapp.model.repository.photo.loader.IPhotoLoader;
 import com.uncreated.vksimpleapp.model.repository.photo.loader.StoragePhotoLoader;
@@ -60,11 +59,10 @@ public class PhotoRepositoryModule {
 
     @Singleton
     @Provides
-    public PhotoRepository photoRepository(EventBus eventBus,
-                                           @Named("cache") IPhotoLoader webPhotoLoader,
+    public PhotoRepository photoRepository(@Named("cache") IPhotoLoader webPhotoLoader,
                                            @Named("thumbnail") GalleryPhotoCache thumbnailsCache,
                                            @Named("original") GalleryPhotoCache originalsCache) {
-        return new PhotoRepository(eventBus, webPhotoLoader, thumbnailsCache, originalsCache);
+        return new PhotoRepository(webPhotoLoader, thumbnailsCache, originalsCache);
     }
 
 
