@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.LiveDataReactiveStreams;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
@@ -41,13 +42,7 @@ public class MainViewModel extends ViewModel {
 
         //TODO:handle disposables
         authRepository.getAuthObservable()
-                .subscribe(auth -> {
-                    userRepository.getUserObservable(auth.getUserId())
-                            .subscribe(user -> userLiveData.postValue(user));
-                    galleryRepository.setUserId(auth.getUserId());
-                    galleryRepository.getGalleryObservable()
-                            .subscribe(gallery -> gallerySizeLiveData.postValue(gallery.getCurrentSize()));
-                });
+                .subscribe(this::onAuth);
 
         authLiveData = LiveDataReactiveStreams.fromPublisher(
                 authRepository.getAuthObservable()
@@ -56,6 +51,15 @@ public class MainViewModel extends ViewModel {
         themeChangeLiveData = LiveDataReactiveStreams.fromPublisher(
                 settingsRepository.getThemeChangeSubject()
                         .toFlowable(BackpressureStrategy.MISSING));
+    }
+
+    @NonNull
+    private void onAuth(Auth auth) {
+        userRepository.getUserObservable(auth.getUserId())
+                .subscribe(user -> userLiveData.postValue(user));
+        galleryRepository.setUserId(auth.getUserId());
+        galleryRepository.getGalleryObservable()
+                .subscribe(gallery -> gallerySizeLiveData.postValue(gallery.getCurrentSize()));
     }
 
     LiveData<User> getUserLiveData() {
