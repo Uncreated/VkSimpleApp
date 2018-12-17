@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.ui.auth.web;
+package com.uncreated.vksimpleapp.ui2.auth.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.webkit.CookieManager;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -59,6 +60,23 @@ public class AuthWebViewModel extends ViewModel {
             Uri uri = request.getUrl();
             return shouldOverrideUrlLoading(webView, uri.toString());
         }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            super.onReceivedError(view, request, error);
+
+            //int code = error.getErrorCode();
+            //String msg = error.getDescription().toString();
+
+            //TODO:handle error
+        }
+
+
     };
 
     //TODO: make it single

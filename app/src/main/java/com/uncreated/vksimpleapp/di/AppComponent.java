@@ -5,14 +5,14 @@ import com.uncreated.vksimpleapp.di.modules.AppModule;
 import com.uncreated.vksimpleapp.di.modules.AuthModule;
 import com.uncreated.vksimpleapp.di.modules.PhotoRepositoryModule;
 import com.uncreated.vksimpleapp.di.modules.RepositoryModule;
-import com.uncreated.vksimpleapp.ui.auth.activity.AuthViewModel;
-import com.uncreated.vksimpleapp.ui.auth.web.AuthWebViewModel;
 import com.uncreated.vksimpleapp.ui.main.MainViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryFragment;
 import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.photo.activity.PhotoViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.photo.page.PageViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsViewModel;
+import com.uncreated.vksimpleapp.ui2.auth.viewmodel.AuthViewModel;
+import com.uncreated.vksimpleapp.ui2.auth.viewmodel.AuthWebViewModel;
 
 import javax.inject.Singleton;
 
@@ -27,8 +27,6 @@ import dagger.Component;
 public interface AppComponent {
     void inject(MainViewModel mainViewModel);
 
-    void inject(AuthViewModel authViewModel);
-
     void inject(PhotoViewModel photoViewModel);
 
     void inject(SettingsViewModel settingsViewModel);
@@ -40,4 +38,7 @@ public interface AppComponent {
     void inject(GalleryFragment galleryFragment);
 
     void inject(GalleryViewModel galleryViewModel);
+
+    void inject(AuthViewModel authViewModel);
+
 }
