@@ -88,7 +88,7 @@ public class AuthWebViewModel extends ViewModel {
 
         authDisposable = authRepository.getAuthObservable()
                 .subscribe(auth -> {
-                    if (!auth.isValid() && auth.isLogout()) {
+                    if (!auth.isValid()) {
                         urlLiveData.setValue(getAuthUrl());
                     }
                 });

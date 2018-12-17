@@ -10,7 +10,6 @@ public class Auth {
     private String accessToken;
     private Long expiredDate;
     private boolean valid = true;
-    private boolean logout = false;
 
     public Auth(String userId, String accessToken, Long expiredDate) {
         this.userId = userId;
@@ -18,25 +17,16 @@ public class Auth {
         this.expiredDate = expiredDate;
     }
 
-    private Auth(boolean logout) {
+    private Auth() {
         this.valid = false;
-        this.logout = logout;
     }
 
     public static Auth AuthNotValid() {
-        return new Auth(false);
-    }
-
-    public static Auth AuthLogout() {
-        return new Auth(true);
+        return new Auth();
     }
 
     public boolean isValid() {
-        return valid;
-    }
-
-    public boolean isLogout() {
-        return logout;
+        return valid;//TODO: check expired date
     }
 
     public static Long calcExpiredDate(long lifeTime) {
@@ -44,12 +34,8 @@ public class Auth {
     }
 
     public String getUserId() {
-        //return userId;//TODO: return true value
-        return "1";//debug
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+        //return userId;//TODO: return the value
+        return "1";
     }
 
     public String getAccessToken() {
@@ -67,8 +53,7 @@ public class Auth {
             return Utils.equals(auth.userId, this.userId) &&
                     Utils.equals(auth.accessToken, this.accessToken) &&
                     Utils.equals(auth.expiredDate, this.expiredDate) &&
-                    Utils.equals(auth.valid, this.valid) &&
-                    Utils.equals(auth.logout, this.logout);
+                    Utils.equals(auth.valid, this.valid);
         }
         return false;
     }

@@ -79,7 +79,7 @@ public class MainViewModel extends ViewModel {
     }
 
     void onLogout() {
-        authRepository.setAuth(Auth.AuthLogout());
+        authRepository.setAuth(Auth.AuthNotValid());
     }
 
     int getDefaultThemeId() {

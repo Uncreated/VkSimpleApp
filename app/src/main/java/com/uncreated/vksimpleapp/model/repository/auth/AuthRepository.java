@@ -14,7 +14,7 @@ public class AuthRepository implements IAuthRepository {
 
     private SharedPreferences sharedPreferences;
 
-    private Subject<Auth> authSubject = BehaviorSubject.create();
+    private Subject<Auth> authSubject;
 
     public AuthRepository(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -22,16 +22,14 @@ public class AuthRepository implements IAuthRepository {
         Auth currentAuth = Auth.load(sharedPreferences, KEY_AUTH);
 
         if (currentAuth != null && currentAuth.isValid()) {
-            authSubject.onNext(currentAuth);
+            authSubject = BehaviorSubject.createDefault(currentAuth);
         } else {
-            authSubject.onNext(Auth.AuthNotValid());
+            authSubject = BehaviorSubject.createDefault(Auth.AuthNotValid());
         }
     }
 
     public void setAuth(Auth auth) {
-        if (auth.isValid()) {
-            auth.save(sharedPreferences, KEY_AUTH);
-        }
+        auth.save(sharedPreferences, KEY_AUTH);
         authSubject.onNext(auth);
     }
 
