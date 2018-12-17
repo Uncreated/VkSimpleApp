@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         initNavigation();
 
         if (savedInstanceState == null) {
-            initFragment(selectedListener);
+            initFragment();
         }
 
         observeAll();
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initFragment(NavigationView.OnNavigationItemSelectedListener selectedListener) {
+    private void initFragment() {
         if (curFragment == null) {
             curFragment = dataBinding.navView.getMenu().getItem(0).getItemId();
         }
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    //TODO:make nav class and subscribe
     public void setUser(User user) {
         String name = user.getFirstName() + " " + user.getLastName();
         navigationViewHolder.getTextViewName().setText(name);

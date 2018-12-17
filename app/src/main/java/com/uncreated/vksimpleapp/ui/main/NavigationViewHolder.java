@@ -6,21 +6,21 @@ import android.widget.TextView;
 
 import com.uncreated.vksimpleapp.R;
 
-class NavigationViewHolder {
+public class NavigationViewHolder {
 
     private TextView textViewName;
     private ImageView imageViewAvatar;
 
-    NavigationViewHolder(View headerView) {
+    public NavigationViewHolder(View headerView) {
         textViewName = headerView.findViewById(R.id.tv_name);
         imageViewAvatar = headerView.findViewById(R.id.iv_avatar);
     }
 
-    TextView getTextViewName() {
+    public TextView getTextViewName() {
         return textViewName;
     }
 
-    ImageView getImageViewAvatar() {
+    public ImageView getImageViewAvatar() {
         return imageViewAvatar;
     }
 }

@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.ui2.auth.viewmodel;
+package com.uncreated.vksimpleapp.ui2.fragments.auth.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -61,6 +61,7 @@ public class AuthWebViewModel extends ViewModel {
             return shouldOverrideUrlLoading(webView, uri.toString());
         }
 
+        //TODO: handle user pages
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
@@ -89,6 +90,7 @@ public class AuthWebViewModel extends ViewModel {
         authDisposable = authRepository.getAuthObservable()
                 .subscribe(auth -> {
                     if (!auth.isValid()) {
+                        logout();
                         urlLiveData.setValue(getAuthUrl());
                     }
                 });

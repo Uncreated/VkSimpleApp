@@ -1,7 +1,7 @@
-package com.uncreated.vksimpleapp.ui2;
+package com.uncreated.vksimpleapp.ui2.view;
 
 public interface MainNavigationCallback {
     void goAuth();
 
-    void goGallery();
+    void goMain();
 }

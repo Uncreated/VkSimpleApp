@@ -11,8 +11,8 @@ import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.photo.activity.PhotoViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.photo.page.PageViewModel;
 import com.uncreated.vksimpleapp.ui.main.fragments.settings.SettingsViewModel;
-import com.uncreated.vksimpleapp.ui2.auth.viewmodel.AuthViewModel;
-import com.uncreated.vksimpleapp.ui2.auth.viewmodel.AuthWebViewModel;
+import com.uncreated.vksimpleapp.ui2.fragments.auth.viewmodel.AuthViewModel;
+import com.uncreated.vksimpleapp.ui2.fragments.auth.viewmodel.AuthWebViewModel;
 
 import javax.inject.Singleton;
 
@@ -41,4 +41,7 @@ public interface AppComponent {
 
     void inject(AuthViewModel authViewModel);
 
+    void inject(com.uncreated.vksimpleapp.ui2.fragments.main.viewmodel.MainViewModel mainViewModel);
+
+    void inject(com.uncreated.vksimpleapp.ui2.modelview.MainViewModel mainViewModel);
 }

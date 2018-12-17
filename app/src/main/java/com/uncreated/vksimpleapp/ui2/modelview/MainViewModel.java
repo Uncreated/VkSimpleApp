@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.ui2.auth.viewmodel;
+package com.uncreated.vksimpleapp.ui2.modelview;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.LiveDataReactiveStreams;
@@ -13,23 +13,22 @@ import javax.inject.Inject;
 
 import io.reactivex.BackpressureStrategy;
 
-public class AuthViewModel extends ViewModel {
+public class MainViewModel extends ViewModel {
 
     @Inject
     IAuthRepository authRepository;
+    private LiveData<Boolean> isAuthValidLiveData;
 
-    private LiveData<Boolean> authSuccessfulLiveData;
-
-    public AuthViewModel() {
+    public MainViewModel() {
         App.getApp().getAppComponent().inject(this);
 
-        authSuccessfulLiveData = Transformations.map(
+        isAuthValidLiveData = Transformations.map(
                 LiveDataReactiveStreams.fromPublisher(authRepository.getAuthObservable()
                         .toFlowable(BackpressureStrategy.LATEST)),
                 Auth::isValid);
     }
 
-    public LiveData<Boolean> getAuthSuccessfulLiveData() {
-        return authSuccessfulLiveData;
+    public LiveData<Boolean> getIsAuthValidLiveData() {
+        return isAuthValidLiveData;
     }
 }

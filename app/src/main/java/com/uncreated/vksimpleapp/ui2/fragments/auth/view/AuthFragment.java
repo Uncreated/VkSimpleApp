@@ -1,4 +1,4 @@
-package com.uncreated.vksimpleapp.ui2.auth.view;
+package com.uncreated.vksimpleapp.ui2.fragments.auth.view;
 
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,15 +12,17 @@ import android.view.ViewGroup;
 
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.FragmentAuthBinding;
-import com.uncreated.vksimpleapp.ui2.MainNavigationCallback;
-import com.uncreated.vksimpleapp.ui2.auth.viewmodel.AuthViewModel;
-import com.uncreated.vksimpleapp.ui2.auth.viewmodel.AuthWebViewModel;
+import com.uncreated.vksimpleapp.ui2.fragments.auth.viewmodel.AuthViewModel;
+import com.uncreated.vksimpleapp.ui2.fragments.auth.viewmodel.AuthWebViewModel;
+import com.uncreated.vksimpleapp.ui2.view.MainNavigationCallback;
 
 public class AuthFragment extends Fragment {
+    private FragmentAuthBinding binding;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentAuthBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_auth,
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_auth,
                 container, false);
 
         MainNavigationCallback navigationCallback = ((MainNavigationCallback) getActivity());
@@ -30,7 +32,7 @@ public class AuthFragment extends Fragment {
         }
 
         initAuthResult();
-        initWebView(binding);
+        initWebView();
 
         return binding.getRoot();
     }
@@ -38,20 +40,26 @@ public class AuthFragment extends Fragment {
     private void initAuthResult() {
         AuthViewModel authViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
 
-        authViewModel.getAuthSuccessfulLiveData()
-                .observe(this, successful -> ((MainNavigationCallback) getActivity()).goGallery());
+        authViewModel.getAuthLiveData()
+                .observe(this, isValid -> {
+                    if (isValid) {
+                        ((MainNavigationCallback) getActivity()).goMain();
+                    }
+                });
     }
 
-    private void initWebView(FragmentAuthBinding binding) {
+    private void initWebView() {
         AuthWebViewModel viewModel = ViewModelProviders.of(this).get(AuthWebViewModel.class);
 
         binding.wvAuth.setWebViewClient(viewModel.getWebViewClient());
 
         viewModel.getUrlLiveData()
-                .observe(this, url -> {
-                    binding.wvAuth.clearCache(true);
-                    binding.wvAuth.clearHistory();
-                    binding.wvAuth.loadUrl(url);
-                });
+                .observe(this, this::goAuth);
+    }
+
+    private void goAuth(String url) {
+        binding.wvAuth.clearCache(true);
+        binding.wvAuth.clearHistory();
+        binding.wvAuth.loadUrl(url);
     }
 }
