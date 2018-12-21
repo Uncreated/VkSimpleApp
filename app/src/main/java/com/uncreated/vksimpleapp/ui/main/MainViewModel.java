@@ -6,7 +6,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
-import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.entity.vk.Auth;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
@@ -14,21 +13,19 @@ import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
 import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
 import com.uncreated.vksimpleapp.model.repository.user.UserRepository;
 
-import javax.inject.Inject;
-
 import io.reactivex.BackpressureStrategy;
 
 public class MainViewModel extends ViewModel {
-    @Inject
+    //@Inject
     ISettingsRepository settingsRepository;
 
-    @Inject
+    //@Inject
     IAuthRepository authRepository;
 
-    @Inject
+    //@Inject
     UserRepository userRepository;
 
-    @Inject
+    //@Inject
     GalleryRepository galleryRepository;
 
     private MutableLiveData<User> userLiveData = new MutableLiveData<>();
@@ -38,7 +35,7 @@ public class MainViewModel extends ViewModel {
     private LiveData<Object> themeChangeLiveData;
 
     public MainViewModel() {
-        App.getApp().getAppComponent().inject(this);
+        //App.getApp().getAppComponent().inject(this);
 
         //TODO:handle disposables
         authRepository.getAuthObservable()

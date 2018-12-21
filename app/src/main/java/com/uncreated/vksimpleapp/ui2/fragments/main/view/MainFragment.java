@@ -20,6 +20,7 @@ import com.uncreated.vksimpleapp.databinding.FragmentMainBinding;
 import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.photo.GlideApp;
 import com.uncreated.vksimpleapp.ui.main.NavigationViewHolder;
+import com.uncreated.vksimpleapp.ui2.fragments.main.subfragments.gallery.view.GalleryFragment;
 import com.uncreated.vksimpleapp.ui2.fragments.main.viewmodel.MainViewModel;
 
 public class MainFragment extends Fragment {
@@ -30,6 +31,8 @@ public class MainFragment extends Fragment {
 
     private NavigationViewHolder navigationViewHolder;
     private NavigationView.OnNavigationItemSelectedListener selectedListener;
+
+    private static int curFragment = -1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -92,7 +95,7 @@ public class MainFragment extends Fragment {
             item.setChecked(true);
             switch (item.getItemId()) {
                 case R.id.nav_gallery:
-                    //switchFragment(new GalleryFragment());
+                    switchFragment(new GalleryFragment(), R.layout.fragment_gallery2);
                     break;
                 case R.id.nav_settings:
                     //switchFragment(new SettingsFragment());
@@ -106,6 +109,15 @@ public class MainFragment extends Fragment {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         };
+    }
+
+    private void switchFragment(Fragment fragment, int id) {
+        if (curFragment != id) {
+            curFragment = id;
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+        }
     }
 
     public void setUser(User user) {

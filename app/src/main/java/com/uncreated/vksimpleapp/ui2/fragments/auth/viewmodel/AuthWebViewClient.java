@@ -3,7 +3,6 @@ package com.uncreated.vksimpleapp.ui2.fragments.auth.viewmodel;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -47,24 +46,7 @@ public class AuthWebViewClient extends WebViewClient {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean shouldOverrideUrlLoading(WebView webView, WebResourceRequest request) {
-        Uri uri = request.getUrl();
-        return shouldOverrideUrlLoading(webView, uri.toString());
-    }
-
-    //TODO: handle user pages
-    @Override
-    public void onPageFinished(WebView view, String url) {
-        super.onPageFinished(view, url);
-    }
-
-    @Override
-    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-        super.onReceivedError(view, request, error);
-
-        //int code = error.getErrorCode();
-        //String msg = error.getDescription().toString();
-
-        //TODO:handle error
+        return shouldOverrideUrlLoading(webView, request.getUrl().toString());
     }
 
     String getAuthUrl() {

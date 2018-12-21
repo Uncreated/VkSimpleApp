@@ -4,10 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Bitmap;
 
-import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
-
-import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
@@ -16,13 +13,13 @@ public class PageViewModel extends ViewModel {
     private Disposable origDisposable;
     private Disposable thumbDisposable;
 
-    @Inject
+    //@Inject
     PhotoRepository photoRepository;
 
     private MutableLiveData<Bitmap> imageLiveData = new MutableLiveData<>();
 
     public PageViewModel() {
-        App.getApp().getAppComponent().inject(this);
+        //App.getApp().getAppComponent().inject(this);
     }
 
     void setUrls(String thumbnailImageUrl, String originalImageUrl) {

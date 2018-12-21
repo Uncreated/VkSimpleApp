@@ -27,8 +27,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
     private List<PhotoInfo> items;
     private OnItemClickListener clickListener;
 
-    GalleryAdapter(PhotoRepository photoRepository, int itemSize, int margin,
-                   List<PhotoInfo> items, OnItemClickListener clickListener) {
+    public GalleryAdapter(PhotoRepository photoRepository, int itemSize, int margin,
+                          List<PhotoInfo> items, OnItemClickListener clickListener) {
         this.photoRepository = photoRepository;
         this.itemSize = itemSize;
         this.margin = margin;
@@ -75,7 +75,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
         holder.cardView.setOnClickListener(v -> clickListener.onItemClicked(position));
     }
 
-    interface OnItemClickListener {
+    public interface OnItemClickListener {
         void onItemClicked(int index);
     }
 

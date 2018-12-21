@@ -1,10 +1,14 @@
 package com.uncreated.vksimpleapp.model.entity.vk;
 
+import android.support.annotation.NonNull;
+
 import com.uncreated.vksimpleapp.model.entity.realm.RealmGallery;
 import com.uncreated.vksimpleapp.model.entity.realm.RealmPhotoInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class Gallery {
 
@@ -19,10 +23,12 @@ public class Gallery {
         }
     }
 
-    public Gallery(Gallery partOne, Gallery partTwo) {
-        totalCount = partOne.totalCount;
-        items = new ArrayList<>(partOne.items.size() + partTwo.items.size());
-        items.addAll(partOne.items);
+    public Gallery(@Nullable Gallery partOne, @NonNull Gallery partTwo) {
+        totalCount = partTwo.totalCount;
+        items = new ArrayList<>(partTwo.items.size() + partTwo.items.size());
+        if (partOne != null) {
+            items.addAll(partOne.items);
+        }
         items.addAll(partTwo.items);
     }
 

@@ -4,23 +4,20 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.LiveDataReactiveStreams;
 import android.arch.lifecycle.ViewModel;
 
-import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.repository.settings.ISettingsRepository;
 import com.uncreated.vksimpleapp.model.repository.settings.entities.SettingsValues;
-
-import javax.inject.Inject;
 
 import io.reactivex.BackpressureStrategy;
 
 public class SettingsViewModel extends ViewModel {
 
-    @Inject
+    //@Inject
     ISettingsRepository settingsRepository;
 
     private LiveData<SettingsValues> settingsValuesLiveData;
 
     public SettingsViewModel() {
-        App.getApp().getAppComponent().inject(this);
+        //App.getApp().getAppComponent().inject(this);
 
         settingsValuesLiveData = LiveDataReactiveStreams.fromPublisher(
                 settingsRepository.getSettingsValues().toFlowable(BackpressureStrategy.LATEST));

@@ -5,26 +5,23 @@ import android.arch.lifecycle.LiveDataReactiveStreams;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
-import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model.entity.vk.PhotoInfo;
 import com.uncreated.vksimpleapp.model.repository.gallery.GalleryRepository;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.reactivex.BackpressureStrategy;
 
 public class PhotoViewModel extends ViewModel {
 
-    @Inject
+    //@Inject
     GalleryRepository galleryRepository;
 
     private LiveData<List<PhotoInfo>> galleryLiveData;
 
     public PhotoViewModel() {
-        App.getApp().getAppComponent().inject(this);
+        //App.getApp().getAppComponent().inject(this);
 
         galleryLiveData = Transformations.map(
                 LiveDataReactiveStreams.fromPublisher(galleryRepository.getGalleryObservable()
