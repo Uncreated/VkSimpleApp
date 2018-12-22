@@ -17,9 +17,8 @@ import android.view.ViewGroup;
 import com.bumptech.glide.request.RequestOptions;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.FragmentMainBinding;
-import com.uncreated.vksimpleapp.model.entity.vk.User;
-import com.uncreated.vksimpleapp.model.repository.photo.GlideApp;
-import com.uncreated.vksimpleapp.ui.main.NavigationViewHolder;
+import com.uncreated.vksimpleapp.model2.common.GlideApp;
+import com.uncreated.vksimpleapp.model2.entity.vk.User;
 import com.uncreated.vksimpleapp.ui2.fragments.main.subfragments.gallery.view.GalleryFragment;
 import com.uncreated.vksimpleapp.ui2.fragments.main.viewmodel.MainViewModel;
 

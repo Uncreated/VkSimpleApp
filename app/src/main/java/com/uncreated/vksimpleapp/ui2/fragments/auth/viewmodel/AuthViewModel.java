@@ -8,7 +8,7 @@ import android.webkit.CookieManager;
 import android.webkit.WebViewClient;
 
 import com.uncreated.vksimpleapp.App;
-import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
+import com.uncreated.vksimpleapp.model2.repository.auth.AuthRepository;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ import io.reactivex.disposables.Disposable;
 public class AuthViewModel extends ViewModel {
 
     @Inject
-    IAuthRepository authRepository;
+    AuthRepository authRepository;
 
     @Inject
     AuthWebViewClient webClient;

@@ -10,7 +10,7 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
-public class SettingsRepository implements ISettingsRepository {
+public class SettingsRepository {
     private static final String SETTINGS_VALUES = "settingsValues";
 
     private SharedPreferences sharedPreferences;
@@ -27,17 +27,14 @@ public class SettingsRepository implements ISettingsRepository {
         settingsValues = new SettingsValues(sharedPreferences, SETTINGS_VALUES);
     }
 
-    @Override
     public Observable<Object> getThemeChangeSubject() {
         return themeChangeSubject;
     }
 
-    @Override
     public Observable<SettingsValues> getSettingsValues() {
         return valuesSubject;
     }
 
-    @Override
     public void setSettingsValues(SettingsValues newSettingsValues) {
         this.settingsValues = newSettingsValues;
         newSettingsValues.save(sharedPreferences, SETTINGS_VALUES);
@@ -47,7 +44,6 @@ public class SettingsRepository implements ISettingsRepository {
         valuesSubject.onNext(newSettingsValues);
     }
 
-    @Override
     public int getDefaultThemeId() {
         if (settingsValues.getThemeParam().getValue()) {
             return R.style.AppTheme_Dark;

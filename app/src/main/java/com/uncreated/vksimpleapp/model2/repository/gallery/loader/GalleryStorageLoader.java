@@ -1,7 +1,9 @@
 package com.uncreated.vksimpleapp.model2.repository.gallery.loader;
 
-import com.uncreated.vksimpleapp.model.entity.realm.RealmGallery;
-import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
+import android.support.annotation.NonNull;
+
+import com.uncreated.vksimpleapp.model2.entity.realm.RealmGallery;
+import com.uncreated.vksimpleapp.model2.entity.vk.Gallery;
 import com.uncreated.vksimpleapp.model2.repository.gallery.GalleryLoader;
 import com.uncreated.vksimpleapp.model2.repository.gallery.GalleryParameters;
 
@@ -14,9 +16,7 @@ public class GalleryStorageLoader extends GalleryLoader {
     private static final String PRIMARY_KEY = "userId";
 
     @Override
-    public void save(GalleryParameters parameters, Gallery gallery) throws IOException {
-        super.save(parameters, gallery);
-
+    public void save(@NonNull GalleryParameters parameters, @NonNull Gallery gallery) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(innerRealm -> {
@@ -31,17 +31,15 @@ public class GalleryStorageLoader extends GalleryLoader {
     }
 
     @Override
-    public Gallery load(GalleryParameters parameters) throws IOException {
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmGallery realmGallery = realm.where(RealmGallery.class)
+    @NonNull
+    public Gallery load(@NonNull GalleryParameters parameters) throws IOException {
+        RealmGallery realmGallery = Realm.getDefaultInstance()
+                .where(RealmGallery.class)
                 .equalTo(PRIMARY_KEY, parameters.getUserId())
                 .findFirst();
-
-        if (realmGallery != null) {
-            return new Gallery(realmGallery);
-        } else {
-            return null;
+        if (realmGallery == null) {
+            throw new IOException("Gallery not found in storage: " + parameters);
         }
+        return new Gallery(realmGallery);
     }
 }

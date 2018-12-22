@@ -7,8 +7,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.uncreated.vksimpleapp.model.entity.vk.Auth;
-import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
+import com.uncreated.vksimpleapp.model2.entity.vk.Auth;
+import com.uncreated.vksimpleapp.model2.repository.auth.AuthRepository;
 
 public class AuthWebViewClient extends WebViewClient {
     private static final int CLIENT_ID = 6622858;
@@ -16,10 +16,10 @@ public class AuthWebViewClient extends WebViewClient {
     private static final String REDIRECT_HOST = "uncreated.com";
     //TODO:move to model or di
 
-    private IAuthRepository authRepository;
+    private AuthRepository authRepository;
     private String version;
 
-    public AuthWebViewClient(IAuthRepository authRepository, String version) {
+    public AuthWebViewClient(AuthRepository authRepository, String version) {
         this.authRepository = authRepository;
         this.version = version;
     }

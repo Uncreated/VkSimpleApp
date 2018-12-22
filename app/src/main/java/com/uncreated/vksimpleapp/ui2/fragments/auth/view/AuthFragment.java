@@ -38,8 +38,8 @@ public class AuthFragment extends Fragment {
     }
 
     private void goAuth(String url) {
-        binding.wvAuth.clearCache(true);
-        binding.wvAuth.clearHistory();
+        //binding.wvAuth.clearCache(true);
+        //binding.wvAuth.clearHistory();
         binding.wvAuth.loadUrl(url);
     }
 }

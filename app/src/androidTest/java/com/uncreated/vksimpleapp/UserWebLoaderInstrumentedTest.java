@@ -3,11 +3,10 @@ package com.uncreated.vksimpleapp;
 import com.uncreated.vksimpleapp.di.DaggerInstrumentedTestComponent;
 import com.uncreated.vksimpleapp.di.InstrumentedTestComponent;
 import com.uncreated.vksimpleapp.di.modules.ApiModule;
-import com.uncreated.vksimpleapp.model.api.ApiService;
-import com.uncreated.vksimpleapp.model.entity.responses.RequestException;
-import com.uncreated.vksimpleapp.model.entity.vk.Auth;
-import com.uncreated.vksimpleapp.model.entity.vk.User;
 import com.uncreated.vksimpleapp.model.repository.user.UserWebLoader;
+import com.uncreated.vksimpleapp.model2.api.ApiService;
+import com.uncreated.vksimpleapp.model2.entity.vk.Auth;
+import com.uncreated.vksimpleapp.model2.entity.vk.User;
 
 import org.junit.AfterClass;
 import org.junit.Before;

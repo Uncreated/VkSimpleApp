@@ -3,9 +3,9 @@ package com.uncreated.vksimpleapp.di.modules;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.uncreated.vksimpleapp.model.api.ApiService;
-import com.uncreated.vksimpleapp.model.api.VkApiInterceptor;
-import com.uncreated.vksimpleapp.model.repository.auth.IAuthRepository;
+import com.uncreated.vksimpleapp.model2.api.ApiService;
+import com.uncreated.vksimpleapp.model2.api.VkApiInterceptor;
+import com.uncreated.vksimpleapp.model2.repository.auth.AuthRepository;
 
 import javax.inject.Named;
 
@@ -68,7 +68,7 @@ public class ApiModule {
     }
 
     @Provides
-    public VkApiInterceptor accessTokenInterceptor(IAuthRepository authRepository,
+    public VkApiInterceptor accessTokenInterceptor(AuthRepository authRepository,
                                                    @Named("version") String version) {
         return new VkApiInterceptor(authRepository, version);
     }

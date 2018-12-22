@@ -2,7 +2,6 @@ package com.uncreated.vksimpleapp.ui2.fragments.main.subfragments.gallery.view;
 
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,18 +14,10 @@ import android.view.ViewGroup;
 import com.uncreated.vksimpleapp.App;
 import com.uncreated.vksimpleapp.R;
 import com.uncreated.vksimpleapp.databinding.FragmentGallery2Binding;
-import com.uncreated.vksimpleapp.model.repository.photo.PhotoRepository;
-import com.uncreated.vksimpleapp.ui.main.fragments.gallery.AutoGridLayoutManager;
-import com.uncreated.vksimpleapp.ui.main.fragments.gallery.GalleryAdapter;
-import com.uncreated.vksimpleapp.ui.main.fragments.photo.activity.PhotoActivity;
+import com.uncreated.vksimpleapp.ui2.fragments.main.subfragments.gallery.viewmodel.GalleryAdapter;
 import com.uncreated.vksimpleapp.ui2.fragments.main.subfragments.gallery.viewmodel.GalleryViewModel;
 
-import javax.inject.Inject;
-
 public class GalleryFragment extends Fragment {
-
-    @Inject
-    PhotoRepository photoRepository;
 
     public GalleryFragment() {
         App.getApp().getAppComponent().inject(this);
@@ -49,20 +40,21 @@ public class GalleryFragment extends Fragment {
 
         GalleryViewModel viewModel = ViewModelProviders.of(this).get(GalleryViewModel.class);
 
-        GalleryAdapter galleryAdapter = new GalleryAdapter(photoRepository,
-                layoutManager.getItemSize(), (int) margin,
-                viewModel.getGalleryLiveData().getValue().getItems(), this::goPhoto);
+        GalleryAdapter galleryAdapter = new GalleryAdapter(layoutManager.getItemSize(), (int) margin,
+                this::goPhoto);
         binding.rvGallery.setAdapter(galleryAdapter);
 
         viewModel.getGalleryLiveData()
-                .observe(this, gallery -> galleryAdapter.setItems(gallery.getItems()));
+                .observe(this, gallery -> {
+                    galleryAdapter.setItems(gallery.getItems());
+                });
 
         return binding.getRoot();
     }
 
     public void goPhoto(int index) {
-        Intent intent = new Intent(getContext(), PhotoActivity.class);
+        /*Intent intent = new Intent(getContext(), PhotoActivity.class);
         PhotoActivity.putArgs(intent, index);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 }

@@ -16,4 +16,12 @@ public class GalleryParameters {
     public int getOffset() {
         return offset;
     }
+
+    @Override
+    public String toString() {
+        return "GalleryParameters{" +
+                "userId='" + userId + '\'' +
+                ", offset=" + offset +
+                '}';
+    }
 }

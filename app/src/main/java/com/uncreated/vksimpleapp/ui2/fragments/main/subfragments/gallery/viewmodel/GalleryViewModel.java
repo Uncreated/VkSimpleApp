@@ -5,13 +5,15 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.uncreated.vksimpleapp.App;
-import com.uncreated.vksimpleapp.model.entity.vk.Gallery;
-import com.uncreated.vksimpleapp.model.repository.auth.AuthRepository;
+import com.uncreated.vksimpleapp.model2.entity.vk.Auth;
+import com.uncreated.vksimpleapp.model2.entity.vk.Gallery;
+import com.uncreated.vksimpleapp.model2.repository.auth.AuthRepository;
 import com.uncreated.vksimpleapp.model2.repository.gallery.GalleryRepository;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 public class GalleryViewModel extends ViewModel {
     @Inject
@@ -28,10 +30,13 @@ public class GalleryViewModel extends ViewModel {
         App.getApp().getAppComponent().inject(this);
 
         disposable = authRepository.getAuthObservable()
-                .lastElement()
-                .subscribe(auth ->
-                        disposable = galleryRepository.loadFromWeb(auth.getUserId())
-                                .subscribe(galleryLiveData::setValue));
+                .firstElement()
+                .subscribe(this::subscribeOnGallery);
+    }
+
+    private void subscribeOnGallery(Auth auth) {
+        disposable = galleryRepository.loadFromWeb(auth.getUserId())
+                .subscribe(galleryLiveData::postValue, Timber::e);
     }
 
     public LiveData<Gallery> getGalleryLiveData() {
